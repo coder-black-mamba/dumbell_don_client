@@ -1,8 +1,11 @@
 import React from 'react'
+import HeroArea from '../components/home/HeroArea'
 
 const HomePage = () => {
   return (
-    <div className="flex justify-center items-center h-screen">Hello from HomePage</div>
+    <div className="flex justify-center items-center h-screen ">
+      <HeroArea />
+    </div>
   )
 }
 

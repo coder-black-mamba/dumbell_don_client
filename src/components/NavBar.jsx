@@ -44,7 +44,7 @@ const NavBar = () => {
     </ul>
   </div>
   <div className="navbar-end">
-    <a className="btn">Button</a>
+    <a className="btn bg-brand text-white">Join Now</a>
   </div>
 </div>
     </div>

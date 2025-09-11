@@ -1,2 +1,15 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+.bg-brand{
+    background-color: #C60822;
+}
+
+.text-brand{
+    color: #C60822;
+}
+
+.border-brand{
+    border-color: #C60822;
+}

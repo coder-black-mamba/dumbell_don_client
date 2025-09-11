@@ -3,7 +3,7 @@ import HeroArea from '../components/home/HeroArea'
 
 const HomePage = () => {
   return (
-    <div className="flex justify-center items-center h-screen ">
+    <div className="min-h-screen ">
       <HeroArea />
     </div>
   )

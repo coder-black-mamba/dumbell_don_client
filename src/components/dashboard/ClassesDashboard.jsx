@@ -98,10 +98,7 @@ const ClassesDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Class Schedule</h1>
-        <button className="bg-brand hover:bg-brand-dark text-white font-bold py-2 px-4 rounded">
-          + Add New Class
-        </button>
+        <h1 className="text-3xl font-bold text-gray-200">Class Schedule</h1> 
       </div>
 
       {classes.results.length === 0 ? (
@@ -111,10 +108,10 @@ const ClassesDashboard = () => {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {classes.results.map((cls) => (
-            <div key={cls.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <div key={cls.id} className="bg-base-300 rounded-lg shadow-md overflow-hidden   hover:shadow-lg transition-shadow duration-300">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{cls.title}</h2>
+                  <h2 className="text-xl font-semibold text-gray-100">{cls.title}</h2>
                   <span className={`px-2 py-1 text-xs rounded-full ${
                     cls.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                   }`}>

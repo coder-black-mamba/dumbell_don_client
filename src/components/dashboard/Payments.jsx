@@ -72,19 +72,19 @@ const Payments = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-base-300 rounded-lg shadow p-6">
         <h2 className="text-2xl font-bold mb-6">Payment History</h2>
         
         <div className="space-y-4">
           {paymentData.results.map((payment) => (
-            <div key={payment.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+            <div key={payment.id} className="border rounded-lg p-4 hover:bg-base-100 transition-colors">
               <div className="flex justify-between items-start">
                 <div className="flex items-start space-x-4">
                   <div className="p-3 bg-blue-50 rounded-full">
                     {getPaymentTypeIcon(payment.metadata.payment_type)}
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900">
+                    <h3 className="font-medium text-gray-300">
                       {payment.metadata.payment_type === 'subscription' 
                         ? payment.metadata.subscription
                         : payment.metadata.booking}

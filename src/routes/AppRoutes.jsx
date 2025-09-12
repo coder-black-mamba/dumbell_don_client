@@ -12,6 +12,9 @@ import SignUpPage from '../pages/SignUpPage'
 import UserDashboard from '../pages/UserDashboard'
 import DashboardLayout from '../layouts/DashboardLayout'
 import MyProfile from '../components/dashboard/MyProfile'
+import Invoices from '../components/dashboard/Invoices'
+import Stats from '../components/dashboard/Stats'
+import Payments from '../components/dashboard/Payments'
 
 function AppRoutes() {
   return (
@@ -30,6 +33,9 @@ function AppRoutes() {
         <Route path='/dashboard' element={<DashboardLayout />}>
             <Route index element={<UserDashboard />} />
             <Route path="profile" element={<MyProfile />} />
+            <Route path="invoices" element={<Invoices />} />
+            <Route path="stats" element={<Stats />} />
+            <Route path="payments" element={<Payments />} />
         </Route>
     </Routes>
   )

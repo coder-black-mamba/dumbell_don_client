@@ -13,7 +13,7 @@ const DashboardLayout = () => {
   // Class helper
   const linkClass = ({ isActive }) =>
     `w-full text-left px-4 py-2 rounded-md ${
-      isActive ? 'bg-brand/10 text-brand font-medium' : 'text-gray-700 hover:bg-gray-100'
+      isActive ? 'bg-brand/10 text-brand font-medium' : 'text-gray-300 hover:bg-base-100'
     }`;
 
   return (
@@ -32,15 +32,27 @@ const DashboardLayout = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 ">
           {/* Sidebar */}
           <div className="md:w-56 flex-shrink-0">
-            <nav className="space-y-1 flex flex-col">
+            <nav className="space-y-1 flex flex-col bg-base-300 p-4 rounded ">
               <NavLink to="/dashboard" end className={linkClass}>
                 Dashboard
               </NavLink>
               <NavLink to="/dashboard/profile" className={linkClass}>
                 My Profile
+              </NavLink>
+              <NavLink to="/dashboard/classes" className={linkClass}>
+                Classes
+              </NavLink>
+              <NavLink to="/dashboard/invoices" className={linkClass}>
+                Invoices
+              </NavLink>
+              <NavLink to="/dashboard/stats" className={linkClass}>
+                Stats
+              </NavLink>
+              <NavLink to="/dashboard/payments" className={linkClass}>
+                Payments
               </NavLink>
               {/* Add more NavLinks here as needed */}
             </nav>

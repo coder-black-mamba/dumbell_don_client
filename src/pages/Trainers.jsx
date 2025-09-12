@@ -73,7 +73,7 @@ const Trainers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-base-300 py-16">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20 px-4">
         <div className="container mx-auto text-center">

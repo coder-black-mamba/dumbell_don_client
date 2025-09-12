@@ -61,10 +61,10 @@ const AboutPage = () => {
               className="md:w-1/2 mb-10 md:mb-0 md:pr-10"
             >
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-              <p className="text-gray-700 mb-6">
+              <p className="text-gray-400 mb-6">
                 Founded in 2010, Dumbbell Don started as a small fitness center with a big vision: to create a community where everyone feels welcome and empowered to achieve their fitness goals. What began as a single location has grown into a premier fitness destination known for its state-of-the-art facilities and exceptional training programs.
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-400">
                 Our mission is to inspire and support individuals on their fitness journey, providing the tools, knowledge, and motivation needed to transform lives through health and wellness.
               </p>
             </motion.div>

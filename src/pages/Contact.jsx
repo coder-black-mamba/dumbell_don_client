@@ -82,7 +82,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-base-300  ">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20 px-4">
         <div className="container mx-auto text-center">
@@ -115,7 +115,7 @@ const Contact = () => {
               <div className="w-12 h-12 bg-brand/10 rounded-full flex items-center justify-center mb-4">
                 {item.icon}
               </div>
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+              <h3 className="text-xl font-bold mb-2 text-base-300">{item.title}</h3>
               <p className="text-gray-600 whitespace-pre-line mb-4">{item.description}</p>
               {item.link && (
                 <a
@@ -255,7 +255,7 @@ const Contact = () => {
       {/* CTA Section */}
       <div className="bg-gradient-to-r bg-base-300 text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Fitness Journey?</h2>
+          <h2 className="text-3xl font-bold mb-4 text-brand">Ready to Start Your Fitness Journey?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Join Dumbbell Don today and take the first step towards a healthier, stronger you.
           </p>

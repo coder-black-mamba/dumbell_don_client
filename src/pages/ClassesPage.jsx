@@ -69,7 +69,7 @@ const ClassesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-base-300 py-16 ">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20 px-4">
         <div className="container mx-auto text-center">
@@ -154,8 +154,8 @@ const ClassesPage = () => {
 
         {/* CTA Section */}
         <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4 ">Can't Find What You're Looking For?</h2>
+          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
             We offer custom training programs and private sessions. Contact us to create a personalized fitness plan.
           </p>
           <button className="bg-brand hover:bg-brand/90 text-white font-medium py-3 px-8 rounded-full transition-colors">

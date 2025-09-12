@@ -87,7 +87,7 @@ const Pricing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16">
+    <div className="min-h-screen bg-base-300 py-16">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20 px-4">
         <div className="container mx-auto text-center">
@@ -234,7 +234,7 @@ const Pricing = () => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <h3 className="font-semibold text-lg mb-2">{faq.question}</h3>
+                <h3 className="font-semibold text-lg mb-2 text-base-300">{faq.question}</h3>
                 <p className="text-gray-600">{faq.answer}</p>
               </motion.div>
             ))}

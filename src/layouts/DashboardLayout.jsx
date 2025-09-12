@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { NavLink, Outlet } from 'react-router';
+import Logo from '../assets/logo_white.png';
 
 const DashboardLayout = () => {
   const userData = {
@@ -20,8 +21,11 @@ const DashboardLayout = () => {
     <div className="min-h-screen bg-base-200">
       {/* Header */}
       <header className="bg-base-300 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Dumbbell Don</h1>
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <NavLink to="/" className="flex items-center">
+            <img src={Logo} alt="DuBell Don" className="h-16" />
+          </NavLink>
+          
           <div className="flex items-center space-x-4">
             <span className="text-sm">Welcome, {userData.name.split(' ')[0]}</span>
             <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center">

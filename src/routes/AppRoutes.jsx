@@ -15,6 +15,8 @@ import MyProfile from '../components/dashboard/MyProfile'
 import Invoices from '../components/dashboard/Invoices'
 import Stats from '../components/dashboard/Stats'
 import Payments from '../components/dashboard/Payments'
+import ClassesDashboard from '../components/dashboard/ClassesDashboard'
+import Attendence from '../components/dashboard/Attendence'
 
 function AppRoutes() {
   return (
@@ -36,6 +38,8 @@ function AppRoutes() {
             <Route path="invoices" element={<Invoices />} />
             <Route path="stats" element={<Stats />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="classes" element={<ClassesDashboard />} />
+            <Route path="attendence" element={<Attendence />} />
         </Route>
     </Routes>
   )

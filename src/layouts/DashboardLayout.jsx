@@ -39,20 +39,23 @@ const DashboardLayout = () => {
               <NavLink to="/dashboard" end className={linkClass}>
                 Dashboard
               </NavLink>
-              <NavLink to="/dashboard/profile" className={linkClass}>
-                My Profile
-              </NavLink>
               <NavLink to="/dashboard/classes" className={linkClass}>
                 Classes
+              </NavLink>
+              <NavLink to="/dashboard/attendence" className={linkClass}>
+                Attendence
+              </NavLink>
+              <NavLink to="/dashboard/profile" className={linkClass}>
+                My Profile
               </NavLink>
               <NavLink to="/dashboard/invoices" className={linkClass}>
                 Invoices
               </NavLink>
-              <NavLink to="/dashboard/stats" className={linkClass}>
-                Stats
-              </NavLink>
               <NavLink to="/dashboard/payments" className={linkClass}>
                 Payments
+              </NavLink>
+              <NavLink to="/dashboard/stats" className={linkClass}>
+                Stats
               </NavLink>
               {/* Add more NavLinks here as needed */}
             </nav>

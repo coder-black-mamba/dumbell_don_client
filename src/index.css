@@ -13,3 +13,7 @@
 .border-brand{
     border-color: #C60822;
 }
+
+button{
+    cursor: pointer;
+}

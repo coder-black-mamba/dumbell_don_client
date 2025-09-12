@@ -7,6 +7,8 @@ import ClassesPage from '../pages/ClassesPage'
 import Trainers from '../pages/Trainers'
 import Pricing from '../pages/Pricing'
 import Contact from '../pages/Contact'
+import LogInPage from '../pages/LogInPage'
+import SignUpPage from '../pages/SignUpPage'
 
 function AppRoutes() {
   return (
@@ -18,6 +20,8 @@ function AppRoutes() {
             <Route path="/trainers" element={<Trainers />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<LogInPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
         </Route>
     </Routes>
   )

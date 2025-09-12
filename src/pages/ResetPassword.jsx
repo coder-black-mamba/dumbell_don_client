@@ -49,11 +49,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-base-200 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <Link to="/">
-            <img className="h-16 w-auto" src={Logo} alt="Dumbbell Don" />
-          </Link>
-        </div>
+        
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-100">
           {step === 1 ? 'Reset your password' : 'Check your email'}
         </h2>
@@ -88,7 +84,7 @@ const ResetPassword = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-base-200 text-white placeholder-gray-400 focus:ring-brand focus:border-brand block w-full pl-10 sm:text-sm border-gray-600 rounded-md"
+                    className="px-3 py-4 bg-base-200 text-white placeholder-gray-400 focus:ring-brand focus:border-brand block w-full pl-10 sm:text-sm border-gray-600 rounded-md"
                     placeholder="Enter your email"
                   />
                 </div>

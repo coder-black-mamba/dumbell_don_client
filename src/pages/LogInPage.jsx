@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaUser, FaLock } from 'react-icons/fa';
-import { Link } from 'react-router';
+import { Link,NavLink } from 'react-router';
 
 const LogInPage = () => {
   const {
@@ -106,9 +106,9 @@ const LogInPage = () => {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+              <NavLink to="/reset-password" className="font-medium text-blue-600 hover:text-blue-500">
                 Forgot your password?
-              </a>
+              </NavLink>
             </div>
           </div>
 

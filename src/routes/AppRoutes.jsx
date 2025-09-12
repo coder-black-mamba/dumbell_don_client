@@ -17,6 +17,7 @@ import Stats from '../components/dashboard/Stats'
 import Payments from '../components/dashboard/Payments'
 import ClassesDashboard from '../components/dashboard/ClassesDashboard'
 import Attendence from '../components/dashboard/Attendence'
+import ResetPassword from '../pages/ResetPassword'
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
         {/* dashboard routes */}
         <Route path='/dashboard' element={<DashboardLayout />}>

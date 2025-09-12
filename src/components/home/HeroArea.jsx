@@ -1,55 +1,121 @@
 import React from "react";
+import { motion } from "framer-motion";
 import HeroAreaImage from "../../assets/hero-bg.jpg";
+import { FaDumbbell, FaMedal, FaClock } from "react-icons/fa";
+
+const stats = [
+  {
+    icon: <FaDumbbell className="w-6 h-6 text-brand" />,
+    value: "500+",
+    label: "Happy Customers"
+  },
+  {
+    icon: <FaMedal className="w-6 h-6 text-brand" />,
+    value: "50+",
+    label: "Certified Trainers"
+  },
+  {
+    icon: <FaClock className="w-6 h-6 text-brand" />,
+    value: "50+",
+    label: "Years Experience"
+  }
+];
+
 const HeroArea = () => {
   return (
-    <div
-      className="flex flex-col  justify-center items-center bg-center bg-cover min-h-screen  "
-      style={{ backgroundImage: `url(${HeroAreaImage})` }}
+    <section 
+      className="relative flex items-center justify-center min-h-screen overflow-hidden bg-cover bg-center"
+      style={{ 
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url(${HeroAreaImage})`,
+        backgroundAttachment: 'fixed'
+      }}
     >
-      <div className="md:w-1/2 w-full px-5 text-center">
-        <div className="flex flex-col items-center sm:flex-row justify-center sm:justify-between">
-          <h1 className="text-5xl md:text-7xl font-bold text-white md:px-0 px-5 w-full md:w-auto">
-            Fell The <span className="text-brand">Burn</span>,
-            Love The <span className="text-brand">Results</span>
-          </h1>
-        </div>
-        <p className="text-base-content text-sm px-5 font-medium mt-5 sm:mt-0">
-          We are a professional gym located in the heart of the city. Our gym
-          offers you a variety of equipment and personalized training programs
-          to help you achieve your fitness goals. Our experienced trainers will
-          guide you through each workout, providing you with the support and
-          motivation you need to succeed.
-        </p>
-        <button className="btn bg-brand text-white px-5 w-full md:w-auto mt-5 py-8 px-15 text-2xl">
-          Book A Season Now
-        </button>
+      <div className="container mx-auto px-4 z-10">
+        <div className="max-w-4xl mx-auto text-center my-10 py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+              Transform Your <span className="text-brand">Body</span>, <br />
+              Transform Your <span className="text-brand">Life</span>
+            </h1>
+            
+            <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Join our fitness community and start your journey to a healthier, stronger you. 
+              With personalized training programs and expert guidance, we'll help you achieve 
+              your fitness goals faster than you ever thought possible.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-brand hover:bg-brand/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+              >
+                Start Your Journey
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-transparent hover:bg-white/10 text-white border-2 border-white/30 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+              >
+                Learn More
+              </motion.button>
+            </div>
+          </motion.div>
 
-        <div className="my-5 text-center flex justify-center gap-5 py-3 ">
-          <div className="single-icon-block flex flex-col items-center px-3 bg-base-100 py-3 rounded w-24">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-brand">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-            </svg>
-            <p className=" my-1">500+</p>
-            <p className="text-sm">Happy <br /> Customers</p>
-          </div>
-          <div className="single-icon-block flex flex-col items-center px-3 bg-base-100 py-3 rounded w-24">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 text-brand">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-            </svg>
-            <p className=" my-1">50+</p>
-            <p className="text-sm">Certified <br /> Trainers</p>
-          </div>
-          <div className="single-icon-block flex flex-col items-center px-3 bg-base-100 py-3 rounded w-24">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 text-brand">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-            </svg>
-            <p className=" my-1">50+</p>
-            <p className="text-sm">Years of <br /> Experience</p>
-          </div>
+          <motion.div 
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          >
+            {stats.map((stat, index) => (
+              <div 
+                key={index}
+                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300"
+              >
+                <div className="flex flex-col items-center">
+                  <div className="p-3 bg-brand/10 rounded-full mb-3">
+                    {stat.icon}
+                  </div>
+                  <span className="text-3xl font-bold text-white mb-1">{stat.value}</span>
+                  <span className="text-sm text-gray-300 text-center">{stat.label}</span>
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
-    </div>
+
+      {/* Animated elements */}
+      <div className="absolute inset-0 overflow-hidden opacity-20">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-brand/30 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-purple-500/30 rounded-full filter blur-3xl animate-blob animation-delay-4000"></div>
+      </div>
+    </section>
   );
 };
+
+// Add these styles to your global CSS file or in a style tag
+const styles = `
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+`;
 
 export default HeroArea;

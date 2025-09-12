@@ -9,6 +9,9 @@ import Pricing from '../pages/Pricing'
 import Contact from '../pages/Contact'
 import LogInPage from '../pages/LogInPage'
 import SignUpPage from '../pages/SignUpPage'
+import UserDashboard from '../pages/UserDashboard'
+import DashboardLayout from '../layouts/DashboardLayout'
+import MyProfile from '../components/dashboard/MyProfile'
 
 function AppRoutes() {
   return (
@@ -22,6 +25,11 @@ function AppRoutes() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+        </Route>
+        {/* dashboard routes */}
+        <Route path='/dashboard' element={<DashboardLayout />}>
+            <Route index element={<UserDashboard />} />
+            <Route path="profile" element={<MyProfile />} />
         </Route>
     </Routes>
   )

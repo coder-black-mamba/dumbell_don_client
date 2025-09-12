@@ -1,21 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaCheck } from 'react-icons/fa';
 import { Link } from 'react-router';
 
 const SignUpPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+    reset
+  } = useForm({
+    mode: 'onChange',
+  });
 
   const password = watch('password', '');
 
-  const onSubmit = (data) => {
-    console.log('Form submitted:', data);
-    // Handle signup logic here
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Form submitted:', data);
+      setIsSuccess(true);
+      reset();
+    } catch (error) {
+      console.error('Signup error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,3}[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,4}$/;

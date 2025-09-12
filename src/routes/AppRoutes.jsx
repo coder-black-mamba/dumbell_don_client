@@ -18,6 +18,8 @@ import Payments from '../components/dashboard/Payments'
 import ClassesDashboard from '../components/dashboard/ClassesDashboard'
 import Attendence from '../components/dashboard/Attendence'
 import ResetPassword from '../pages/ResetPassword'
+import ActivationEmailSuccessfull from '../pages/ActivationEmailSuccessfull'
+import EmailVerified from '../pages/EmailVerified'
 
 function AppRoutes() {
   return (
@@ -32,6 +34,8 @@ function AppRoutes() {
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/activation-email-successfull" element={<ActivationEmailSuccessfull />} />
+            <Route path="/email-verified" element={<EmailVerified />} />
         </Route>
         {/* dashboard routes */}
         <Route path='/dashboard' element={<DashboardLayout />}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, Navigate } from 'react-router'
 import BaseLayout from '../layouts/BaseLayout'
 import HomePage from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
@@ -10,6 +10,8 @@ import Contact from '../pages/Contact'
 import LogInPage from '../pages/LogInPage'
 import SignUpPage from '../pages/SignUpPage'
 import UserDashboard from '../pages/UserDashboard'
+import AdminDashboard from '../pages/AdminDahsboard'
+import StaffDashboard from '../pages/StaffDashboard'
 import DashboardLayout from '../layouts/DashboardLayout'
 import MyProfile from '../components/dashboard/MyProfile'
 import Invoices from '../components/dashboard/Invoices'
@@ -46,6 +48,18 @@ function AppRoutes() {
             <Route path="payments" element={<Payments />} />
             <Route path="classes" element={<ClassesDashboard />} />
             <Route path="attendence" element={<Attendence />} />
+        </Route>
+
+        {/* Admin routes */}
+        <Route path="/admin/*" element={<AdminDashboard />}>
+            <Route index element={<Navigate to="/admin" replace />} />
+            {/* Add admin specific sub-routes here */}
+        </Route>
+
+        {/* Staff routes */}
+        <Route path="/staff/*" element={<StaffDashboard />}>
+            <Route index element={<Navigate to="/staff" replace />} />
+            {/* Add staff specific sub-routes here */}
         </Route>
     </Routes>
   )

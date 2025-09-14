@@ -28,7 +28,7 @@ import AdminUsers from '../components/AdminDashboard/AdminUsers'
 import AdminMembershipPlans from '../components/AdminDashboard/AdminMembershipPlans'
 import AdminClasses from '../components/AdminDashboard/AdminClasses'
 import AdminBookings from '../components/AdminDashboard/AdminBookings'
-
+import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
 
 function AppRoutes() {
   return (
@@ -64,6 +64,7 @@ function AppRoutes() {
             <Route path="memberships" element={<AdminMembershipPlans />} />
             <Route path="classes" element={<AdminClasses />} />
             <Route path="bookings" element={<AdminBookings />} />
+            <Route path="attendance" element={<AdminAttendences />} />
             {/* Add admin specific sub-routes here */}
         </Route>
 

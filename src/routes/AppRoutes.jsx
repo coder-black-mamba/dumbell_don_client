@@ -27,6 +27,9 @@ import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
 import AdminUsers from '../components/AdminDashboard/AdminUsers'
 import AdminMembershipPlans from '../components/AdminDashboard/AdminMembershipPlans'
 import AdminClasses from '../components/AdminDashboard/AdminClasses'
+import AdminBookings from '../components/AdminDashboard/AdminBookings'
+
+
 function AppRoutes() {
   return (
     <Routes>
@@ -60,6 +63,7 @@ function AppRoutes() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="memberships" element={<AdminMembershipPlans />} />
             <Route path="classes" element={<AdminClasses />} />
+            <Route path="bookings" element={<AdminBookings />} />
             {/* Add admin specific sub-routes here */}
         </Route>
 

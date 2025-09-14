@@ -10,7 +10,7 @@ import Contact from '../pages/Contact'
 import LogInPage from '../pages/LogInPage'
 import SignUpPage from '../pages/SignUpPage'
 import UserDashboard from '../pages/UserDashboard'
-import AdminDashboard from '../pages/AdminDahsboard'
+import AdminDashboard from '../pages/AdminDashboard'
 import StaffDashboard from '../pages/StaffDashboard'
 import DashboardLayout from '../layouts/DashboardLayout'
 import MyProfile from '../components/dashboard/MyProfile'
@@ -22,7 +22,9 @@ import Attendence from '../components/dashboard/Attendence'
 import ResetPassword from '../pages/ResetPassword'
 import ActivationEmailSuccessfull from '../pages/ActivationEmailSuccessfull'
 import EmailVerified from '../pages/EmailVerified'
-
+import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
+import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
+    
 function AppRoutes() {
   return (
     <Routes>
@@ -51,14 +53,14 @@ function AppRoutes() {
         </Route>
 
         {/* Admin routes */}
-        <Route path="/admin/*" element={<AdminDashboard />}>
-            <Route index element={<Navigate to="/admin" replace />} />
+        <Route path="/admin/*" element={<AdminDashboardLayout />}>
+            <Route index element={<AdminDashboard />} />
             {/* Add admin specific sub-routes here */}
         </Route>
 
         {/* Staff routes */}
-        <Route path="/staff/*" element={<StaffDashboard />}>
-            <Route index element={<Navigate to="/staff" replace />} />
+        <Route path="/staff/*" element={<StaffDashboardLayout />}>
+            <Route index element={<StaffDashboard />} />
             {/* Add staff specific sub-routes here */}
         </Route>
     </Routes>

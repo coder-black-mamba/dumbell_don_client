@@ -5,6 +5,7 @@ import {
   FaUsers,
   FaDumbbell,
   FaCalendarAlt,
+  FaIdCard,
   FaSignOutAlt,
   FaBars,
   FaTimes,
@@ -31,8 +32,10 @@ const StaffDashboardLayout = () => {
     { name: "Classes", icon: <FaDumbbell />, path: "/staff/classes" },
     { name: "Bookings", icon: <FaCalendarAlt />, path: "/staff/bookings" },
     { name: "Members", icon: <FaUsers />, path: "/staff/members" },
+    { name: "Memberships", icon: <FaIdCard />, path: "/staff/memberships" },
     { name: "Feedback", icon: <FaComments />, path: "/staff/feedback" },
     { name: "Profile", icon: <FaUserCog />, path: "/staff/profile" },
+
   ];
 
   const handleLogout = () => {
@@ -61,7 +64,7 @@ const StaffDashboardLayout = () => {
         }`}
       >
         <div className="flex h-16 items-center justify-between border-b border-gray-700 px-4">
-          <h1 className="text-xl font-bold">Staff Portal</h1>
+          <h1 className="text-xl font-bold">Staff Dashboard</h1>
           <button
             onClick={toggleSidebar}
             className="rounded-md p-1 text-gray-400 hover:bg-gray-700 hover:text-white lg:hidden"

@@ -33,6 +33,10 @@ import AdminPayments from '../components/AdminDashboard/AdminPayments'
 import AdminInvoices from '../components/AdminDashboard/AdminInvoices'
 import AdminFeedback from '../components/AdminDashboard/AdminFeedback'
 import Report from '../components/AdminDashboard/Report'
+import StaffBookings from '../components/StaffDashboard/StaffBookings'
+import StaffUsers from '../components/StaffDashboard/StaffUsers'
+import StaffFeedback from '../components/StaffDashboard/StaffFeedback'
+
 
 function AppRoutes() {
   return (
@@ -79,6 +83,13 @@ function AppRoutes() {
         {/* Staff routes */}
         <Route path="/staff/*" element={<StaffDashboardLayout />}>
             <Route index element={<StaffDashboard />} />
+            <Route path="attendance" element={<AdminAttendences />} />
+            <Route path="classes" element={<AdminClasses />} />
+            <Route path="memberships" element={<AdminMembershipPlans />} />
+            <Route path="profile" element={<MyProfile />} />
+            <Route path="bookings" element={<StaffBookings />} />
+            <Route path="members" element={<StaffUsers />} />
+            <Route path="feedback" element={<StaffFeedback />} />
             {/* Add staff specific sub-routes here */}
         </Route>
     </Routes>

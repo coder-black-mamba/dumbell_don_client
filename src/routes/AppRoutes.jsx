@@ -24,7 +24,8 @@ import ActivationEmailSuccessfull from '../pages/ActivationEmailSuccessfull'
 import EmailVerified from '../pages/EmailVerified'
 import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
 import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
-    
+import AdminUsers from '../components/AdminDashboard/AdminUsers'
+import AdminMembershipPlans from '../components/AdminDashboard/AdminMembershipPlans'
 function AppRoutes() {
   return (
     <Routes>
@@ -55,6 +56,8 @@ function AppRoutes() {
         {/* Admin routes */}
         <Route path="/admin/*" element={<AdminDashboardLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="memberships" element={<AdminMembershipPlans />} />
             {/* Add admin specific sub-routes here */}
         </Route>
 

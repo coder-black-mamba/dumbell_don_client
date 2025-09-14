@@ -30,6 +30,9 @@ import AdminClasses from '../components/AdminDashboard/AdminClasses'
 import AdminBookings from '../components/AdminDashboard/AdminBookings'
 import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
 import AdminPayments from '../components/AdminDashboard/AdminPayments'
+import AdminInvoices from '../components/AdminDashboard/AdminInvoices'
+import AdminFeedback from '../components/AdminDashboard/AdminFeedback'
+import Report from '../components/AdminDashboard/Report'
 
 function AppRoutes() {
   return (
@@ -67,6 +70,9 @@ function AppRoutes() {
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="attendance" element={<AdminAttendences />} />
             <Route path="payments" element={<AdminPayments />} />
+            <Route path="invoices" element={<AdminInvoices />} />
+            <Route path="feedback" element={<AdminFeedback />} />
+            <Route path="reports" element={<Report />} />
             {/* Add admin specific sub-routes here */}
         </Route>
 

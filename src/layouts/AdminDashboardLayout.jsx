@@ -24,7 +24,8 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // const [activeTab, setActiveTab] = useState('dashboard');
+  const activeTab = location.pathname;
 
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/admin' },
@@ -39,17 +40,8 @@ const AdminDashboard = () => {
     { name: 'Reports', icon: <FaChartBar />, path: '/admin/reports' },
     { name: 'Settings', icon: <FaCog />, path: '/admin/settings' },
   ];
-
-  useEffect(() => {
-    // Set active tab based on current path
-    const currentPath = location.pathname;
-    const activeItem = menuItems.find(item => item.path === currentPath);
-    if (activeItem) {
-      setActiveTab(activeItem.path);
-    } else {
-      setActiveTab('/admin');
-    }
-  }, [location.pathname]);
+  
+  console.log(activeTab);
 
   const handleLogout = () => {
     // Handle logout logic here
@@ -94,11 +86,10 @@ const AdminDashboard = () => {
                   to={item.path}
                   className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
                     activeTab === item.path
-                      ? 'bg-brand-dark text-white'
+                      ? 'bg-brand text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                   }`}
                   onClick={() => {
-                    setActiveTab(item.path);
                     if (window.innerWidth < 1024) {
                       setSidebarOpen(false);
                     }

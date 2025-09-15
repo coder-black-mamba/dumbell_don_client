@@ -21,20 +21,17 @@ const LogInPage = () => {
   // const from = location.state?.from?.pathname || "/";
 
   const onSubmit = async (data) => {
+    console.log(isSubmitting);
     try { 
-     
-      
       const response=await login(data);
-      console.log(response);
+      console.log(data);
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 5000);
 
-      navigate("/", { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
-      setError(
-        error.response?.data?.detail ||
-          error.message ||
-          "Login failed. Please check your credentials and try again."
-      );
+      setError("Login failed. Please check your credentials and try again.");
     } finally {
     }
   };

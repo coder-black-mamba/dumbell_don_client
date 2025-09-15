@@ -1,18 +1,42 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { FaUser, FaLock } from 'react-icons/fa';
-import { Link,NavLink } from 'react-router';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaUser, FaLock, FaSpinner } from "react-icons/fa";
+import { Link, useNavigate, useLocation, NavLink } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import ErrorMessage from "../components/common/ErrorMessage";
 
 const LogInPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log('Form submitted:', data);
-    // Handle login logic here
+  const { login } = useAuth();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // const from = location.state?.from?.pathname || "/";
+
+  const onSubmit = async (data) => {
+    try { 
+     
+      
+      const response=await login(data);
+      console.log(response);
+
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Login failed:", error);
+      setError(
+        error.response?.data?.detail ||
+          error.message ||
+          "Login failed. Please check your credentials and try again."
+      );
+    } finally {
+    }
   };
 
   return (
@@ -26,11 +50,16 @@ const LogInPage = () => {
             Please sign in to your account
           </p>
         </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+
+        {error && <ErrorMessage message={error} onClose={() => setError("")} />}
+
+        <form className="mt-4 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -42,14 +71,16 @@ const LogInPage = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  {...register('email', {
-                    required: 'Email is required',
+                  {...register("email", {
+                    required: "Email is required",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Invalid email address',
+                      message: "Invalid email address",
                     },
                   })}
-                  className={`appearance-none block w-full pl-10 pr-3 py-2 border text-gray-600 ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className={`appearance-none block w-full pl-10 pr-3 py-2 border text-gray-600 ${
+                    errors.email ? "border-red-300" : "border-gray-300"
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                   placeholder="you@example.com"
                 />
               </div>
@@ -61,7 +92,10 @@ const LogInPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Password
               </label>
               <div className="relative">
@@ -73,14 +107,16 @@ const LogInPage = () => {
                   name="password"
                   type="password"
                   autoComplete="current-password"
-                  {...register('password', {
-                    required: 'Password is required',
+                  {...register("password", {
+                    required: "Password is required",
                     minLength: {
                       value: 6,
-                      message: 'Password must be at least 6 characters',
+                      message: "Password must be at least 6 characters",
                     },
                   })}
-                  className={`appearance-none text-gray-600 block w-full pl-10 pr-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className={`appearance-none text-gray-600 block w-full pl-10 pr-3 py-2 border ${
+                    errors.password ? "border-red-300" : "border-gray-300"
+                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                   placeholder="••••••••"
                 />
               </div>
@@ -100,13 +136,19 @@ const LogInPage = () => {
                 type="checkbox"
                 className="h-4 w-4 text-blue-600 focus:ring-error-500 border-error-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-900"
+              >
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <NavLink to="/reset-password" className="font-medium text-blue-600 hover:text-blue-500">
+              <NavLink
+                to="/reset-password"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
                 Forgot your password?
               </NavLink>
             </div>
@@ -115,9 +157,19 @@ const LogInPage = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand hover:bg-brand/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand transition-colors duration-200"
+              disabled={isSubmitting}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand ${
+                isSubmitting ? "opacity-75 cursor-not-allowed" : ""
+              }`}
             >
-              Sign in
+              {isSubmitting ? (
+                <>
+                  <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
         </form>

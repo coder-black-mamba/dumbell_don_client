@@ -2,6 +2,7 @@ import React from 'react';
 import SectionTitle from '../SectionTitle';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
 
 const reviews = [
   {
@@ -86,16 +87,17 @@ const Reviews = () => {
             </motion.div>
           ))}
         </div>
-
-        <div className="mt-16 text-center">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-brand text-white rounded-full font-medium hover:bg-brand/90 transition-colors"
-          >
-            Leave a Review
-          </motion.button>
-        </div>
+        <Link to="/reviews">
+          <div className="mt-16 text-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 bg-brand text-white rounded-full font-medium hover:bg-brand/90 transition-colors"
+            >
+              Leave a Review
+            </motion.button>
+          </div>
+        </Link>
       </div>
     </section>
   );

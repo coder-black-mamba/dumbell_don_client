@@ -2,32 +2,33 @@ import React from "react";
 import { motion } from "framer-motion";
 import HeroAreaImage from "../../assets/hero-bg.jpg";
 import { FaDumbbell, FaMedal, FaClock } from "react-icons/fa";
+import { Link } from "react-router";
 
 const stats = [
   {
     icon: <FaDumbbell className="w-6 h-6 text-brand" />,
     value: "500+",
-    label: "Happy Customers"
+    label: "Happy Customers",
   },
   {
     icon: <FaMedal className="w-6 h-6 text-brand" />,
     value: "50+",
-    label: "Certified Trainers"
+    label: "Certified Trainers",
   },
   {
     icon: <FaClock className="w-6 h-6 text-brand" />,
     value: "50+",
-    label: "Years Experience"
-  }
+    label: "Years Experience",
+  },
 ];
 
 const HeroArea = () => {
   return (
-    <section 
+    <section
       className="relative flex items-center justify-center min-h-screen overflow-hidden bg-cover bg-center"
-      style={{ 
+      style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url(${HeroAreaImage})`,
-        backgroundAttachment: 'fixed'
+        backgroundAttachment: "fixed",
       }}
     >
       <div className="container mx-auto px-4 z-10">
@@ -41,39 +42,44 @@ const HeroArea = () => {
               Transform Your <span className="text-brand">Body</span>, <br />
               Transform Your <span className="text-brand">Life</span>
             </h1>
-            
+
             <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Join our fitness community and start your journey to a healthier, stronger you. 
-              With personalized training programs and expert guidance, we'll help you achieve 
-              your fitness goals faster than you ever thought possible.
+              Join our fitness community and start your journey to a healthier,
+              stronger you. With personalized training programs and expert
+              guidance, we'll help you achieve your fitness goals faster than
+              you ever thought possible.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-brand hover:bg-brand/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
-              >
-                Start Your Journey
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-transparent hover:bg-white/10 text-white border-2 border-white/30 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
-              >
-                Learn More
-              </motion.button>
+              <Link to="/login">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-brand hover:bg-brand/90 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+                >
+                  Start Your Journey
+                </motion.button>
+              </Link>
+              <Link to="/contact">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-transparent hover:bg-white/10 text-white border-2 border-white/30 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+                >
+                  Learn More
+                </motion.button>
+              </Link>
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
             {stats.map((stat, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300"
               >
@@ -81,8 +87,12 @@ const HeroArea = () => {
                   <div className="p-3 bg-brand/10 rounded-full mb-3">
                     {stat.icon}
                   </div>
-                  <span className="text-3xl font-bold text-white mb-1">{stat.value}</span>
-                  <span className="text-sm text-gray-300 text-center">{stat.label}</span>
+                  <span className="text-3xl font-bold text-white mb-1">
+                    {stat.value}
+                  </span>
+                  <span className="text-sm text-gray-300 text-center">
+                    {stat.label}
+                  </span>
                 </div>
               </div>
             ))}

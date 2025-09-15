@@ -40,6 +40,8 @@ import StaffFeedback from '../components/StaffDashboard/StaffFeedback'
 import Unauthorized from '../components/common/Unauthorized'
 import NotFound from '../components/common/NotFound'
 import Dashboard from '../pages/Dashboard'
+import LogOut from '../pages/LogOut'
+import Reviews from '../pages/Reviews'
 
 function AppRoutes() {
   return (
@@ -58,6 +60,8 @@ function AppRoutes() {
             <Route path="/email-verified" element={<EmailVerified />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/logout" element={<LogOut />} />
+            <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}

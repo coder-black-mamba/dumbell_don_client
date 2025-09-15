@@ -2,6 +2,7 @@ import React from 'react';
 import SectionTitle from '../SectionTitle';
 import { FaDumbbell, FaRunning, FaFire, FaHeartbeat, FaClock, FaUserFriends } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
 
 const fitnessClasses = [
   {
@@ -103,12 +104,13 @@ const Classes = () => {
             </motion.div>
           ))}
         </div>
-
+        <Link to="/classes">
         <div className="text-center mt-12">
           <button className="px-8 py-3 border-2 border-brand text-brand hover:bg-brand hover:text-white rounded-full font-medium transition-colors">
             View All Classes
           </button>
         </div>
+        </Link>
       </div>
     </section>
   );

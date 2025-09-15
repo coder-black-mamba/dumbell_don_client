@@ -2,6 +2,7 @@ import React from 'react';
 import SectionTitle from '../SectionTitle';
 import { FaCheck, FaFire, FaStar, FaCrown } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router';
 
 const plans = [
   {
@@ -124,9 +125,11 @@ const Plans = () => {
 
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-6">Need help choosing the right plan?</p>
+          <Link to="/contact">
           <button className="px-6 py-2 border-2 border-brand text-brand hover:bg-brand hover:text-white rounded-full font-medium transition-colors">
             Contact Us
           </button>
+          </Link>
         </div>
       </div>
     </section>

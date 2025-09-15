@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { FaBars, FaTimes, FaUserAlt, FaPhoneAlt } from 'react-icons/fa';
-import { Link } from 'react-router';
-import Logo from '../assets/logo_white.png';
+import React, { useState, useEffect } from "react";
+import { FaBars, FaTimes, FaUserAlt, FaPhoneAlt } from "react-icons/fa";
+import { Link } from "react-router";
+import Logo from "../assets/logo_white.png";
+import { useAuth } from "../hooks/useAuth";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,33 +18,32 @@ const NavBar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrolled]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Classes', path: '/classes' },
-    { name: 'Trainers', path: '/trainers' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'Contact', path: '/contact' },
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Classes", path: "/classes" },
+    { name: "Trainers", path: "/trainers" },
+    { name: "Pricing", path: "/pricing" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-base-100/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
-    }`}
+    <header
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-base-100/90 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
+      }`}
     >
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img 
-              src={Logo} 
-              alt="Dumbbell Don" 
-              className="h-24" 
-            />
+            <img src={Logo} alt="Dumbbell Don" className="h-24" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -58,22 +60,41 @@ const NavBar = () => {
           </div>
 
           {/* Auth Buttons - Desktop */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <Link
-              to="/login"
-              className="text-white hover:text-brand transition-colors duration-300 flex items-center"
-            >
-              <FaUserAlt className="mr-2" />
-              Login
-            </Link>
-            <Link
-              to="/contact"
-              className="bg-brand hover:bg-brand/90 text-white px-6 py-2 rounded-full font-medium transition-colors duration-300 flex items-center"
-            >
-              <FaPhoneAlt className="mr-2" />
-              Contact Us
-            </Link>
-          </div>
+          {!isAuthenticated ? (
+            <div className="hidden lg:flex items-center space-x-4">
+              <Link
+                to="/login"
+                className="text-white hover:text-brand transition-colors duration-300 flex items-center"
+              >
+                <FaUserAlt className="mr-2" />
+                Login
+              </Link>
+              <Link
+                to="/contact"
+                className="bg-brand hover:bg-brand/90 text-white px-6 py-2 rounded-full font-medium transition-colors duration-300 flex items-center"
+              >
+                <FaPhoneAlt className="mr-2" />
+                Contact Us
+              </Link>
+            </div>
+          ) : (
+            <div className="hidden lg:flex items-center space-x-4">
+              <Link
+                to="/dashboard"
+                className="bg-brand hover:bg-brand/90 text-white px-6 py-2 rounded-full font-medium transition-colors duration-300 flex items-center"
+              >
+                <FaUserAlt className="mr-2" />
+                Dashboard
+              </Link>
+              <Link
+                to="/logout"
+                className="text-white hover:text-brand transition-colors duration-300 flex items-center"
+              >
+                <FaUserAlt className="mr-2" />
+                Logout
+              </Link>
+            </div>
+          )}
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
@@ -104,7 +125,7 @@ const NavBar = () => {
                   {link.name}
                 </Link>
               ))}
-              <div className="pt-4 border-t border-gray-700">
+              {!isAuthenticated ? (<div className="pt-4 border-t border-gray-700">
                 <Link
                   to="/login"
                   className="block text-white hover:text-brand py-2 px-4 rounded transition-colors duration-300"
@@ -119,7 +140,24 @@ const NavBar = () => {
                 >
                   Contact Us
                 </Link>
+              </div>):(
+                <div className="pt-4 border-t border-gray-700">
+                <Link
+                  to="/dashboard"
+                  className="block text-white hover:text-brand py-2 px-4 rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/logout"
+                  className="block text-white hover:text-brand py-2 px-4 rounded transition-colors duration-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Logout
+                </Link>
               </div>
+              )}
             </div>
           </div>
         )}

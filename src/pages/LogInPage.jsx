@@ -24,10 +24,8 @@ const LogInPage = () => {
     console.log(isSubmitting);
     try { 
       const response=await login(data);
-      console.log(data);
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 5000);
+      console.log(response)
+      navigate("/dashboard", { replace: true });
 
     } catch (error) {
       console.error("Login failed:", error);

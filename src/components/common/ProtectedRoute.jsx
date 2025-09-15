@@ -2,9 +2,14 @@ import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
 export const ProtectedRoute = ({ children, roles = [] }) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
+  // const user =JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
 
+  // console.log("Protected Routes")
+  // console.log(isAuthenticated)
+  // console.log(user)
+  // console.log(roles)
   if (loading) {
     return <div>Loading...</div>; // Or a loading spinner
   }
@@ -24,19 +29,19 @@ export const ProtectedRoute = ({ children, roles = [] }) => {
 };
 
 export const AdminRoute = ({ children }) => (
-  <ProtectedRoute roles={['admin']}>
+  <ProtectedRoute roles={['ADMIN']}>
     {children}
   </ProtectedRoute>
 );
 
 export const StaffRoute = ({ children }) => (
-  <ProtectedRoute roles={['staff']}>
+  <ProtectedRoute roles={['STAFF']}>
     {children}
   </ProtectedRoute>
 );
 
 export const MemberRoute = ({ children }) => (
-  <ProtectedRoute roles={['member']}>
+  <ProtectedRoute roles={['MEMBER']}>
     {children}
   </ProtectedRoute>
 );

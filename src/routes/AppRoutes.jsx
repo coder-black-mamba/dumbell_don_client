@@ -1,5 +1,6 @@
 import React from 'react'
-import { Route, Routes, Navigate } from 'react-router'
+import { Route, Routes, Navigate, Outlet } from 'react-router'
+import { AdminRoute, MemberRoute, StaffRoute } from '../components/common/ProtectedRoute'
 import BaseLayout from '../layouts/BaseLayout'
 import HomePage from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
@@ -36,7 +37,8 @@ import Report from '../components/AdminDashboard/Report'
 import StaffBookings from '../components/StaffDashboard/StaffBookings'
 import StaffUsers from '../components/StaffDashboard/StaffUsers'
 import StaffFeedback from '../components/StaffDashboard/StaffFeedback'
-
+import Unauthorized from '../components/common/Unauthorized'
+import NotFound from '../components/common/NotFound'
 
 function AppRoutes() {
   return (
@@ -53,44 +55,59 @@ function AppRoutes() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/activation-email-successfull" element={<ActivationEmailSuccessfull />} />
             <Route path="/email-verified" element={<EmailVerified />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}
-        <Route path='/dashboard' element={<DashboardLayout />}>
-            <Route index element={<UserDashboard />} />
-            <Route path="profile" element={<MyProfile />} />
-            <Route path="invoices" element={<Invoices />} />
-            <Route path="stats" element={<Stats />} />
-            <Route path="payments" element={<Payments />} />
-            <Route path="classes" element={<ClassesDashboard />} />
-            <Route path="attendence" element={<Attendence />} />
+        <Route path='/dashboard' element={
+          <MemberRoute>
+            <DashboardLayout />
+          </MemberRoute>
+        }>
+          <Route index element={<UserDashboard />} />
+          <Route path="profile" element={<MyProfile />} />
+          <Route path="invoices" element={<Invoices />} />
+          <Route path="stats" element={<Stats />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="classes" element={<ClassesDashboard />} />
+          <Route path="attendence" element={<Attendence />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Admin routes */}
-        <Route path="/admin/*" element={<AdminDashboardLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="memberships" element={<AdminMembershipPlans />} />
-            <Route path="classes" element={<AdminClasses />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="attendance" element={<AdminAttendences />} />
-            <Route path="payments" element={<AdminPayments />} />
-            <Route path="invoices" element={<AdminInvoices />} />
-            <Route path="feedback" element={<AdminFeedback />} />
-            <Route path="reports" element={<Report />} />
-            {/* Add admin specific sub-routes here */}
+        <Route path="/admin/*" element={
+          <AdminRoute>
+            <AdminDashboardLayout />
+          </AdminRoute>
+        }>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="memberships" element={<AdminMembershipPlans />} />
+          <Route path="classes" element={<AdminClasses />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="attendance" element={<AdminAttendences />} />
+          <Route path="payments" element={<AdminPayments />} />
+          <Route path="invoices" element={<AdminInvoices />} />
+          <Route path="feedback" element={<AdminFeedback />} />
+          <Route path="reports" element={<Report />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Staff routes */}
-        <Route path="/staff/*" element={<StaffDashboardLayout />}>
-            <Route index element={<StaffDashboard />} />
-            <Route path="attendance" element={<AdminAttendences />} />
-            <Route path="classes" element={<AdminClasses />} />
-            <Route path="memberships" element={<AdminMembershipPlans />} />
-            <Route path="profile" element={<MyProfile />} />
-            <Route path="bookings" element={<StaffBookings />} />
-            <Route path="members" element={<StaffUsers />} />
-            <Route path="feedback" element={<StaffFeedback />} />
-            {/* Add staff specific sub-routes here */}
+        <Route path="/staff/*" element={
+          <StaffRoute>
+            <StaffDashboardLayout />
+          </StaffRoute>
+        }>
+          <Route index element={<StaffDashboard />} />
+          <Route path="attendance" element={<AdminAttendences />} />
+          <Route path="classes" element={<AdminClasses />} />
+          <Route path="memberships" element={<AdminMembershipPlans />} />
+          <Route path="profile" element={<MyProfile />} />
+          <Route path="bookings" element={<StaffBookings />} />
+          <Route path="members" element={<StaffUsers />} />
+          <Route path="feedback" element={<StaffFeedback />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
     </Routes>
   )

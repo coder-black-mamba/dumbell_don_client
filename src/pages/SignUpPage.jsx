@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaCheck } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaCheck, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router';
+import ErrorMessage from '../components/common/ErrorMessage';
+import { useNavigate } from 'react-router';
+import { apiClient } from '../services/apiServices';
 
 const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+  const [message, setMessage] = useState({ text: '', type: '' });
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors ,isSubmitting},
     reset
   } = useForm({
     mode: 'onChange',
@@ -21,14 +25,27 @@ const SignUpPage = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Form submitted:', data);
+    try { 
+      console.log(data)
+      const signupData = {
+        "email": data.email,
+        "password": data.password,
+        "first_name": data.firstName,
+        "last_name": data.lastName,
+        "phone_number": data.phone,
+        "address": data.address,
+        "profile_picture": data.profilePicture || null 
+      }
+      const response = await apiClient.post('auth/users/', signupData);
       setIsSuccess(true);
       reset();
+      navigate('/sent-email-success', { state: { email: data.email } });
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error(error);
+      setMessage({
+        text: error.response?.data?.detail || 'Failed to signup. Please try again.',
+        type: 'error',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +64,9 @@ const SignUpPage = () => {
             Join our fitness community today
           </p>
         </div>
-        
+        {message.text && (
+          <ErrorMessage message={message.text} type={message.type} />
+        )}        
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             {/* Name Row */}
@@ -270,7 +289,8 @@ const SignUpPage = () => {
             type="submit"
             className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand hover:bg-brand/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand"
           >
-            Create Account
+                         {isSubmitting ? (<><FaSpinner className="animate-spin"  /> <span className="ml-2">Creating Account...</span></>): 'Create Account'}
+
           </button>
         </form>
 

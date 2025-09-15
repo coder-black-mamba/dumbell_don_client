@@ -43,6 +43,8 @@ import Dashboard from '../pages/Dashboard'
 import LogOut from '../pages/LogOut'
 import Reviews from '../pages/Reviews'
 import RsetPasswordConfirm from '../pages/RsetPasswordConfirm'
+import SentEmailSuccess from '../pages/SentEmailSuccess'
+import ActivateAccount from '../pages/ActivateAccount'
 
 function AppRoutes() {
   return (
@@ -56,6 +58,8 @@ function AppRoutes() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/sent-email-success" element={<SentEmailSuccess />} />
+            <Route path="/activate/:uid/:token" element={<ActivateAccount />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/reset-password/confirm/:uid/:token" element={<RsetPasswordConfirm />} />
             <Route path="/activation-email-successfull" element={<ActivationEmailSuccessfull />} />

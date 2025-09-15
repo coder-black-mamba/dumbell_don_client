@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaLock, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router';
 import Logo from '../assets/logo_white.png';
+import { apiClient } from '../services/apiServices';
 
 const ResetPassword = () => {
   const [email, setEmail] = useState('');
@@ -17,9 +18,7 @@ const ResetPassword = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setStep(2);
+      await apiClient.post('auth/users/reset_password/', { email });
       setMessage('Password reset link has been sent to your email.');
     } catch (error) {
       setMessage('Failed to send reset link. Please try again.');
@@ -96,7 +95,12 @@ const ResetPassword = () => {
                   disabled={isLoading}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand"
                 >
-                  {isLoading ? 'Sending...' : 'Send reset link'}
+                  {isLoading ? (
+                    <>
+                    <span className="animate-spin mr-2 h-5 w-5 border-b-2 border-white rounded-full"></span>
+                    'Sending...'
+                    </>
+                  ) : 'Send reset link'}
                 </button>
               </div>
             </form>

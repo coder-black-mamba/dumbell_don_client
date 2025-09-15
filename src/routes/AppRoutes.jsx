@@ -42,6 +42,7 @@ import NotFound from '../components/common/NotFound'
 import Dashboard from '../pages/Dashboard'
 import LogOut from '../pages/LogOut'
 import Reviews from '../pages/Reviews'
+import RsetPasswordConfirm from '../pages/RsetPasswordConfirm'
 
 function AppRoutes() {
   return (
@@ -56,6 +57,7 @@ function AppRoutes() {
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-password/confirm/:uid/:token" element={<RsetPasswordConfirm />} />
             <Route path="/activation-email-successfull" element={<ActivationEmailSuccessfull />} />
             <Route path="/email-verified" element={<EmailVerified />} />
             <Route path="/unauthorized" element={<Unauthorized />} />

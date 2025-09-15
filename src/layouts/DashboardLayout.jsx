@@ -65,25 +65,25 @@ const DashboardLayout = () => {
             } md:translate-x-0 transition-transform duration-300 ease-in-out w-64 md:w-56 flex-shrink-0 bg-base-300 md:bg-transparent h-screen md:h-auto overflow-y-auto sidebar`}
           >
             <nav className="space-y-1 flex flex-col bg-base-300 p-4 rounded h-full">
-              <NavLink to="/dashboard" end className={linkClass}>
+              <NavLink to="/user/dashboard" end className={linkClass}>
                 Dashboard
               </NavLink>
-              <NavLink to="/dashboard/classes" className={linkClass}>
+              <NavLink to="/user/classes" className={linkClass}>
                 Classes
               </NavLink>
-              <NavLink to="/dashboard/attendence" className={linkClass}>
+              <NavLink to="/user/attendence" className={linkClass}>
                 Attendence
               </NavLink>
-              <NavLink to="/dashboard/profile" className={linkClass}>
+              <NavLink to="/user/profile" className={linkClass}>
                 My Profile
               </NavLink>
-              <NavLink to="/dashboard/invoices" className={linkClass}>
+              <NavLink to="/user/invoices" className={linkClass}>
                 Invoices
               </NavLink>
-              <NavLink to="/dashboard/payments" className={linkClass}>
+              <NavLink to="/user/payments" className={linkClass}>
                 Payments
               </NavLink>
-              <NavLink to="/dashboard/stats" className={linkClass}>
+              <NavLink to="/user/stats" className={linkClass}>
                 Stats
               </NavLink>
               {/* Add more NavLinks here as needed */}

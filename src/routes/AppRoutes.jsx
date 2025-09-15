@@ -45,6 +45,8 @@ import Reviews from '../pages/Reviews'
 import RsetPasswordConfirm from '../pages/RsetPasswordConfirm'
 import SentEmailSuccess from '../pages/SentEmailSuccess'
 import ActivateAccount from '../pages/ActivateAccount'
+import SingleClassPage from '../pages/SingleClassPage'
+import RegistrationSuccessfull from '../pages/RegistrationSuccessfull'
 
 function AppRoutes() {
   return (
@@ -53,6 +55,8 @@ function AppRoutes() {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/classes" element={<ClassesPage />} />
+            <Route path="/classes/:id" element={<SingleClassPage />} />
+            <Route path="/registration-successfull" element={<RegistrationSuccessfull />} />
             <Route path="/trainers" element={<Trainers />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/contact" element={<Contact />} />

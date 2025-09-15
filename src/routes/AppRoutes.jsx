@@ -39,6 +39,7 @@ import StaffUsers from '../components/StaffDashboard/StaffUsers'
 import StaffFeedback from '../components/StaffDashboard/StaffFeedback'
 import Unauthorized from '../components/common/Unauthorized'
 import NotFound from '../components/common/NotFound'
+import Dashboard from '../pages/Dashboard'
 
 function AppRoutes() {
   return (
@@ -56,15 +57,16 @@ function AppRoutes() {
             <Route path="/activation-email-successfull" element={<ActivationEmailSuccessfull />} />
             <Route path="/email-verified" element={<EmailVerified />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}
-        <Route path='/dashboard' element={
+        <Route path='/user/*' element={
           <MemberRoute>
             <DashboardLayout />
           </MemberRoute>
         }>
-          <Route index element={<UserDashboard />} />
+          <Route index path="dashboard" element={<UserDashboard />} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="invoices" element={<Invoices />} />
           <Route path="stats" element={<Stats />} />
@@ -80,7 +82,7 @@ function AppRoutes() {
             <AdminDashboardLayout />
           </AdminRoute>
         }>
-          <Route index element={<AdminDashboard />} />
+          <Route index path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="memberships" element={<AdminMembershipPlans />} />
           <Route path="classes" element={<AdminClasses />} />
@@ -99,7 +101,7 @@ function AppRoutes() {
             <StaffDashboardLayout />
           </StaffRoute>
         }>
-          <Route index element={<StaffDashboard />} />
+          <Route index path="dashboard" element={<StaffDashboard />} />
           <Route path="attendance" element={<AdminAttendences />} />
           <Route path="classes" element={<AdminClasses />} />
           <Route path="memberships" element={<AdminMembershipPlans />} />

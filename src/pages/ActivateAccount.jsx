@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { FaCheckCircle, FaTimesCircle, FaArrowLeft, FaSpinner } from 'react-icons/fa';
 import { apiClient } from '../services/apiServices';
-
+ 
 const ActivateAccount = () => {
   const { uid, token } = useParams();
   const navigate = useNavigate();

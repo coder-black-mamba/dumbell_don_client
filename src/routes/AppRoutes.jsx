@@ -47,6 +47,10 @@ import SentEmailSuccess from '../pages/SentEmailSuccess'
 import ActivateAccount from '../pages/ActivateAccount'
 import SingleClassPage from '../pages/SingleClassPage'
 import RegistrationSuccessfull from '../pages/RegistrationSuccessfull'
+import InitiatePayment from '../pages/InitiatePayment'
+import PaymentSuccess from '../pages/PaymentSuccess'
+import PaymentCancel from '../pages/PaymentCancel'
+import PaymentFail from '../pages/PaymentFail'
 
 function AppRoutes() {
   return (
@@ -72,6 +76,10 @@ function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/logout" element={<LogOut />} />
             <Route path="/reviews" element={<Reviews />} />
+            <Route path="/payment/initiate" element={<InitiatePayment />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/cancel" element={<PaymentCancel />} />
+            <Route path="/payment/fail" element={<PaymentFail />} />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}

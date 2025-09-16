@@ -47,7 +47,8 @@ import SentEmailSuccess from '../pages/SentEmailSuccess'
 import ActivateAccount from '../pages/ActivateAccount'
 import SingleClassPage from '../pages/SingleClassPage'
 import RegistrationSuccessfull from '../pages/RegistrationSuccessfull'
-import InitiatePayment from '../pages/InitiatePayment'
+import InitiateBookingPayment from '../pages/InitiateBookingPayment'
+import InitiateSubscriptionPayment from '../pages/InitiateSubscriptionPayment'
 import PaymentSuccess from '../pages/PaymentSuccess'
 import PaymentCancel from '../pages/PaymentCancel'
 import PaymentFail from '../pages/PaymentFail'
@@ -77,7 +78,8 @@ function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/logout" element={<LogOut />} />
             <Route path="/reviews" element={<Reviews />} />
-            <Route path="/payment/initiate" element={<InitiatePayment />} />
+            <Route path="/payment/initiate/booking" element={<InitiateBookingPayment />} />
+            <Route path="/payment/initiate/subscription" element={<InitiateSubscriptionPayment />} />
             <Route path="/payment/success/:id" element={<PaymentSuccess />} />
             <Route path="/payment/cancel" element={<PaymentCancel />} />
             <Route path="/payment/fail" element={<PaymentFail />} />

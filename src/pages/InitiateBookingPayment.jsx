@@ -38,7 +38,7 @@ const PAYMENT_TYPES = {
   },
 };
 
-const InitiatePayment = () => {
+const InitiateBookingPayment = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [paymentDetails, setPaymentDetails] = useState(PAYMENT_TYPES.BOOKING);
@@ -55,14 +55,12 @@ const InitiatePayment = () => {
     }
 
     try {
-      const { paymentType = 'BOOKING', classData: classDataFromState } = location.state;
+      const { classData: classDataFromState } = location.state;
       
       if (!classDataFromState) {
         console.warn('No classData found in location.state');
       }
-
-      const details = PAYMENT_TYPES[paymentType.toUpperCase()] || PAYMENT_TYPES.BOOKING;
-      setPaymentDetails(details);
+ 
       
       if (classDataFromState) {
         setClassData(classDataFromState);
@@ -94,7 +92,7 @@ const InitiatePayment = () => {
         "notes": "nothing",
         "metadata": {},
       });
-      console.log(invoice_response)
+      // console.log(invoice_response)
 
 
       // initiating payment
@@ -103,15 +101,15 @@ const InitiatePayment = () => {
         "invoice_id": invoice_id
       });
 
-      console.log(payment_response)
+      // console.log(payment_response)
       window.location.href = payment_response.data.payment_url;
 
       // navigate(`/dashboard`);
 
       
     }catch (error) {
-      console.error('Error creating payment intent:', error);
-      setError('Failed to create payment intent');
+      console.error('Error initializing payment:', error);
+      setError('Failed to initialize payment');
     }finally {
       setIsSubmitting(false);
     }}
@@ -138,7 +136,7 @@ const InitiatePayment = () => {
           <div className="bg-primary text-primary-content p-6">
             <h1 className="text-2xl font-bold text-center">Checkout</h1>
             <p className="text-center opacity-90 mt-2">
-              Complete your {paymentDetails.label.toLowerCase()}
+              Complete your Class Booking For Class <span className="font-semibold">"{classData.title}"</span>
             </p>
           </div>
 
@@ -159,14 +157,14 @@ const InitiatePayment = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Plan:</span>
-                  <span className="font-semibold">{paymentDetails.label}</span>
+                  <span className="font-medium">Class Title:</span>
+                  <span className="font-semibold">{classData.title}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Description:</span>
                   <span className="text-right">
-                    {paymentDetails.description}
+                    {classData.description}
                   </span>
                 </div>
 
@@ -185,27 +183,22 @@ const InitiatePayment = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-3">What's included:</h3>
               <ul className="space-y-2">
-                {paymentDetails.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
+              <li  className="flex items-start">
                     <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
-                    <span>{feature}</span>
+                    <span>Access to one class</span>
                   </li>
-                ))}
+                  <li  className="flex items-start">
+                    <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
+                    <span>Valid for 7 days</span>
+                  </li>
+                  <li  className="flex items-start">
+                    <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
+                    <span>Flexible scheduling</span>
+                  </li>
               </ul>
             </div>
 
-            {/* Next Billing Info */}
-            {paymentDetails.id === "subscription" && (
-              <div className="alert alert-info mb-6">
-                <div>
-                  <FaCalendarAlt className="text-xl" />
-                  <span>
-                    Your next billing date will be:{" "}
-                    <strong>{user.nextBillingDate}</strong>
-                  </span>
-                </div>
-              </div>
-            )}
+          
 
             {/* Payment Method
             <div className="mb-8">
@@ -264,7 +257,7 @@ const InitiatePayment = () => {
   );
 };
 
-export default InitiatePayment;
+export default InitiateBookingPayment;
 
 
 

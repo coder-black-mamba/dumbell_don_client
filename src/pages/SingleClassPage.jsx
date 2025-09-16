@@ -42,10 +42,9 @@ const SingleClassPage = () => {
     
     console.log('Navigating to payment with classData:', classData);
     
-    navigate('/payment/initiate', {
+    navigate('/payment/initiate/booking', {
       state: {
         classData: { ...classData },
-        paymentType: 'BOOKING',
       },
     });
   };

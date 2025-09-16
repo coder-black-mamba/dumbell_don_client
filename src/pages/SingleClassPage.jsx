@@ -1,63 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import { FaArrowLeft, FaClock, FaUser, FaCalendarAlt, FaMapMarkerAlt, FaDumbbell, FaRegClock } from 'react-icons/fa';
-import { apiClient } from '../services/apiServices';
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router";
+import {
+  FaArrowLeft,
+  FaClock,
+  FaUser,
+  FaMapMarkerAlt,
+  FaDollarSign,
+  FaUsers,
+  FaCalendarAlt,
+} from "react-icons/fa";
+import { apiClient } from "../services/apiServices";
+import { format, parseISO } from "date-fns";
 
 const SingleClassPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClassDetails = async () => {
       try {
-        setIsLoading(true);
-        // Replace with actual API endpoint
-        // const response = await apiClient.get(`/api/classes/${classId}/`);
-        // setClassData(response.data);
-        
-        // Mock data for now
-        setTimeout(() => {
-          setClassData({
-            id: id,
-            title: 'Morning Yoga Flow',
-            instructor: 'Sarah Johnson',
-            description: 'Start your day with a refreshing yoga session that combines traditional poses with modern flow sequences. Perfect for all levels, this class focuses on building strength, flexibility, and mindfulness. Great for improving posture and reducing stress.',
-            duration: 60, // in minutes
-            schedule: [
-              { day: 'Monday', time: '07:00 AM' },
-              { day: 'Wednesday', time: '07:00 AM' },
-              { day: 'Friday', time: '07:30 AM' }
-            ],
-            location: 'Main Studio',
-            capacity: 15,
-            enrolled: 12,
-            intensity: 'Moderate',
-            category: 'Yoga',
-            image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-          });
-          setIsLoading(false);
-        }, 800);
+        const response = await apiClient.get(`/fitness-classes/${id}`);
+        setClassData(response.data.data);
+        setIsLoading(false);
       } catch (err) {
-        setError('Failed to load class details. Please try again later.');
+        setError("Failed to load class details. Please try again later.");
         setIsLoading(false);
       }
     };
-
     fetchClassDetails();
   }, [id]);
 
-  const handleRegister = () => {
-    // Implement registration logic
-    alert('Registration functionality will be implemented soon!');
+  const handleEnroll = async () => {
+    if (!classData) {
+      console.error('No class data available');
+      return;
+    }
+    
+    console.log('Navigating to payment with classData:', classData);
+    
+    navigate('/payment/initiate', {
+      state: {
+        classData: { ...classData },
+        paymentType: 'BOOKING',
+      },
+    });
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-base-200">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand"></div>
       </div>
     );
   }
@@ -66,14 +62,7 @@ const SingleClassPage = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <FaTimesCircle className="h-5 w-5 text-red-400" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          </div>
+          <p className="text-red-700">{error}</p>
         </div>
       </div>
     );
@@ -87,136 +76,127 @@ const SingleClassPage = () => {
     );
   }
 
+  const formatTime = (dateString) => {
+    return format(parseISO(dateString), "h:mm a");
+  };
+
+  const formatDate = (dateString) => {
+    return format(parseISO(dateString), "EEEE, MMMM d, yyyy");
+  };
+
   return (
-    <div className="bg-base-200">
+    <div className="bg-base-200 min-h-screen">
       {/* Back button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 py-16">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
+        <Link
+          to="/classes"
+          className="inline-flex items-center text-gray-600 hover:text-brand transition-colors mb-6"
         >
           <FaArrowLeft className="mr-2" />
           Back to Classes
-        </button>
+        </Link>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="lg:flex lg:space-x-8">
-          {/* Main content */}
-          <div className="lg:w-2/3">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-300 mb-2">{classData.title}</h1>
-              <p className="text-lg text-gray-600 mb-6">Instructor: {classData.instructor}</p>
-              
-              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden mb-6">
-                <img
-                  src={classData.image}
-                  alt={classData.title}
-                  className="w-full h-96 object-cover rounded-lg"
-                />
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-300 mb-4">About This Class</h2>
-                <p className="text-gray-700 leading-relaxed">{classData.description}</p>
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-300 mb-4">Class Details</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-6 w-6 text-blue-500">
-                      <FaDumbbell className="h-5 w-5 mt-1" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-500">Category</p>
-                      <p className="text-sm text-gray-300">{classData.category}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-6 w-6 text-blue-500">
-                      <FaRegClock className="h-5 w-5 mt-1" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-500">Duration</p>
-                      <p className="text-sm text-gray-300">{classData.duration} minutes</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-6 w-6 text-blue-500">
-                      <FaUser className="h-5 w-5 mt-1" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-500">Intensity</p>
-                      <p className="text-sm text-gray-300">{classData.intensity}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 h-6 w-6 text-blue-500">
-                      <FaMapMarkerAlt className="h-5 w-5 mt-1" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-500">Location</p>
-                      <p className="text-sm text-gray-300">{classData.location}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="md:flex">
+            {/* Class Image */}
+            <div className="md:w-1/2">
+              <img
+                src={
+                  classData?.image ||
+                  "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                }
+                alt={classData.title}
+                className="w-full h-64 md:h-full object-cover"
+              />
             </div>
-          </div>
 
-          {/* Sidebar */}
-          <div className="lg:w-1/3">
-            <div className="bg-base-300 rounded-lg p-6 sticky top-6">
-              <h2 className="text-xl font-semibold text-gray-300 mb-4">Class Schedule</h2>
-              
-              <div className="space-y-4 mb-6">
-                {classData.schedule.map((session, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <FaCalendarAlt className="h-5 w-5 text-blue-600" />
+            {/* Class Info */}
+            <div className="p-8 md:w-1/2">
+              <div className="flex justify-between items-start mb-4">
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {classData.title}
+                </h1>
+                <span className="bg-brand/10 text-brand text-sm font-medium px-3 py-1 rounded-full">
+                  {classData.capacity} spots left
+                </span>
+              </div>
+
+              <p className="text-lg text-gray-600 mb-6">
+                <FaUser className="inline mr-2 text-brand" />
+                Instructor:{" "}
+                <span className="font-medium">#{classData.instructor}</span>
+              </p>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    Class Details
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <FaCalendarAlt className="h-5 w-5 text-brand mt-0.5 mr-3 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {formatDate(classData.start_datetime)}
+                        </p>
+                        <p className="text-gray-600">
+                          {formatTime(classData.start_datetime)} -{" "}
+                          {formatTime(classData.end_datetime)}
+                          <span className="mx-2">•</span>
+                          {classData.duration_minutes} minutes
+                        </p>
                       </div>
-                      <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-300">{session.day}</p>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <FaClock className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
-                          {session.time}
-                        </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <FaMapMarkerAlt className="h-5 w-5 text-brand mt-0.5 mr-3 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-gray-900">Location</p>
+                        <p className="text-gray-600">{classData.location}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <FaUsers className="h-5 w-5 text-brand mt-0.5 mr-3 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-gray-900">Capacity</p>
+                        <p className="text-gray-600">
+                          {classData.capacity} spots available
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start">
+                      <FaDollarSign className="h-5 w-5 text-brand mt-0.5 mr-3 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-gray-900">Price</p>
+                        <p className="text-gray-600">
+                          ${(classData.price_cents / 100).toFixed(2)}
+                        </p>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <div className="mb-4">
-                <div className="flex justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-300">Available Spots</span>
-                  <span className="text-sm font-medium text-gray-300">
-                    {classData.capacity - classData.enrolled} of {classData.capacity}
-                  </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-blue-600 h-2.5 rounded-full" 
-                    style={{ width: `${(classData.enrolled / classData.capacity) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
 
-              <button
-                onClick={handleRegister}
-                className="w-full justify-center py-3 text-base font-medium btn bg-brand"
-              >
-                Register for Class
-              </button>
-              
-              <p className="mt-3 text-center text-sm text-gray-500">
-                Have questions?{' '}
-                <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                  Contact us
-                </a>
-              </p>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    About This Class
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {classData.description}
+                  </p>
+                </div>
+                  <button
+                    onClick={handleEnroll}
+                    disabled={isEnrolling}
+                    className={`w-full bg-brand hover:bg-brand/90 text-white font-medium py-3 px-6 rounded-lg transition-colors ${
+                      isEnrolling ? "opacity-70 cursor-not-allowed" : ""
+                    }`}>
+                    {isEnrolling ? "Enrolling..." : "Enroll Now"}
+                  </button>
+              </div>
             </div>
           </div>
         </div>

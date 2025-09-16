@@ -7,7 +7,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
-
+import { FaSpinner } from "react-icons/fa";
 const PAYMENT_TYPES = {
   BOOKING: {
     id: "booking",
@@ -36,11 +36,39 @@ const PAYMENT_TYPES = {
 const InitiatePayment = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [paymentDetails, setPaymentDetails] = useState(PAYMENT_TYPES.BOOKING);
+  const [classData, setClassData] = useState(null);
 
-  // Get payment type from location state or default to booking
-  const paymentType = location.state?.paymentType || "booking";
-  const paymentDetails =
-    PAYMENT_TYPES[paymentType.toUpperCase()] || PAYMENT_TYPES.BOOKING;
+  useEffect(() => {
+    
+    
+    // Check if location.state exists
+    if (!location.state) {
+      console.error('No state provided, redirecting to classes page');
+      navigate('/classes');
+      return;
+    }
+
+    try {
+      const { paymentType = 'BOOKING', classData: classDataFromState } = location.state;
+      
+      if (!classDataFromState) {
+        console.warn('No classData found in location.state');
+      }
+
+      const details = PAYMENT_TYPES[paymentType.toUpperCase()] || PAYMENT_TYPES.BOOKING;
+      setPaymentDetails(details);
+      
+      if (classDataFromState) {
+        setClassData(classDataFromState);
+      } else {
+        console.warn('classData is undefined or null');
+      }
+    } catch (error) {
+      console.error('Error processing location state:', error);
+      navigate('/classes');
+    }
+  }, [location.state, navigate]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,34 +77,7 @@ const InitiatePayment = () => {
   const handlePayment = async () => {
     setIsSubmitting(true);
 
-    try {
-      // Here you would typically make an API call to your backend to initiate the payment
-      // For example:
-      // const response = await initiatePaymentAPI({
-      //   type: paymentDetails.id,
-      //   amount: paymentDetails.amount,
-      //   userId: user.id
-      // });
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // In a real app, you would redirect to payment gateway or show success message
-      // navigate('/payment-success', {
-      //   state: {
-      //     paymentType: paymentDetails.id,
-      //     amount: paymentDetails.amount,
-      //     transactionId: response.transactionId
-      //   }
-      // });
-
-      console.log("Payment initiated for:", paymentDetails.label);
-    } catch (error) {
-      console.error("Payment initiation failed:", error);
-      // Handle error (show error message to user)
-    } finally {
-      setIsSubmitting(false);
-    }
+     
   };
 
   if (!user) {
@@ -112,9 +113,9 @@ const InitiatePayment = () => {
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Membership ID:</span>
+                  <span className="font-medium">Membership ID: {user.id}</span>
                   <span className="badge badge-outline">
-                    {user.membershipId}
+                    {user.id}
                   </span>
                 </div>
 
@@ -135,7 +136,7 @@ const InitiatePayment = () => {
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount:</span>
                   <span className="text-primary">
-                    {paymentDetails.amount} BDT
+                    {classData?.price_cents / 100} BDT
                   </span>
                 </div>
               </div>
@@ -167,7 +168,7 @@ const InitiatePayment = () => {
               </div>
             )}
 
-            {/* Payment Method */}
+            {/* Payment Method
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-3">Payment Method</h3>
               <div className="bg-base-200 rounded-lg p-4">
@@ -187,20 +188,18 @@ const InitiatePayment = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Buttons */}
             <div className="flex flex-col space-y-3 mt-8">
               <button
                 onClick={handlePayment}
-                className={`btn btn-primary btn-lg ${
-                  isSubmitting ? "loading" : ""
-                }`}
+                className={`btn bg-brand btn-lg `}
                 disabled={isSubmitting}
               >
                 {isSubmitting
-                  ? "Processing..."
-                  : `Pay ${paymentDetails.amount} BDT`}
+                  ? (<><FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" /><span> Processing ... PLease Stay On This Page</span></>) 
+                  : (`Pay $${classData?.price_cents / 100} USD`)}
               </button>
 
               <button

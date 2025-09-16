@@ -68,7 +68,7 @@ const InitiateSubscriptionPayment = () => {
       }
     } catch (error) {
       console.error("Error processing location state:", error);
-      navigate("/classes");
+      navigate("/pricing");
     }
   }, [location.state, navigate]);
 

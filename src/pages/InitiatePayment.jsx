@@ -175,7 +175,7 @@ const InitiatePayment = () => {
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount:</span>
                   <span className="text-primary">
-                    {classData?.price_cents / 100} BDT
+                    {classData?.price_cents / 100} USD
                   </span>
                 </div>
               </div>

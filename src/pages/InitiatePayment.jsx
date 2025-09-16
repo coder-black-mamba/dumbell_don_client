@@ -8,6 +8,11 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import { FaSpinner } from "react-icons/fa";
+import { authApiClient } from "../services/apiServices";
+import ErrorMessage  from "../components/common/ErrorMessage";
+
+
+
 const PAYMENT_TYPES = {
   BOOKING: {
     id: "booking",
@@ -38,10 +43,10 @@ const InitiatePayment = () => {
   const location = useLocation();
   const [paymentDetails, setPaymentDetails] = useState(PAYMENT_TYPES.BOOKING);
   const [classData, setClassData] = useState(null);
+  const [error,setError ] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    
-    
     // Check if location.state exists
     if (!location.state) {
       console.error('No state provided, redirecting to classes page');
@@ -74,11 +79,42 @@ const InitiatePayment = () => {
 
   const { user } = useAuth();
 
+  
+  // method for initilizing payment
   const handlePayment = async () => {
     setIsSubmitting(true);
+    try {
+      const booking_response = await authApiClient.post('bookings/',{
+        "fitness_class":1 
+      });
+ 
+      const booking_id=booking_response.data.data.id;
+      console.log(booking_id)
+      const invoice_response = await  authApiClient.post(`invoices/?payment_type=booking&id=${booking_id}`,{
+        "notes": "nothing",
+        "metadata": {},
+      });
+      console.log(invoice_response)
 
-     
-  };
+
+      // initiating payment
+      const invoice_id=invoice_response.data.data.number;
+      const payment_response = await authApiClient.post(`payment/initiate/`,{
+        "invoice_id": invoice_id
+      });
+
+      console.log(payment_response)
+      window.location.href = payment_response.data.payment_url;
+
+      // navigate(`/dashboard`);
+
+      
+    }catch (error) {
+      console.error('Error creating payment intent:', error);
+      setError('Failed to create payment intent');
+    }finally {
+      setIsSubmitting(false);
+    }}
 
   if (!user) {
     return (
@@ -94,6 +130,9 @@ const InitiatePayment = () => {
   return (
     <div className="min-h-screen bg-base-200 py-8 px-4">
       <div className="max-w-2xl mx-auto py-16">
+        <div className="py-16 my-10">
+          <ErrorMessage error={error} />
+        </div>
         <div className="card bg-base-100 shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-primary text-primary-content p-6">
@@ -226,3 +265,9 @@ const InitiatePayment = () => {
 };
 
 export default InitiatePayment;
+
+
+
+
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4MDgwNTE5LCJpYXQiOjE3NTc5OTQxMTksImp0aSI6IjE5ZTQyMDI1MmU2YjQ2MmE5MDI2ZjRjNDRlYzZhYmYxIiwidXNlcl9pZCI6IjYifQ.PIk7KBDiJnsvl5sPHO89k244e52nA4W-GuMc4os0C2E

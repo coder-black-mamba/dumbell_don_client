@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // unauthenticated api client
 export const apiClient = axios.create({
-    baseURL: 'https://dumbbell-don.vercel.app/api/v1/',
+    baseURL: 'http://localhost:8000/api/v1/',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -12,7 +12,7 @@ export const apiClient = axios.create({
 
 // authenticated api client
 export const authApiClient = axios.create({ 
-    baseURL: 'https://dumbbell-don.vercel.app/api/v1/',
+    baseURL: 'http://localhost:8000/api/v1/',
     headers: {
         'Content-Type': 'application/json',
     },

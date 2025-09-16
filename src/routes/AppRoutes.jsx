@@ -51,6 +51,7 @@ import InitiatePayment from '../pages/InitiatePayment'
 import PaymentSuccess from '../pages/PaymentSuccess'
 import PaymentCancel from '../pages/PaymentCancel'
 import PaymentFail from '../pages/PaymentFail'
+import DownloadRecipt from '../pages/DownloadRecipt'
 
 function AppRoutes() {
   return (
@@ -77,9 +78,10 @@ function AppRoutes() {
             <Route path="/logout" element={<LogOut />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/payment/initiate" element={<InitiatePayment />} />
-            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/success/:id" element={<PaymentSuccess />} />
             <Route path="/payment/cancel" element={<PaymentCancel />} />
             <Route path="/payment/fail" element={<PaymentFail />} />
+            <Route path="/download-recipt" element={<DownloadRecipt />} />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}

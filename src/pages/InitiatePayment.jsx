@@ -85,11 +85,11 @@ const InitiatePayment = () => {
     setIsSubmitting(true);
     try {
       const booking_response = await authApiClient.post('bookings/',{
-        "fitness_class":1 
+        "fitness_class":classData.id 
       });
  
       const booking_id=booking_response.data.data.id;
-      console.log(booking_id)
+      console.log(classData)
       const invoice_response = await  authApiClient.post(`invoices/?payment_type=booking&id=${booking_id}`,{
         "notes": "nothing",
         "metadata": {},

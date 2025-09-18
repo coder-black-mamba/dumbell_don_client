@@ -43,9 +43,9 @@ const InitiateBookingPayment = () => {
   const location = useLocation();
   const [paymentDetails, setPaymentDetails] = useState(PAYMENT_TYPES.BOOKING);
   const [classData, setClassData] = useState(null);
-  const [error,setError ] = useState(null);
+  const [error,setError ] = useState({});
   const [loading, setLoading] = useState(false)
-
+  
   useEffect(() => {
     // Check if location.state exists
     if (!location.state) {
@@ -63,7 +63,7 @@ const InitiateBookingPayment = () => {
  
       
       if (classDataFromState) {
-        setClassData(classDataFromState);
+        setClassData((prev_data)=>{return {...prev_data,...classDataFromState}});
       } else {
         console.warn('classData is undefined or null');
       }
@@ -113,7 +113,9 @@ const InitiateBookingPayment = () => {
     }finally {
       setIsSubmitting(false);
     }}
-
+    console.log("location state",location.state)
+    console.log("classData",classData)
+    
   if (!user) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
@@ -136,7 +138,7 @@ const InitiateBookingPayment = () => {
           <div className="bg-primary text-primary-content p-6">
             <h1 className="text-2xl font-bold text-center">Checkout</h1>
             <p className="text-center opacity-90 mt-2">
-              Complete your Class Booking For Class <span className="font-semibold">"{classData.title}"</span>
+              Complete your Class Booking For Class <span className="font-semibold">"{classData?.title}"</span>
             </p>
           </div>
 
@@ -158,13 +160,13 @@ const InitiateBookingPayment = () => {
 
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Class Title:</span>
-                  <span className="font-semibold">{classData.title}</span>
+                  <span className="font-semibold">{classData?.title}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Description:</span>
                   <span className="text-right">
-                    {classData.description}
+                    {classData?.description}
                   </span>
                 </div>
 

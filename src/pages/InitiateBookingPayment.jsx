@@ -43,7 +43,7 @@ const InitiateBookingPayment = () => {
   const location = useLocation();
   const [paymentDetails, setPaymentDetails] = useState(PAYMENT_TYPES.BOOKING);
   const [classData, setClassData] = useState(null);
-  const [error,setError ] = useState({});
+  const [error,setError ] = useState();
   const [loading, setLoading] = useState(false)
   
   useEffect(() => {
@@ -68,6 +68,7 @@ const InitiateBookingPayment = () => {
         console.warn('classData is undefined or null');
       }
     } catch (error) {
+      setError(error);
       console.error('Error processing location state:', error);
       navigate('/classes');
     }
@@ -87,8 +88,7 @@ const InitiateBookingPayment = () => {
       });
  
       const booking_id=booking_response.data.data.id;
-      console.log(classData)
-      const invoice_response = await  authApiClient.post(`invoices/?payment_type=booking&id=${booking_id}`,{
+       const invoice_response = await  authApiClient.post(`invoices/?payment_type=booking&id=${booking_id}`,{
         "notes": "nothing",
         "metadata": {},
       });
@@ -112,9 +112,7 @@ const InitiateBookingPayment = () => {
       setError('Failed to initialize payment');
     }finally {
       setIsSubmitting(false);
-    }}
-    console.log("location state",location.state)
-    console.log("classData",classData)
+    }} 
     
   if (!user) {
     return (
@@ -130,9 +128,7 @@ const InitiateBookingPayment = () => {
   return (
     <div className="min-h-screen bg-base-200 py-8 px-4">
       <div className="max-w-2xl mx-auto py-16">
-        <div className="py-16 my-10">
-          <ErrorMessage error={error} />
-        </div>
+        {error && <ErrorMessage error={error} />}
         <div className="card bg-base-100 shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-primary text-primary-content p-6">

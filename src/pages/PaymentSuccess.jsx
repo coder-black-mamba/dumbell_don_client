@@ -18,17 +18,25 @@ import Recipt from "../components/Recipt";
 const PaymentSuccess = () => {
   const [payment, setPayment] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error,setError ] = useState();
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     setLoading(true);
-    const fethchPayment = async () => {
-      const payment = await authApiClient.get(`/payments/${id}`);
+    const fetchPayment = async () => {
+      const payment = await authApiClient.get(`/payments/${id}/`);
       setPayment(payment.data.data);
       setLoading(false);
     };
-    fethchPayment();
+
+    try {
+      fetchPayment();
+    } catch (error) {
+      setError(error);
+      console.error('Error fetching payment:', error);
+      // navigate('/dashboard/bookings');
+    }
   }, [id]);
 
   const handleViewBooking = () => {
@@ -42,10 +50,10 @@ const PaymentSuccess = () => {
   console.log(payment);
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-24 flex-col ">
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="card w-full max-w-2xl bg-base-100 shadow-xl overflow-hidden py-16">
+      {loading && <Loader />}
+      {error && <ErrorMessage error={error} />}
+     {!loading && !error && payment && (
+      <div className="card w-full max-w-2xl bg-base-100 shadow-xl overflow-hidden py-16">
           {/* Header */}
           <div className="bg-success text-success-content p-6 text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/20 mb-4">
@@ -128,7 +136,8 @@ const PaymentSuccess = () => {
             </div>
           </div>
         </div>
-      )}
+     )}
+      
     </div>
   );
 };

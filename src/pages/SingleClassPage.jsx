@@ -21,6 +21,7 @@ const SingleClassPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchClassDetails = async () => {
       try {
         const response = await apiClient.get(`/fitness-classes/${id}`);

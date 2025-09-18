@@ -21,10 +21,8 @@ const LogInPage = () => {
   // const from = location.state?.from?.pathname || "/";
 
   const onSubmit = async (data) => {
-    console.log(isSubmitting);
     try { 
       const response=await login(data);
-      console.log(response)
       navigate("/dashboard", { replace: true });
 
     } catch (error) {

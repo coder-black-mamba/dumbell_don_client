@@ -53,6 +53,7 @@ import PaymentSuccess from '../pages/PaymentSuccess'
 import PaymentCancel from '../pages/PaymentCancel'
 import PaymentFail from '../pages/PaymentFail'
 import DownloadRecipt from '../pages/DownloadRecipt'
+import ConfirmSubscription from '../pages/ConfirmSubscription'
 
 function AppRoutes() {
   return (
@@ -65,6 +66,7 @@ function AppRoutes() {
             <Route path="/registration-successfull" element={<RegistrationSuccessfull />} />
             <Route path="/trainers" element={<Trainers />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/pricing/:id" element={<ConfirmSubscription />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />

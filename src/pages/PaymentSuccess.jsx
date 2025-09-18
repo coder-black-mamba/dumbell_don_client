@@ -87,6 +87,15 @@ const PaymentSuccess = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
+                  <span className="font-medium">Invoice ID:</span>
+                  <div className="tooltip" data-tip={payment?.reference}>
+                    <span className="font-mono text-sm bg-base-300 px-2 py-1 rounded">
+                    {payment?.metadata?.invoice}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center">
                   <span className="font-medium">Payment Method:</span>
                   <span>SSL Commerz</span>
                 </div>

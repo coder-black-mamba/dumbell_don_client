@@ -18,6 +18,7 @@ const SingleClassPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEnrolling, setIsEnrolling] = useState(false);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,8 +61,8 @@ const SingleClassPage = () => {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 h-screen">
+        <div className="bg-red-50 border-l-4 border-red-400 p-4 my-20">
           <p className="text-red-700">{error}</p>
         </div>
       </div>

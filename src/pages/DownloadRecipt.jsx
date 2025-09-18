@@ -12,7 +12,7 @@ import {useLocation, useNavigate} from "react-router";
 const DownloadRecipt = () => {
     const { payment } = useLocation().state || { payment: null };
     const navigate = useNavigate();
-
+    console.log(payment)
 
     // redirect to dashboard if payment is null
     useEffect(() => {

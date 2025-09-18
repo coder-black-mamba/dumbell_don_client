@@ -30,12 +30,12 @@ const Classes = () => {
       setFitnessClasses(data.data.results.slice(0, 4));
       setLoading(false);
       } catch (error) {
+        setLoading(false)
         console.error('Error fetching classes:', error);
-        setLoading(false);
       }
      })()
     }, [])
-
+  
   return (
     <section className="py-20 bg-base-100">
       <div className="container mx-auto px-4">

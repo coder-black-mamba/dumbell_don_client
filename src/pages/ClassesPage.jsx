@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FaClock, FaUserFriends, FaFire, FaDumbbell, FaHeartbeat, FaRunning } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router';
 
 const ClassesPage = () => {
   const [activeFilter, setActiveFilter] = useState('all');
+  const navigate = useNavigate();
 
   const classes = [
     {
@@ -66,6 +68,11 @@ const ClassesPage = () => {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
+  };
+
+
+  const handleBookNow = (cls) => {
+    navigate(`/classes/${cls.id}`);
   };
 
   return (
@@ -144,7 +151,8 @@ const ClassesPage = () => {
                   <FaClock className="mr-2" />
                   <span>{cls.time}</span>
                 </div>
-                <button className="w-full bg-brand hover:bg-brand/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                
+                <button onClick={(cls) => handleBookNow(cls)} className="w-full bg-brand hover:bg-brand/90 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                   Book Now
                 </button>
               </div>

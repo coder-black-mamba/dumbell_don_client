@@ -5,6 +5,7 @@ import {
   FaCheckCircle,
   FaCalendarAlt,
   FaMoneyBillWave,
+  FaCheck
 } from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import { FaSpinner } from "react-icons/fa";
@@ -45,6 +46,7 @@ const InitiateSubscriptionPayment = () => {
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { plan } = location.state;
 
   useEffect(() => {
     // Check if location.state exists
@@ -55,14 +57,13 @@ const InitiateSubscriptionPayment = () => {
     }
 
     try {
-      const { subscriptionData: subscriptionDataFromState } = location.state;
 
-      if (!subscriptionDataFromState) {
+      if (!plan) {
         console.warn("No subscriptionData found in location.state");
       }
 
-      if (subscriptionDataFromState) {
-        setSubscriptionData(subscriptionDataFromState);
+      if (plan) {
+        setSubscriptionData(plan);
       } else {
         console.warn("subscriptionData is undefined or null");
       }
@@ -70,18 +71,23 @@ const InitiateSubscriptionPayment = () => {
       console.error("Error processing location state:", error);
       navigate("/pricing");
     }
-  }, [location.state, navigate]);
+  }, [location.state]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { user } = useAuth();
+
+  console.log(plan);
+
+
+
 
   // method for initilizing payment
   const handlePayment = async () => {
     setIsSubmitting(true);
     try {
       const subscription_response = await authApiClient.post("subscriptions/", {
-        plan: subscriptionData.id,
+        "plan": subscriptionData.id,
       });
 
       const subscription_id = subscription_response.data.data.id;
@@ -124,9 +130,10 @@ const InitiateSubscriptionPayment = () => {
     );
   }
 
+
   return (
-    <div className="min-h-screen bg-base-200 py-8 px-4">
-      <div className="max-w-2xl mx-auto py-16">
+    <div className="min-h-screen bg-base-200 py-2 px-4">
+      <div className="max-w-2xl mx-auto ">
         <div className="py-16 my-10">
           <ErrorMessage error={error} />
         </div>
@@ -136,7 +143,7 @@ const InitiateSubscriptionPayment = () => {
             <h1 className="text-2xl font-bold text-center">Checkout</h1>
             <p className="text-center opacity-90 mt-2">
               Complete Your Subscription For Plan{" "}
-              <span className="font-semibold">"{subscriptionData.title}"</span>
+              <span className="font-semibold">"{subscriptionData?.name}"</span>
             </p>
           </div>
 
@@ -157,14 +164,14 @@ const InitiateSubscriptionPayment = () => {
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Plan:</span>
                   <span className="font-semibold">
-                    {subscriptionData.title}
+                    {subscriptionData?.name}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Description:</span>
                   <span className="text-right">
-                    {subscriptionData.description}
+                    {subscriptionData?.description.split(",").at(-1)}
                   </span>
                 </div>
 
@@ -183,18 +190,12 @@ const InitiateSubscriptionPayment = () => {
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-3">What's included:</h3>
               <ul className="space-y-2">
-                <li className="flex items-start">
-                  <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
-                  <span>"Unlimited classes"</span>
-                </li>
-                <li className="flex items-start">
-                  <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
-                  <span>"Priority booking"</span>
-                </li>
-                <li className="flex items-start">
-                  <FaCheckCircle className="text-success mt-1 mr-2 flex-shrink-0" />
-                  <span>"Discounts on merchandise"</span>
-                </li>
+                {subscriptionData?.description.split(",").map((feature, index) => (
+                  <li key={index} className="flex items-center">
+                    <FaCheck className="text-green-500 mr-3" />
+                    <span className="text-gray-300">{feature}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -203,8 +204,10 @@ const InitiateSubscriptionPayment = () => {
               <div>
                 <FaCalendarAlt className="text-xl" />
                 <span>
-                  Your next billing date will be:{" "}
-                  <strong>{subscriptionData.end_date}</strong>
+                  Your next billing date will be (mm/dd/yyyy):{" "}
+                  <strong>
+                    {new Date(Date.now() + subscriptionData?.duration_days * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                  </strong>
                 </span>
               </div>
             </div>

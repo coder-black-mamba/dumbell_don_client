@@ -47,8 +47,7 @@ const PaymentSuccess = () => {
     navigate("/download-recipt", { state: { payment } });
   };
 
-  console.log(payment);
-  return (
+   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-24 flex-col ">
       {loading && <Loader />}
       {error && <ErrorMessage error={error} />}

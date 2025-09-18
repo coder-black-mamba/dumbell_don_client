@@ -26,11 +26,7 @@ const PricingContainer = () => {
     fetchPricingPlans()
     
   }, [])
-console.log(yearlyPlans)
-
-
-
-  console.log(loading)
+ 
 
 
    const fadeInUp = {

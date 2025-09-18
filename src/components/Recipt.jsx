@@ -70,6 +70,12 @@ const Recipt = ({payment}) => {
               </span>
             </div>
             <div className="flex justify-between">
+              <span className="font-medium">Invoice ID:</span>
+              <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
+                {payment?.metadata?.invoice}
+              </span>
+            </div>
+            <div className="flex justify-between">
               <span className="font-medium">Payment ID:</span>
               <span className="font-mono bg-gray-100 px-2 py-1 rounded text-xs">
                 {payment?.id}

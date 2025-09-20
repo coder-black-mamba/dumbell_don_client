@@ -107,7 +107,7 @@ function AppRoutes() {
             <Route path="/payment/fail" element={
                  <PaymentFail />
              } />
-            <Route path="/download-recipt" element={
+            <Route path="/download-receipt" element={
                  <DownloadRecipt />
              } />
             <Route path="*" element={<NotFound />} />

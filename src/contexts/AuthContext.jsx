@@ -14,22 +14,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
+  const [subscription, setSubscription] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if user is logged in on initial load
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (storedToken) {
-      setToken(JSON.parse(storedToken));
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUser = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await authApiClient.get("auth/users/me/");
       setUser(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -38,11 +29,14 @@ export const AuthProvider = ({ children }) => {
       console.error("Failed to fetch user:", error);
       logout();
       return null;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   const login = async (userData) => {
     try {
+      setIsLoading(true);
       const response = await apiClient.post("auth/jwt/create/", {
         email: userData.email,
         password: userData.password,
@@ -61,6 +55,8 @@ export const AuthProvider = ({ children }) => {
       console.error("Login failed:", error);
       setError(error.response?.data || error.message);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,10 +68,66 @@ export const AuthProvider = ({ children }) => {
     navigate("/login", { replace: true });
   }, [navigate]);
 
+  const fetchMembership = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await authApiClient.get("/subscriptions/");
+      const subscriptionsData = response.data.data.results;
+
+      const today = new Date();
+      const selectedSubscription = subscriptionsData.find((subscription) => {
+        const startDate = new Date(subscription.start_date);
+        const endDate = new Date(subscription.end_date);
+        return (
+          startDate <= today &&
+          endDate >= today &&
+          subscription.status === "ACTIVE"
+        );
+      });
+
+      setSubscription(selectedSubscription);
+      return selectedSubscription;
+    } catch (error) {
+      console.error("Error fetching membership:", error);
+      setError("Failed to load membership data");
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []); // Add any dependencies if needed
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
+
+      if (storedToken) {
+        setToken(JSON.parse(storedToken));
+      }
+
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setUser(user);
+
+        // Only fetch membership if we have a valid token
+        if (storedToken) {
+          try {
+            await fetchMembership();
+          } catch (error) {
+            console.error("Failed to initialize membership:", error);
+          }
+        }
+      }
+    };
+
+    initializeAuth();
+  }, [fetchMembership]);
 
   const value = React.useMemo(
     () => ({
       user,
+      subscription,
+      fetchMembership,
       token,
       isAuthenticated: !!user,
       isAdmin: user?.role === "ADMIN",
@@ -86,17 +138,19 @@ export const AuthProvider = ({ children }) => {
       fetchUser,
       error,
     }),
-    [user, token, login, logout, fetchUser, error]
+    [
+      user,
+      token,
+      login,
+      logout,
+      fetchUser,
+      error,
+      subscription,
+      fetchMembership,
+    ]
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
-
-
- 

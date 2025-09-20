@@ -4,7 +4,7 @@ import CardContainer from "./CardContainer";
 import { authApiClient } from "../../services/apiServices";
 import ErrorMessage from "../common/ErrorMessage";
 import Loader from "../common/Loader";
-import { tr } from "framer-motion/client";
+import { useAuth } from "../../hooks/useAuth";
 
 // Format date as 'MMM DD, YYYY' (e.g., 'Sep 20, 2023')
 const formatDate = (dateString) => {
@@ -21,38 +21,16 @@ const formatTime = (dateTimeString) => {
 };
 
 const Stats = () => {
-  const [subscription, setSubscription] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [loading, setloading] = useState(true);
   const [error, seterror] = useState(null);
   const [bookingLoader, setBookingLoader] = useState(true);
-
+  const { subscription,user } = useAuth();
+  console.log(subscription);
   useEffect(() => {
-    setloading(true);
+    setBookingLoader(true);
 
     try {
-      const fetchMembership = async () => {
-        setloading(true);
-        const response = await authApiClient.get("/subscriptions/");
-        const subscriptionsData = response.data.data.results;
-
-        const today = new Date();
-        const selectedSubscription = subscriptionsData.find((subscription) => {
-          const startDate = new Date(subscription.start_date);
-          const endDate = new Date(subscription.end_date);
-          return (
-            startDate <= today &&
-            endDate >= today &&
-            subscription.status === "ACTIVE"
-          );
-        });
-
-        setSubscription(selectedSubscription || []);
-        setloading(false);
-      };
-
       const fetchBookings = async () => {
-        setBookingLoader(true);
         const response = await authApiClient.get("classes/bookings/");
         const bookingsData = response.data.data;
         const today = new Date();
@@ -64,18 +42,17 @@ const Stats = () => {
         setBookings(filteredBookings);
         setBookingLoader(false);
       };
-      fetchMembership();
       fetchBookings();
     } catch (error) {
       console.log(error);
       seterror(error);
-      setloading(false);
+      setBookingLoader(false);
     }
   }, []);
 
-  if (loading) {
+  if (bookingLoader) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
+      <div className="flex justify-center items-center min-h-[200px] ">
         <Loader />
       </div>
     );
@@ -90,7 +67,7 @@ const Stats = () => {
       <div className="space-y-6">
         <CardContainer subscription={subscription} bookings={bookings} />
 
-        <div className="bg-base-300 p-6 rounded-lg shadow">
+        <div className="bg-base-300 p-6 rounded-lg shadow mx-auto">
           <h3 className="text-lg font-semibold mb-4">Upcoming Bookings</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -106,7 +83,7 @@ const Stats = () => {
                 {bookings.length === 0 && bookingLoader && (
                   <tr>
                     <td colSpan="4" className="py-8 text-center">
-                      <div className="flex justify-center items-center min-h-[200px]">
+                      <div className="flex justify-center items-center w-[80%] mx-auto">
                         <Loader />
                       </div>
                     </td>

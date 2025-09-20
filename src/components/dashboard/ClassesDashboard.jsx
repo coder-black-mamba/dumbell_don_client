@@ -135,10 +135,12 @@ const ClassesDashboard = () => {
           <p className="text-gray-400">No classes found.</p>
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="p-2 h-screen overflow-y-auto">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 ">
           {filteredClasses.map((singleClass) => (
             <SingleClassCard key={singleClass.id} singleClass={singleClass} />
           ))}
+        </div>
         </div>
       )}
     </div>

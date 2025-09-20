@@ -44,7 +44,7 @@ const PaymentSuccess = () => {
   };
 
   const handleDownloadReceipt = () => {
-    navigate("/download-recipt", { state: { payment } });
+    navigate("/download-receipt", { state: { payment } });
   };
 
    return (

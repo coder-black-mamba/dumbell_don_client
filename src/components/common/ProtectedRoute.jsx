@@ -45,3 +45,9 @@ export const MemberRoute = ({ children }) => (
     {children}
   </ProtectedRoute>
 );
+
+export const AuthenticatedRoute = ({ children }) => (
+  <ProtectedRoute>
+    {children}
+  </ProtectedRoute>
+);

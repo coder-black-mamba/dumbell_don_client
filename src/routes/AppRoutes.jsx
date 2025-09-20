@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes, Navigate, Outlet } from 'react-router'
-import { AdminRoute, MemberRoute, StaffRoute } from '../components/common/ProtectedRoute'
+import { AdminRoute, MemberRoute, StaffRoute , AuthenticatedRoute } from '../components/common/ProtectedRoute'
 import BaseLayout from '../layouts/BaseLayout'
 import HomePage from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
@@ -63,10 +63,18 @@ function AppRoutes() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/classes/:id" element={<SingleClassPage />} />
-            <Route path="/registration-successfull" element={<RegistrationSuccessfull />} />
+            <Route path="/registration-successfull" element={
+              <AuthenticatedRoute>
+                <RegistrationSuccessfull />
+              </AuthenticatedRoute>
+            } />
             <Route path="/trainers" element={<Trainers />} />
             <Route path="/pricing" element={<Pricing />} />
-            <Route path="/pricing/:id" element={<ConfirmSubscription />} />
+            <Route path="/pricing/:id" element={
+              <AuthenticatedRoute>
+                <ConfirmSubscription />
+              </AuthenticatedRoute>
+            } />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
@@ -80,12 +88,36 @@ function AppRoutes() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/logout" element={<LogOut />} />
             <Route path="/reviews" element={<Reviews />} />
-            <Route path="/payment/initiate/booking" element={<InitiateBookingPayment />} />
-            <Route path="/payment/initiate/subscription" element={<InitiateSubscriptionPayment />} />
-            <Route path="/payment/success/:id" element={<PaymentSuccess />} />
-            <Route path="/payment/cancel" element={<PaymentCancel />} />
-            <Route path="/payment/fail" element={<PaymentFail />} />
-            <Route path="/download-recipt" element={<DownloadRecipt />} />
+            <Route path="/payment/initiate/booking" element={
+              <AuthenticatedRoute>
+                <InitiateBookingPayment />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/payment/initiate/subscription" element={
+              <AuthenticatedRoute>
+                <InitiateSubscriptionPayment />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/payment/success/:id" element={
+              <AuthenticatedRoute>
+                <PaymentSuccess />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/payment/cancel" element={
+              <AuthenticatedRoute>
+                <PaymentCancel />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/payment/fail" element={
+              <AuthenticatedRoute>
+                <PaymentFail />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/download-recipt" element={
+              <AuthenticatedRoute>
+                <DownloadRecipt />
+              </AuthenticatedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}

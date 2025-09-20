@@ -6,7 +6,7 @@ import { FaUserCircle, FaStar } from "react-icons/fa";
 const ReviewPageCard = ({ review, index }) => {
   return (
     <motion.div
-      key={review.id}
+      key={review.id+5}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.3 }}

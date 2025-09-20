@@ -99,25 +99,17 @@ function AppRoutes() {
               </AuthenticatedRoute>
             } />
             <Route path="/payment/success/:id" element={
-              <AuthenticatedRoute>
-                <PaymentSuccess />
-              </AuthenticatedRoute>
-            } />
+                 <PaymentSuccess />
+             } />
             <Route path="/payment/cancel" element={
-              <AuthenticatedRoute>
-                <PaymentCancel />
-              </AuthenticatedRoute>
-            } />
+                 <PaymentCancel />
+             } />
             <Route path="/payment/fail" element={
-              <AuthenticatedRoute>
-                <PaymentFail />
-              </AuthenticatedRoute>
-            } />
+                 <PaymentFail />
+             } />
             <Route path="/download-recipt" element={
-              <AuthenticatedRoute>
-                <DownloadRecipt />
-              </AuthenticatedRoute>
-            } />
+                 <DownloadRecipt />
+             } />
             <Route path="*" element={<NotFound />} />
         </Route>
         {/* dashboard routes */}

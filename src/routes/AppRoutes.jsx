@@ -54,6 +54,7 @@ import PaymentCancel from '../pages/PaymentCancel'
 import PaymentFail from '../pages/PaymentFail'
 import DownloadRecipt from '../pages/DownloadRecipt'
 import ConfirmSubscription from '../pages/ConfirmSubscription'
+import DownloadInvoice from '../pages/DownloadInvoice'
 
 function AppRoutes() {
   return (
@@ -109,6 +110,9 @@ function AppRoutes() {
              } />
             <Route path="/download-receipt" element={
                  <DownloadRecipt />
+             } />
+            <Route path="/download-invoice" element={
+                 <DownloadInvoice />
              } />
             <Route path="*" element={<NotFound />} />
         </Route>

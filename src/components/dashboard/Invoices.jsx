@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useState, useEffect } from "react";
 import {
   FaFileInvoiceDollar,
   FaDownload,
@@ -8,42 +8,37 @@ import {
   FaFilePdf,
   FaCreditCard,
 } from "react-icons/fa";
+import { authApiClient } from "../../services/apiServices";
+import Loader from "../common/Loader";
+import ErrorMessage from "../common/ErrorMessage";
+import { useNavigate } from "react-router";
 
 const Invoices = () => {
-  // Mock data based on your API response
-  const invoiceData = {
-    count: 2,
-    results: [
-      {
-        id: 1,
-        number: "INV-20250813151857",
-        issue_date: "2025-08-13",
-        due_date: "2025-08-20",
-        total_cents: 3000,
-        currency: "USD",
-        status: "PAID",
-        metadata: {
-          payment_type: "subscription",
-          subscription: "Monthly Membership Platinum",
-          subscription_id: 1,
-        },
-      },
-      {
-        id: 2,
-        number: "INV-20250813152229",
-        issue_date: "2025-08-13",
-        due_date: "2025-08-20",
-        total_cents: 1500,
-        currency: "USD",
-        status: "PENDING",
-        metadata: {
-          booking: "Morning Vinyasa Yoga",
-          booking_id: 1,
-          payment_type: "booking",
-        },
-      },
-    ],
-  };
+  const [invoiceData, setInvoiceData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchInvoiceData = async () => {
+      try {
+        const response = await authApiClient.get("invoices/");
+        setInvoiceData(response.data.data);
+      } catch (error) {
+        setError(
+          error.response?.data?.message || "Failed to fetch invoice data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInvoiceData();
+  }, []);
+  
+
+
+    
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -85,11 +80,6 @@ const Invoices = () => {
     );
   };
 
-  const handleDownload = (invoiceNumber, e) => {
-    e.stopPropagation();
-    // Implement download functionality
-    console.log(`Downloading invoice ${invoiceNumber}`);
-  };
 
   const handlePrint = (invoiceNumber, e) => {
     e.stopPropagation();
@@ -101,6 +91,14 @@ const Invoices = () => {
     // Navigate to invoice detail view
     console.log(`Paying invoice ${invoiceId}`);
   };
+
+  if(loading){
+    return <Loader />;
+  }
+
+  if(error){
+    return <ErrorMessage error={error} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -163,7 +161,7 @@ const Invoices = () => {
               </tr>
             </thead>
             <tbody className="bg-base-300 divide-y divide-gray-200">
-              {invoiceData.results.map((invoice) => {
+              {invoiceData.results?.map((invoice) => {
                 return (
                   <tr
                     key={invoice.id}
@@ -226,7 +224,9 @@ const Invoices = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
                         <button
-                          onClick={(e) => handleDownload(invoice.number, e)}
+                          onClick={(e) => navigate(`/download-invoice/`, {
+                            state: { invoice },
+                          })}
                           className="text-indigo-600 hover:text-indigo-900"
                           title="Download"
                         >

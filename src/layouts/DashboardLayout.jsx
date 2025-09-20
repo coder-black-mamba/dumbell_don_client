@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { NavLink, Outlet } from 'react-router';
 import Logo from '../assets/logo_white.png';
+import { useAuth } from '../hooks/useAuth';
+import { Link } from 'react-router';
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const userData = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    membership: 'Premium',
-    membershipExpiry: '2023-12-31',
-  };
-
+  const {user} =useAuth();
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -48,10 +44,10 @@ const DashboardLayout = () => {
           </div>
           
           <div className="flex items-center space-x-4">
-            <span className="text-sm">Welcome, {userData.name.split(' ')[0]}</span>
-            <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center">
-              <FaSignOutAlt className="mr-1" /> Sign out
-            </button>
+            <span className="text-sm">Welcome, {user.first_name} - {user.last_name}</span>
+            <Link to="/logout" className="text-sm text-gray-600 hover:text-gray-300 flex items-center border border-gray-300 px-2 py-1 rounded">
+              <FaSignOutAlt className="mr-1" /> Log out
+            </Link>
           </div>
         </div>
       </header>

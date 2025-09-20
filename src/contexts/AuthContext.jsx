@@ -86,6 +86,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       setSubscription(selectedSubscription);
+      console.log("selectedSubscription",selectedSubscription);
+      console.log("subscriptionsData",subscriptionsData);
       return selectedSubscription;
     } catch (error) {
       console.error("Error fetching membership:", error);
@@ -116,7 +118,7 @@ export const AuthProvider = ({ children }) => {
 
     initializeAuth();
     fetchMembership();
-  }, [fetchMembership]);
+  }, []);
 
   const value = React.useMemo(
     () => ({

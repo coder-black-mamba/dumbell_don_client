@@ -110,17 +110,12 @@ export const AuthProvider = ({ children }) => {
         setUser(user);
 
         // Only fetch membership if we have a valid token
-        if (storedToken) {
-          try {
-            await fetchMembership();
-          } catch (error) {
-            console.error("Failed to initialize membership:", error);
-          }
-        }
+        
       }
     };
 
     initializeAuth();
+    fetchMembership();
   }, [fetchMembership]);
 
   const value = React.useMemo(

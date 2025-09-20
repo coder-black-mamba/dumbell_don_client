@@ -4,6 +4,8 @@ import { FaStar, FaPaperPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
 import ErrorMessage from "../common/ErrorMessage";
 import SuccessMessage from "../common/SuccessMessage";
+import { authApiClient } from "../../services/apiServices";
+
 
 const ReviewForm = ({ reviews, setReviews }) => {
   const { isAuthenticated, user } = useAuth();
@@ -45,8 +47,6 @@ const ReviewForm = ({ reviews, setReviews }) => {
       setIsLoading(true);
       setError(null);
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const review = {
         "rating": newReview.rating,
         "comment": newReview.comment.trim(),
@@ -54,7 +54,9 @@ const ReviewForm = ({ reviews, setReviews }) => {
         "created_at": new Date(),
       }
 
-      setReviews([review, ...reviews]);
+      const response = await authApiClient.post("/feedbacks/", review);
+      console.log(response);
+      setReviews([response.data.data, ...reviews]);
       setNewReview({ rating: 0, comment: "", hover: 0 });
       // alert("Thank you for your review!");
     } catch (error) {

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import ReviewPageCard from '../components/reviews/ReviewPageCard';
 import ReviewForm from '../components/reviews/ReviewForm';
 import ErrorMessage from '../components/common/ErrorMessage';
+import { authApiClient } from '../services/apiServices';
 
 // Sample reviews data
 const sampleReviews=[
@@ -40,6 +41,23 @@ const sampleReviews=[
 const Reviews = () => {
   const { isAuthenticated, user } = useAuth();
   const [reviews, setReviews] = useState(sampleReviews);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    try {
+      const fetchReviews = async () => {
+        const response = await authApiClient.get("/feedbacks/");
+        setReviews(response.data.data.results);
+      }
+      fetchReviews();
+    } catch (error) {
+      setError(error);
+    }
+    
+  }, []);
+
+
+  console.log(reviews)
  
   return (
     <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -55,11 +73,12 @@ const Reviews = () => {
         {/* Reviews List */}
        <div className="space-y-6">
                  <h2 className="text-2xl font-semibold text-white mb-6">Member Reviews</h2>
+                 {error && <ErrorMessage error={error} />}
                  {reviews.length === 0 ? (
                    <p className="text-center text-gray-500 py-8">No reviews yet. Be the first to review!</p>
                  ) : (
-                   reviews.map((review, index) => (
-                    <ReviewPageCard review={review} index={index} />
+                   reviews?.map((review, index) => (
+                    <ReviewPageCard key={review.id} review={review} index={index} />
                    ))
                  )}
                </div>

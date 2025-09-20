@@ -34,7 +34,6 @@ const Stats = () => {
       const fetchMembership = async () => {
         setloading(true);
         const response = await authApiClient.get("/subscriptions/");
-        console.log(loading);
         const subscriptionsData = response.data.data.results;
 
         const today = new Date();
@@ -56,7 +55,6 @@ const Stats = () => {
         setBookingLoader(true);
         const response = await authApiClient.get("classes/bookings/");
         const bookingsData = response.data.data;
-        console.log(bookingsData);
         const today = new Date();
         const filteredBookings = bookingsData.filter((booking) => {
           const bookingDate = new Date(booking.class_data.start_datetime);

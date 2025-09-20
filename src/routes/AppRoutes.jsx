@@ -69,8 +69,8 @@ function AppRoutes() {
               </AuthenticatedRoute>
             } />
             <Route path="/trainers" element={<Trainers />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/pricing/:id" element={
+            <Route path="/subscriptions" element={<Pricing />} />
+            <Route path="/subscriptions/:id" element={
               <AuthenticatedRoute>
                 <ConfirmSubscription />
               </AuthenticatedRoute>

@@ -7,7 +7,7 @@ const PlanCard = ({ plan }) => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate(`/pricing/${plan.id}`, {
+    navigate(`/subscriptions/${plan.id}`, {
       state: { plan },
     });
   };

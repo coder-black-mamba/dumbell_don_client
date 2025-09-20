@@ -90,12 +90,12 @@ const PricingContainer = () => {
       >
         {loading&&<Loader />}
         {!loading&&billingCycle==="monthly"&&monthlyPlans.map((plan, index) => (
-         <motion.div>
+         <motion.div key={plan.id}>
             <PlanCard plan={plan} key={plan.id} />
           </motion.div>
         ))}
         {!loading&&billingCycle==="yearly"&&yearlyPlans.map((plan, index) => (
-         <motion.div>
+         <motion.div key={plan.id}>
             <PlanCard plan={plan} key={plan.id} />
           </motion.div>
         ))}

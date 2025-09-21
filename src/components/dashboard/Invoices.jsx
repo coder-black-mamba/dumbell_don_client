@@ -327,4 +327,4 @@ const Invoices = () => {
   );
 };
 
-export default Invoices;
+export default React.memo(Invoices);

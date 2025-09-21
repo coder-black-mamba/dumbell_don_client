@@ -29,7 +29,7 @@ const DashboardLayout = () => {
   return (
     <div className="min-h-screen bg-base-200">
       {/* Header */}
-      <header className="bg-base-300 shadow-sm sticky top-0 z-10">
+      <header className="bg-base-300 shadow-sm sticky top-0 z-10 p-5">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center">
             <button 
@@ -38,9 +38,7 @@ const DashboardLayout = () => {
             >
               {sidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
-            <NavLink to="/" className="flex items-center">
-              <img src={Logo} alt="DuBell Don" className="h-16" />
-            </NavLink>
+           
           </div>
           
           <div className="flex items-center space-x-4">
@@ -52,42 +50,44 @@ const DashboardLayout = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar */}
-          <div 
-            className={`fixed md:static inset-y-0 left-0 z-20 transform ${
-              sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } md:translate-x-0 transition-transform duration-300 ease-in-out w-64 md:w-56 flex-shrink-0 bg-base-300 md:bg-transparent h-screen md:h-auto overflow-y-auto sidebar`}
-          >
-            <nav className="space-y-1 flex flex-col bg-base-300 p-4 rounded h-full">
-              <NavLink to="/user/dashboard" end className={linkClass}>
-                Dashboard
-              </NavLink>
-              <NavLink to="/user/classes" className={linkClass}>
-                Classes
-              </NavLink>
-              <NavLink to="/user/attendence" className={linkClass}>
-                Attendence
-              </NavLink>
-              <NavLink to="/user/profile" className={linkClass}>
-                My Profile
-              </NavLink>
-              <NavLink to="/user/invoices" className={linkClass}>
-                Invoices
-              </NavLink>
-              <NavLink to="/user/payments" className={linkClass}>
-                Payments
-              </NavLink>
-              <NavLink to="/user/stats" className={linkClass}>
-                Stats
-              </NavLink>
-              {/* Add more NavLinks here as needed */}
-            </nav>
-          </div>
+      <div className="flex w-full">
+        {/* Sidebar */}
+        <div 
+          className={`fixed md:fixed inset-y-0 left-0 z-20 transform ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0 transition-transform duration-300 ease-in-out w-64 flex-shrink-0 bg-base-300 h-screen overflow-y-auto sidebar`}
+        >
+          <nav className="space-y-1 flex flex-col bg-base-300 p-4 h-full">
+          <NavLink to="/" className="flex items-center justify-center border-b border-gray-200">
+              <img src={Logo} alt="DuBell Don" className="h-16" />
+            </NavLink>
+            <NavLink to="/user/dashboard" end className={linkClass}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/user/classes" className={linkClass}>
+              Classes
+            </NavLink>
+            <NavLink to="/user/attendence" className={linkClass}>
+              Attendence
+            </NavLink>
+            <NavLink to="/user/profile" className={linkClass}>
+              My Profile
+            </NavLink>
+            <NavLink to="/user/invoices" className={linkClass}>
+              Invoices
+            </NavLink>
+            <NavLink to="/user/payments" className={linkClass}>
+              Payments
+            </NavLink>
+            <NavLink to="/user/stats" className={linkClass}>
+              Stats
+            </NavLink>
+          </nav>
+        </div>
 
-          {/* Main Content */}
-          <div className="flex-1">
+        {/* Main Content */}
+        <div className="flex-1 md:ml-64">
+          <div className="max-w-7xl mx-auto px-4 py-8 w-full">
             <Outlet />
           </div>
         </div>

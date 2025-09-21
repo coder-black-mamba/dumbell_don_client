@@ -24,8 +24,8 @@ const Stats = () => {
   const [bookings, setBookings] = useState([]);
   const [error, seterror] = useState(null);
   const [bookingLoader, setBookingLoader] = useState(true);
-  const { subscription,user } = useAuth();
-  console.log(subscription);
+  const { user ,fetchMembership} = useAuth();
+  const [subscription, setSubscription] = useState(null);
   useEffect(() => {
     setBookingLoader(true);
 
@@ -41,6 +41,8 @@ const Stats = () => {
 
         setBookings(filteredBookings);
         setBookingLoader(false);
+        const subscriptionData = await fetchMembership();
+        setSubscription(subscriptionData);
       };
       fetchBookings();
     } catch (error) {

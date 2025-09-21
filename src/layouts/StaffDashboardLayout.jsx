@@ -34,7 +34,7 @@ const StaffDashboardLayout = () => {
     { name: "Classes", icon: <FaDumbbell />, path: "/staff/classes" },
     { name: "Bookings", icon: <FaCalendarAlt />, path: "/staff/bookings" },
     { name: "Members", icon: <FaUsers />, path: "/staff/members" },
-    { name: "Memberships", icon: <FaIdCard />, path: "/staff/memberships" },
+    { name: "Plans", icon: <FaIdCard />, path: "/staff/plans" },
     { name: "Feedback", icon: <FaComments />, path: "/staff/feedback" },
     { name: "Profile", icon: <FaUserCog />, path: "/staff/profile" },
 

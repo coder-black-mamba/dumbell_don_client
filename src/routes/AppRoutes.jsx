@@ -26,8 +26,7 @@ import EmailVerified from '../pages/EmailVerified'
 import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
 import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
 import AdminUsers from '../components/AdminDashboard/AdminUsers'
-import AdminMembershipPlans from '../components/AdminDashboard/AdminMembershipPlans'
-import AdminClasses from '../components/AdminStaffCommon/AdminStaffClasses'
+import AdminStaffMembershipPlans from '../components/AdminStaffCommon/AdminStaffMembershipPlans'
 import AdminBookings from '../components/AdminDashboard/AdminBookings'
 import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
 import AdminPayments from '../components/AdminDashboard/AdminPayments'
@@ -59,6 +58,9 @@ import MemberDetails from '../components/StaffDashboard/MemberDetails'
 import EditClass from '../components/AdminStaffCommon/EditClass'
 import AdminStaffClasses from '../components/AdminStaffCommon/AdminStaffClasses'
 import AddClass from '../components/AdminStaffCommon/AddClass'
+import AddPlan from '../components/AdminStaffCommon/AddPlan'
+import EditPlan from '../components/AdminStaffCommon/EditPlan'
+
 
 function AppRoutes() {
   return (
@@ -149,7 +151,9 @@ function AppRoutes() {
           <Route path="classes" element={<AdminStaffClasses/>} />
           <Route path="classes/add" element={<AddClass/>} />
           <Route path="classes/edit/:id" element={<EditClass/>} />
-          <Route path="memberships" element={<AdminMembershipPlans />} />
+          <Route path="plans" element={<AdminStaffMembershipPlans />} />
+          <Route path="plans/add" element={<AddPlan/>} />
+          <Route path="plans/edit/:id" element={<EditPlan/>} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="bookings" element={<StaffBookings />} />
           <Route path="members" element={<StaffUsers />} />
@@ -167,8 +171,10 @@ function AppRoutes() {
         }>
           <Route index path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
-          <Route path="memberships" element={<AdminMembershipPlans />} />
-          <Route path="classes" element={<AdminClasses />} />
+          <Route path="plans" element={<AdminStaffMembershipPlans />} />
+          <Route path="plans/add" element={<AddPlan/>} />
+          <Route path="plans/edit/:id" element={<EditPlan/>} />
+          <Route path="classes" element={<AdminStaffClasses />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="attendance" element={<AdminAttendences />} />
           <Route path="payments" element={<AdminPayments />} />

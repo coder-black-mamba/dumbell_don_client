@@ -25,7 +25,7 @@ const StaffDashboardLayout = () => {
   //   const [activeTab, setActiveTab] = useState('/staff');\
   // console.log(location.pathname);
   const menuItems = [
-    { name: "Dashboard", icon: <FaHome />, path: "/staff" },
+    { name: "Dashboard", icon: <FaHome />, path: "/staff/dashboard" },
     {
       name: "Attendance",
       icon: <FaClipboardCheck />,

@@ -5,10 +5,13 @@ import Loader from "../common/Loader"
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { authApiClient } from '../../services/apiServices';
+import ErrorMessage from '../common/ErrorMessage'
+
 
 const AdminStaffClasses = () => {
   const [classes, setClasses] = useState();
   const [filteredClasses,setFilteredClasses] = useState([]);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');  
   const { isAdmin, isStaff } = useAuth();
@@ -25,6 +28,7 @@ const AdminStaffClasses = () => {
         setFilteredClasses(response.data.data.results)
       } catch (error) {
         console.log(error)
+        setError(error)
       }finally{
         setLoading(false);
       }
@@ -49,7 +53,21 @@ const AdminStaffClasses = () => {
       navigate("/unauthorized");
     }
   };
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
   
+    if (value.length > 0) {
+      const filtered = classes?.results?.filter((cls) =>
+        `${cls.name} ${cls.instructor}`.toLowerCase().includes(value.toLowerCase()) ||
+        cls.description.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredClasses(filtered);
+    } else {
+      setFilteredClasses(classes?.results);
+    }
+  };
 
   if (loading) {
     return (
@@ -58,8 +76,16 @@ const AdminStaffClasses = () => {
       </div>
     );
   }
-  console.log(filteredClasses)
 
+  if(error){
+    return (
+      <div className="flex justify-center items-center h-64">
+         <ErrorMessage message={"Something Went Wrong PLease Try Again"}/>
+      </div>
+    );
+  }
+
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
@@ -74,7 +100,7 @@ const AdminStaffClasses = () => {
               placeholder="Search classes..."
               className="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearch}
             />
           </div>
           <button

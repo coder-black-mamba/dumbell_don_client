@@ -23,6 +23,7 @@ const StaffFeedback = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
   const [error, setError] = useState(null)
+  const [fitnessClasses, setFitnessClasses] = useState([]);
 
   const {user} = useAuth();
 
@@ -39,7 +40,21 @@ const StaffFeedback = () => {
         setLoading(false);
       }
     } 
+
+    const fetchFitnessClasses = async()=>{
+      try {
+        const response = await authApiClient.get('fitness-classes/');
+        console.log(response)
+        setFitnessClasses(response?.data?.data?.results);
+      setLoading(false);
+      } catch (error) {
+        console.error('Error fetching fitness classes:', error);
+        setError(error)
+        setLoading(false);
+      }
+    }
     fetchFeedback();
+    fetchFitnessClasses();
   }, []);
 
   // Format date
@@ -158,9 +173,9 @@ const StaffFeedback = () => {
                 onChange={(e) => setClassFilter(e.target.value)}
               >
                 <option value="all">All Classes</option>
-                {mockClasses.map(cls => (
+                {fitnessClasses?.map(cls => (
                   <option key={cls.id} value={cls.id}>
-                    {cls.name}
+                    {cls.title}
                   </option>
                 ))}
               </select>

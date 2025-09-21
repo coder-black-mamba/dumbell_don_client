@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaFileInvoiceDollar,
   FaDownload,
@@ -6,6 +6,7 @@ import {
   FaCheckCircle,
   FaClock,
   FaFilePdf,
+  FaSpinner,
   FaCreditCard,
 } from "react-icons/fa";
 import { authApiClient } from "../../services/apiServices";
@@ -16,6 +17,7 @@ import { useNavigate } from "react-router";
 const Invoices = () => {
   const [invoiceData, setInvoiceData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false)
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -35,10 +37,6 @@ const Invoices = () => {
     };
     fetchInvoiceData();
   }, []);
-  
-
-
-    
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -81,27 +79,37 @@ const Invoices = () => {
   };
 
 
-  const handlePrint = (invoiceNumber, e) => {
-    e.stopPropagation();
-    // Implement print functionality
-    console.log(`Printing invoice ${invoiceNumber}`);
-  };
 
-  const handlePayment = (invoiceId) => {
+  const handlePayment =async (invoice,e) => {
     // Navigate to invoice detail view
-    console.log(`Paying invoice ${invoiceId}`);
+    setPaymentLoading(true);
+    e.target.disabled = true;
+    e.target.innerHTML = "Processing...";
+    console.log(`Paying invoice ${invoice}`);
+    try {
+      const response = await authApiClient.post(`/payment/initiate/`, { invoice_id: invoice.number });
+      window.location.href = response.data.payment_url;
+
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to initiate payment");
+    } finally {
+      setPaymentLoading(false);
+      e.target.disabled = false;
+      e.target.innerHTML = "Pay Now";
+    }
   };
 
-  if(loading){
+  if (loading) {
     return <Loader />;
   }
 
-  if(error){
+  if (error) {
     return <ErrorMessage error={error} />;
   }
 
   return (
     <div className="space-y-6">
+        {/* {paymentLoading && (<><Loader /> Loading Payment...</>)} */}
       <div className="bg-base-300 rounded-lg shadow p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
           <h2 className="text-2xl font-bold">Invoices</h2>
@@ -114,6 +122,7 @@ const Invoices = () => {
             </button>
           </div>
         </div>
+
 
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -176,18 +185,16 @@ const Invoices = () => {
                             {invoice.number}
                           </div>
                         </div>
-                        <div className="my-2">
-                        </div>
+                        <div className="my-2"></div>
                       </div>
                       {invoice.status !== "PAID" && (
                         <button
                           type="button"
-                          onClick={(e) => handlePayment(invoice.id)}
+                          onClick={(e) => handlePayment(invoice,e)}
                           className="btn bg-brand mt-4 w-full"
                           title="Pay Invoice"
                         >
-                          Pay Now
-                          <FaCreditCard className="h-4 w-4" />
+                          <FaCreditCard /> Pay Now
                         </button>
                       )}
                     </td>
@@ -196,7 +203,7 @@ const Invoices = () => {
                         {invoice.metadata.payment_type === "subscription"
                           ? invoice.metadata.subscription
                           : invoice.metadata.booking?.split(" - ")[3] ||
-                          "Booking"}
+                            "Booking"}
                       </div>
                       <div className="text-sm text-gray-500">
                         {invoice.metadata.payment_type.charAt(0).toUpperCase() +
@@ -208,9 +215,11 @@ const Invoices = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div
-                        className={`text-sm ${invoice.status === "OVERDUE"
+                        className={`text-sm ${
+                          invoice.status === "OVERDUE"
                             ? "text-red-600 font-medium"
-                            : "text-gray-500"}`}
+                            : "text-gray-500"
+                        }`}
                       >
                         {formatDate(invoice.due_date)}
                       </div>
@@ -224,16 +233,22 @@ const Invoices = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
                         <button
-                          onClick={(e) => navigate(`/download-invoice/`, {
-                            state: { invoice },
-                          })}
+                          onClick={(e) =>
+                            navigate(`/download-invoice/`, {
+                              state: { invoice },
+                            })
+                          }
                           className="text-indigo-600 hover:text-indigo-900"
                           title="Download"
                         >
                           <FaDownload className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={(e) => handlePrint(invoice.number, e)}
+                          onClick={(e) =>
+                            navigate(`/download-invoice/`, {
+                              state: { invoice },
+                            })
+                          }
                           className="text-gray-600 hover:text-gray-900"
                           title="Print"
                         >

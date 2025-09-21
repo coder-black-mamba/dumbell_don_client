@@ -61,7 +61,7 @@ const Attendance = () => {
 
   if (loading) {
     return (
-      <div class="my-6">
+      <div className="my-6">
         <Loader />
       </div>
     );

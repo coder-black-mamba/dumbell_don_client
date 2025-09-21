@@ -13,12 +13,14 @@ import {
   FaComments,
   FaUserCog,
 } from "react-icons/fa";
+import { useAuth } from "../hooks/useAuth";
 
 const StaffDashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const activeTab = location.pathname;
+  const { user } = useAuth();
   // console.log(activeTab);
   //   const [activeTab, setActiveTab] = useState('/staff');\
   // console.log(location.pathname);
@@ -40,7 +42,7 @@ const StaffDashboardLayout = () => {
 
   const handleLogout = () => {
     // Handle logout logic here
-    navigate("/login");
+    navigate("/logout");
   };
 
   const toggleSidebar = () => {
@@ -129,9 +131,9 @@ const StaffDashboardLayout = () => {
           <div className="flex items-center">
             <div className="relative">
               <button className="flex items-center text-sm font-medium text-gray-300 hover:text-white">
-                <span className="mr-2">Staff User</span>
-                <div className="h-8 w-8 rounded-full bg-brand-dark flex items-center justify-center text-white">
-                  SU
+                <span className="mr-2">{user?.first_name} {user?.last_name} - {user?.role}</span>
+                <div className="h-8 w-8 rounded-full bg-brand flex items-center justify-center text-white">
+                  {user?.first_name?.charAt(0).toUpperCase()}{user?.last_name?.charAt(0).toUpperCase()}
                 </div>
               </button>
             </div>

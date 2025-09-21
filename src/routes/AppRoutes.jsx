@@ -132,24 +132,7 @@ function AppRoutes() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* Admin routes */}
-        <Route path="/admin/*" element={
-          <AdminRoute>
-            <AdminDashboardLayout />
-          </AdminRoute>
-        }>
-          <Route index path="dashboard" element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="memberships" element={<AdminMembershipPlans />} />
-          <Route path="classes" element={<AdminClasses />} />
-          <Route path="bookings" element={<AdminBookings />} />
-          <Route path="attendance" element={<AdminAttendences />} />
-          <Route path="payments" element={<AdminPayments />} />
-          <Route path="invoices" element={<AdminInvoices />} />
-          <Route path="feedback" element={<AdminFeedback />} />
-          <Route path="reports" element={<Report />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
+       
 
         {/* Staff routes */}
         <Route path="/staff/*" element={
@@ -167,6 +150,27 @@ function AppRoutes() {
           <Route path="feedback" element={<StaffFeedback />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+
+
+         {/* Admin routes */}
+         <Route path="/admin/*" element={
+          <AdminRoute>
+            <AdminDashboardLayout />
+          </AdminRoute>
+        }>
+          <Route index path="dashboard" element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="memberships" element={<AdminMembershipPlans />} />
+          <Route path="classes" element={<AdminClasses />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="attendance" element={<AdminAttendences />} />
+          <Route path="payments" element={<AdminPayments />} />
+          <Route path="invoices" element={<AdminInvoices />} />
+          <Route path="feedback" element={<AdminFeedback />} />
+          <Route path="reports" element={<Report />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+        
     </Routes>
   )
 }

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaCalendarAlt, FaUser, FaCheck, FaTimes, FaFilter, FaSync, FaClipboardCheck } from 'react-icons/fa';
+import Loader from '../common/Loader';
+import AttendenceDetail from '../AdminStaffCommon/AttendenceDetail';
+import { formatDateTime, formatDate, formatTime } from '../../utils/datetime'
 
 // Mock data for demonstration
 const mockAttendances = {
@@ -165,36 +168,6 @@ const AdminAttendences = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Format date and time
-  const formatDateTime = (dateTimeString) => {
-    const options = { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    return new Date(dateTimeString).toLocaleString('en-US', options);
-  };
-
-  // Format date only
-  const formatDate = (dateTimeString) => {
-    return new Date(dateTimeString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  // Format time only
-  const formatTime = (dateTimeString) => {
-    return new Date(dateTimeString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   // Filter attendances based on search and filters
   const filteredAttendances = attendances.filter(attendance => {
     const matchesSearch = 
@@ -243,7 +216,7 @@ const AdminAttendences = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <Loader/>
       </div>
     );
   }
@@ -251,7 +224,7 @@ const AdminAttendences = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Class Attendance</h1>
+        <h1 className="text-2xl font-bold text-gray-300 mb-4 md:mb-0">Class Attendance</h1>
         <div className="flex space-x-3 w-full md:w-auto">
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -271,7 +244,7 @@ const AdminAttendences = () => {
       </div>
 
       {/* Filters */}
-      {showFilters && (
+      {/* {showFilters && (
         <div className="bg-white p-4 rounded-lg shadow-md mb-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -321,10 +294,10 @@ const AdminAttendences = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Attendance Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-green-100 text-green-600 mr-4">
@@ -369,7 +342,7 @@ const AdminAttendences = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Attendances Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -441,17 +414,6 @@ const AdminAttendences = () => {
                         >
                           View
                         </button>
-                        <button
-                          onClick={() => toggleAttendanceStatus(attendance.id)}
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            attendance.present 
-                              ? 'bg-red-100 text-red-600 hover:bg-red-200' 
-                              : 'bg-green-100 text-green-600 hover:bg-green-200'
-                          }`}
-                          title={attendance.present ? 'Mark as Absent' : 'Mark as Present'}
-                        >
-                          {attendance.present ? <FaTimes /> : <FaCheck />}
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -470,109 +432,7 @@ const AdminAttendences = () => {
 
       {/* Attendance Details Modal */}
       {isModalOpen && selectedAttendance && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Attendance Details</h2>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                &times;
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Member Information</h3>
-                <div className="flex items-center space-x-4 mb-4">
-                  <img 
-                    className="h-16 w-16 rounded-full" 
-                    src={selectedAttendance.booking.member.avatar} 
-                    alt={selectedAttendance.booking.member.name} 
-                  />
-                  <div>
-                    <p className="text-lg font-medium text-gray-900">{selectedAttendance.booking.member.name}</p>
-                    <p className="text-gray-600">{selectedAttendance.booking.member.email}</p>
-                  </div>
-                </div>
-                
-                <h3 className="text-lg font-medium text-gray-900 mt-6 mb-3">Class Details</h3>
-                <div className="space-y-2">
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Class:</span>{' '}
-                    {selectedAttendance.booking.fitness_class.name}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Instructor:</span>{' '}
-                    {selectedAttendance.booking.fitness_class.instructor}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Scheduled Time:</span>{' '}
-                    {formatTime(selectedAttendance.booking.fitness_class.schedule)}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Duration:</span>{' '}
-                    {selectedAttendance.booking.fitness_class.duration_minutes} minutes
-                  </p>
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-3">Attendance Information</h3>
-                <div className="space-y-2">
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Attendance ID:</span>{' '}
-                    {selectedAttendance.id}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Marked At:</span>{' '}
-                    {formatDateTime(selectedAttendance.marked_at)}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Marked By:</span>{' '}
-                    {selectedAttendance.marked_by.name} ({selectedAttendance.marked_by.role})
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium text-gray-700">Status:</span>{' '}
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      selectedAttendance.present 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {selectedAttendance.present ? 'Present' : 'Absent'}
-                    </span>
-                  </p>
-                </div>
-                
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Update Status</h3>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() => {
-                        toggleAttendanceStatus(selectedAttendance.id);
-                        setIsModalOpen(false);
-                      }}
-                      className={`px-4 py-2 rounded-lg font-medium ${
-                        selectedAttendance.present 
-                          ? 'bg-red-100 text-red-700 hover:bg-red-200' 
-                          : 'bg-green-100 text-green-700 hover:bg-green-200'
-                      }`}
-                    >
-                      Mark as {selectedAttendance.present ? 'Absent' : 'Present'}
-                    </button>
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AttendenceDetail selectedAttendance={selectedAttendance} toggleAttendanceStatus={toggleAttendanceStatus} setIsModalOpen={setIsModalOpen} />
       )}
     </div>
   );

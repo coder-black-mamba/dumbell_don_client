@@ -9,80 +9,10 @@ import {
   FaEye,
   FaCalendarAlt
 } from 'react-icons/fa';
-
-// Mock data for demonstration
-const mockFeedback = {
-  count: 1,
-  results: [
-    {
-      id: 1,
-      rating: 10,
-      comment: "Great class! The instructor was very knowledgeable and the workout was intense but fun.",
-      created_at: "2025-08-21T23:45:17.946269Z",
-      updated_at: "2025-08-21T23:45:17.946289Z",
-      member: {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/1.jpg"
-      },
-      fitness_class: {
-        id: 2,
-        name: "Morning HIIT",
-        instructor: "Sarah Johnson"
-      }
-    },
-    {
-      id: 2,
-      rating: 8,
-      comment: "Good session, but the room was a bit too warm.",
-      created_at: "2025-08-20T15:30:00.000000Z",
-      updated_at: "2025-08-20T15:30:00.000000Z",
-      member: {
-        id: 2,
-        name: "Jane Smith",
-        email: "jane@example.com",
-        avatar: "https://randomuser.me/api/portraits/women/2.jpg"
-      },
-      fitness_class: {
-        id: 1,
-        name: "Yoga Flow",
-        instructor: "Michael Chen"
-      }
-    },
-    {
-      id: 3,
-      rating: 9,
-      comment: "Excellent workout! Will definitely come again.",
-      created_at: "2025-08-19T18:15:00.000000Z",
-      updated_at: "2025-08-19T18:15:00.000000Z",
-      member: {
-        id: 3,
-        name: "Alex Johnson",
-        email: "alex@example.com",
-        avatar: "https://randomuser.me/api/portraits/men/3.jpg"
-      },
-      fitness_class: {
-        id: 2,
-        name: "Morning HIIT",
-        instructor: "Sarah Johnson"
-      }
-    }
-  ]
-};
-
-// Mock classes and members for form
-const mockClasses = [
-  { id: 1, name: 'Yoga Flow', instructor: 'Michael Chen' },
-  { id: 2, name: 'Morning HIIT', instructor: 'Sarah Johnson' },
-  { id: 3, name: 'Power Lifting', instructor: 'David Wilson' }
-];
-
-const mockMembers = [
-  { id: 1, name: 'John Doe', email: 'john@example.com' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-  { id: 3, name: 'Alex Johnson', email: 'alex@example.com' }
-];
+import { useAuth } from '../../hooks/useAuth';
+import { authApiClient } from '../../services/apiServices';
+import Loader from '../common/Loader';
+import ErrorMessage from '../common/ErrorMessage';
 
 const StaffFeedback = () => {
   const [feedbackList, setFeedbackList] = useState([]);
@@ -92,14 +22,24 @@ const StaffFeedback = () => {
   const [classFilter, setClassFilter] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState(null);
+  const [error, setError] = useState(null)
 
-  // Load feedback
+  const {user} = useAuth();
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFeedbackList(mockFeedback.results);
+    const fetchFeedback= async()=>{
+      try {
+        const response = await authApiClient.get('feedbacks/');
+        console.log(response)
+        setFeedbackList(response?.data?.data?.results);
       setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+      } catch (error) {
+        console.error('Error fetching feedback:', error);
+        setError(error)
+        setLoading(false);
+      }
+    } 
+    fetchFeedback();
   }, []);
 
   // Format date
@@ -152,7 +92,15 @@ const StaffFeedback = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <Loader/>
+      </div>
+    );
+  }
+
+  if(error){
+    return (
+      <div className="flex justify-center items-center h-64">
+        <ErrorMessage message={"Something went wrong. Please try again later."}/>
       </div>
     );
   }
@@ -160,11 +108,11 @@ const StaffFeedback = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Member Feedback</h1>
+        <h1 className="text-2xl font-bold text-gray-200 mb-4 md:mb-0">Member Feedback</h1>
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+      <div className="bg-white p-4 rounded-lg shadow-md mb-6 text-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-1">
             <div className="relative">

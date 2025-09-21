@@ -6,55 +6,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { authApiClient } from '../../services/apiServices';
 
-// Mock data
-const mockClasses = {
-  count: 3,
-  results: [
-    {
-      id: 1,
-      name: 'Yoga Flow',
-      description: 'A dynamic yoga class focusing on fluid movements and breath work',
-      instructor: 'Sarah Johnson',
-      schedule: '2025-09-15T09:00:00Z',
-      duration_minutes: 60,
-      max_capacity: 20,
-      current_enrollment: 15,
-      is_active: true,
-      created_at: '2025-08-13T15:04:57.587705Z',
-      updated_at: '2025-08-13T15:04:57.587726Z',
-      created_by: 2
-    },
-    {
-      id: 2,
-      name: 'HIIT Training',
-      description: 'High-intensity interval training for maximum calorie burn',
-      instructor: 'Mike Chen',
-      schedule: '2025-09-15T17:30:00Z',
-      duration_minutes: 45,
-      max_capacity: 15,
-      current_enrollment: 12,
-      is_active: true,
-      created_at: '2025-08-13T15:07:12.984537Z',
-      updated_at: '2025-08-13T15:07:12.984557Z',
-      created_by: 2
-    },
-    {
-      id: 3,
-      name: 'Zumba Party',
-      description: 'Dance-based fitness class with Latin and international music',
-      instructor: 'Maria Garcia',
-      schedule: '2025-09-16T18:00:00Z',
-      duration_minutes: 60,
-      max_capacity: 25,
-      current_enrollment: 20,
-      is_active: true,
-      created_at: '2025-08-13T15:07:55.672907Z',
-      updated_at: '2025-08-13T15:07:55.672926Z',
-      created_by: 2
-    }
-  ]
-};
-
 const AdminStaffClasses = () => {
   const [classes, setClasses] = useState();
   const [filteredClasses,setFilteredClasses] = useState([]);
@@ -70,7 +21,6 @@ const AdminStaffClasses = () => {
       setLoading(true);
       try {
         const response=await authApiClient.get('fitness-classes/');
-        console.log(response.data);
         setClasses(response.data.data);
         setFilteredClasses(response.data.data.results)
       } catch (error) {

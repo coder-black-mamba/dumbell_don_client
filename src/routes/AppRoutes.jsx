@@ -27,7 +27,7 @@ import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
 import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
 import AdminUsers from '../components/AdminDashboard/AdminUsers'
 import AdminMembershipPlans from '../components/AdminDashboard/AdminMembershipPlans'
-import AdminClasses from '../components/AdminDashboard/AdminClasses'
+import AdminClasses from '../components/AdminStaffCommon/AdminStaffClasses'
 import AdminBookings from '../components/AdminDashboard/AdminBookings'
 import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
 import AdminPayments from '../components/AdminDashboard/AdminPayments'
@@ -170,7 +170,7 @@ function AppRoutes() {
           <Route path="reports" element={<Report />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        
+
     </Routes>
   )
 }

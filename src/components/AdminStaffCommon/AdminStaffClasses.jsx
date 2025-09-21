@@ -50,7 +50,7 @@ const mockClasses = {
   ]
 };
 
-const AdminClasses = () => {
+const AdminStaffClasses = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -182,7 +182,7 @@ const AdminClasses = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Class Schedule</h1>
+        <h1 className="text-2xl font-bold text-gray-200 mb-4 md:mb-0">Classes </h1>
         <div className="flex space-x-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -294,7 +294,7 @@ const AdminClasses = () => {
       {/* Add/Edit Class Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl text-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">
                 {currentClass ? 'Edit Class' : 'Add New Class'}
@@ -414,4 +414,4 @@ const AdminClasses = () => {
   );
 };
 
-export default AdminClasses;
+export default AdminStaffClasses;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaCalendarAlt, FaUser, FaDumbbell, FaCheck, FaTimes, FaClock, FaFilter, FaSync } from 'react-icons/fa';
+import Loader from '../common/Loader';
 
 // Mock data for demonstration
 const mockBookings = {
@@ -220,7 +221,7 @@ const StaffBookings = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <Loader/>
       </div>
     );
   }
@@ -367,24 +368,6 @@ const StaffBookings = () => {
                         >
                           View
                         </button>
-                        {booking.status === 'BOOKED' && (
-                          <>
-                            <button
-                              onClick={() => handleStatusUpdate(booking.id, 'ATTENDED')}
-                              className="text-green-600 hover:text-green-900"
-                              title="Mark as Attended"
-                            >
-                              <FaCheck />
-                            </button>
-                            <button
-                              onClick={() => handleStatusUpdate(booking.id, 'NO_SHOW')}
-                              className="text-red-600 hover:text-red-900 ml-2"
-                              title="Mark as No Show"
-                            >
-                              <FaTimes />
-                            </button>
-                          </>
-                        )}
                       </div>
                     </td>
                   </tr>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
-import MemberDetailsModal from './MemberDetailsModal';
+import MemberDetailsModal from './MemberDetails';
 
 // Mock data
 const mockUsers = {

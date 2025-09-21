@@ -2,7 +2,7 @@ import React from 'react'
 import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
 
-const MemberDetailsModal = () => {
+const MemberDetails = () => {
     const {currentUser} = useLocation().state;
     const navigate = useNavigate()
   return (
@@ -76,4 +76,4 @@ const MemberDetailsModal = () => {
   )
 }
 
-export default MemberDetailsModal
+export default MemberDetails

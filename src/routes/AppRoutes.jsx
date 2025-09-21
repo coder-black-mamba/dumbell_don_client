@@ -55,6 +55,7 @@ import PaymentFail from '../pages/PaymentFail'
 import DownloadRecipt from '../pages/DownloadRecipt'
 import ConfirmSubscription from '../pages/ConfirmSubscription'
 import DownloadInvoice from '../pages/DownloadInvoice'
+import MemberDetails from '../components/StaffDashboard/MemberDetails'
 
 function AppRoutes() {
   return (
@@ -147,6 +148,7 @@ function AppRoutes() {
           <Route path="profile" element={<MyProfile />} />
           <Route path="bookings" element={<StaffBookings />} />
           <Route path="members" element={<StaffUsers />} />
+          <Route path="members/:id" element={<MemberDetails/>} />
           <Route path="feedback" element={<StaffFeedback />} />
           <Route path="*" element={<NotFound />} />
         </Route>

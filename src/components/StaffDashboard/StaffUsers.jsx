@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
-import MemberDetailsModal from './MemberDetails';
+import Loader from '../common/Loader';
 
 // Mock data
 const mockUsers = {
@@ -57,17 +57,7 @@ const StaffUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    address: '',
-    role: 'MEMBER',
-  });
-
+ 
   // Load users
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -76,28 +66,11 @@ const StaffUsers = () => {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-
-  // Handle input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+ 
 
   // View user details
   const handleViewDetails = (user) => {
-    setCurrentUser(user);
-    setFormData({
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      phone_number: user.phone_number,
-      address: user.address,
-      role: user.role,
-    });
-    setIsModalOpen(true);
+    console.log(user);
   };
 
   // Filter only MEMBER role users and apply search
@@ -121,7 +94,7 @@ const StaffUsers = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+       <Loader/>
       </div>
     );
   }
@@ -187,7 +160,7 @@ const StaffUsers = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {new Date(user.join_date).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                       <button
                         onClick={() => handleViewDetails(user)}
                         className="text-blue-600 hover:text-blue-900"
@@ -209,11 +182,6 @@ const StaffUsers = () => {
           </table>
         </div>
       </div>
-
-      {/* View User Details Modal */}
-      {isModalOpen && currentUser && (
-        <MemberDetailsModal currentUser={currentUser} setIsModalOpen={setIsModalOpen}/>
-      )}
     </div>
   );
 };

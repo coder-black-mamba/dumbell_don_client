@@ -56,6 +56,9 @@ import DownloadRecipt from '../pages/DownloadRecipt'
 import ConfirmSubscription from '../pages/ConfirmSubscription'
 import DownloadInvoice from '../pages/DownloadInvoice'
 import MemberDetails from '../components/StaffDashboard/MemberDetails'
+import EditClass from '../components/AdminStaffCommon/EditClass'
+import AdminStaffClasses from '../components/AdminStaffCommon/AdminStaffClasses'
+import AddClass from '../components/AdminStaffCommon/AddClass'
 
 function AppRoutes() {
   return (
@@ -143,7 +146,9 @@ function AppRoutes() {
         }>
           <Route index path="dashboard" element={<StaffDashboard />} />
           <Route path="attendance" element={<AdminAttendences />} />
-          <Route path="classes" element={<AdminClasses />} />
+          <Route path="classes" element={<AdminStaffClasses/>} />
+          <Route path="classes/add" element={<AddClass/>} />
+          <Route path="class/edit/:id" element={<EditClass/>} />
           <Route path="memberships" element={<AdminMembershipPlans />} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="bookings" element={<StaffBookings />} />

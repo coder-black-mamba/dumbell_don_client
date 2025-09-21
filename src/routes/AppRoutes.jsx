@@ -148,7 +148,7 @@ function AppRoutes() {
           <Route path="profile" element={<MyProfile />} />
           <Route path="bookings" element={<StaffBookings />} />
           <Route path="members" element={<StaffUsers />} />
-          <Route path="members/:id" element={<MemberDetails/>} />
+          <Route path="member/:id" element={<MemberDetails/>} />
           <Route path="feedback" element={<StaffFeedback />} />
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -1,79 +1,162 @@
-import React from 'react'
-import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
+import React from 'react';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
+import { useAuth } from '../../hooks/useAuth';
 
 const MemberDetails = () => {
-    const {currentUser} = useLocation().state;
-    const navigate = useNavigate()
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-900">Member Details</h2>
-              <button
-                onClick={() => navigate('/staff/members')}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
-                  {currentUser.profile_picture_url ? (
-                    <img className="h-16 w-16 rounded-full" src={currentUser.profile_picture_url} alt="" />
-                  ) : (
-                    <FaUser className="h-8 w-8 text-gray-400" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">{currentUser.first_name} {currentUser.last_name}</h3>
-                  <p className="text-gray-500">{currentUser.role}</p>
-                </div>
-              </div>
-              
-              <div className="border-t border-gray-200 pt-4">
-                <h4 className="text-sm font-medium text-gray-500 mb-2">Contact Information</h4>
-                <dl className="space-y-2">
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Email</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentUser.phone_number || 'Not provided'}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Address</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{currentUser.address || 'Not provided'}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-gray-500">Member Since</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
-                      {new Date(currentUser.join_date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-            
-            <div className="mt-6 flex justify-end">
-              <button
-                type="button"
-                onClick={() => navigate('/staff/members')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              >
-                Go Back
-              </button>
-            </div>
-          </div>
-        </div>
-  )
-}
+    const { user } = useLocation().state;
+    const navigate = useNavigate();
+    const { isAdmin } = useAuth();
+    // const isAdmin = true;
 
-export default MemberDetails
+    // Format date to a more readable format
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    const handleEdit = () => {
+        // Handle edit functionality
+        console.log('Edit member:', user.id);
+        navigate(`/admin/member/edit/${user.id}`);
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="flex items-center text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                        <FaArrowLeft className="mr-2" />
+                        Back to Members
+                    </button>
+                    {isAdmin && (
+                        <button
+                            onClick={handleEdit}
+                            className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                        >
+                            <FaEdit className="mr-2" />
+                            Edit Member
+                        </button>
+                    )}
+                </div>
+
+                <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-6 text-white border-b border-gray-700">
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+                            <div className="relative">
+                                <div className="h-24 w-24 rounded-full bg-gray-700 flex items-center justify-center ring-4 ring-blue-500/20">
+                                    {user.profile_picture_url ? (
+                                        <img 
+                                            className="h-24 w-24 rounded-full object-cover" 
+                                            src={user.profile_picture_url} 
+                                            alt={`${user.first_name} ${user.last_name}`} 
+                                        />
+                                    ) : (
+                                        <FaUser className="h-12 w-12 text-gray-400" />
+                                    )}
+                                </div>
+                                <span className="absolute -bottom-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                    {user.role}
+                                </span>
+                            </div>
+                            <div className="text-center sm:text-left">
+                                <h1 className="text-2xl font-bold text-white">{user.first_name} {user.last_name}</h1>
+                                <p className="text-gray-300 mt-1">Member since {formatDate(user.join_date)}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Contact Information */}
+                            <div className="space-y-4">
+                                <h2 className="text-lg font-semibold text-gray-200 flex items-center">
+                                    <FaUser className="mr-2 text-blue-400" />
+                                    Contact Information
+                                </h2>
+                                <div className="space-y-4">
+                                    <div className="flex items-start bg-gray-750 p-3 rounded-lg">
+                                        <FaEnvelope className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
+                                        <div>
+                                            <p className="text-sm text-gray-400">Email</p>
+                                            <p className="text-gray-200">{user.email}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start bg-gray-750 p-3 rounded-lg">
+                                        <FaPhone className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
+                                        <div>
+                                            <p className="text-sm text-gray-400">Phone</p>
+                                            <p className="text-gray-200">{user.phone_number || 'Not provided'}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start bg-gray-750 p-3 rounded-lg">
+                                        <FaMapMarkerAlt className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
+                                        <div>
+                                            <p className="text-sm text-gray-400">Address</p>
+                                            <p className="text-gray-200">{user.address || 'Not provided'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Membership Details */}
+                            <div className="space-y-4">
+                                <h2 className="text-lg font-semibold text-gray-200 flex items-center">
+                                    <FaCalendarAlt className="mr-2 text-blue-400" />
+                                    Membership Details
+                                </h2>
+                                <div className="bg-gray-750 p-4 rounded-lg border border-gray-700">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <p className="text-sm text-gray-400">Membership Status</p>
+                                            <p className="font-medium text-blue-400">Active</p>
+                                        </div>
+                                        <span className="px-3 py-1 text-xs font-semibold bg-green-900/30 text-green-400 rounded-full border border-green-400/30">
+                                            Verified
+                                        </span>
+                                    </div>
+                                    <div className="mt-4">
+                                        <p className="text-sm text-gray-400">Member Since</p>
+                                        <p className="text-gray-200">{formatDate(user.join_date)}</p>
+                                    </div>
+                                </div>
+
+                                {/* Additional Stats */}
+                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                    <div className="bg-gray-750 p-4 rounded-lg text-center border border-gray-700">
+                                        <p className="text-2xl font-bold text-blue-400">12</p>
+                                        <p className="text-xs text-gray-400">Classes Attended</p>
+                                    </div>
+                                    <div className="bg-gray-750 p-4 rounded-lg text-center border border-gray-700">
+                                        <p className="text-2xl font-bold text-blue-400">3</p>
+                                        <p className="text-xs text-gray-400">Active Bookings</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="mt-8 pt-6 border-t border-gray-700 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex-1">
+                                Send Message
+                            </button>
+                            <button className="px-4 py-2 border border-gray-600 text-gray-200 rounded-lg hover:bg-gray-700 transition-colors flex-1">
+                                View Activity
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MemberDetails;

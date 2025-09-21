@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
 import Loader from '../common/Loader';
+import { useNavigate } from 'react-router';
+import { authApiClient } from '../../services/apiServices';
 
 // Mock data
 const mockUsers = {
@@ -55,32 +57,61 @@ const mockUsers = {
 
 const StaffUsers = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
  
   // Load users
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setUsers(mockUsers.results);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const fetchMembers = async () => {
+      try {
+        const response = await authApiClient.get('user-list/');
+        const data = response.data;
+        setUsers(data.data);
+        setFilteredUsers(data.data.results);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+    fetchMembers();
   }, []);
  
 
   // View user details
   const handleViewDetails = (user) => {
     console.log(user);
+    navigate(`/staff/member/${user.id}`, { state: { user } });
   };
 
   // Filter only MEMBER role users and apply search
-  const filteredUsers = users
-    .filter(user => user.role === 'MEMBER')
-    .filter(user => 
-      `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.phone_number?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // const filteredUsers = users
+  //   ?.results
+  //   ?.filter(user => user.role === 'MEMBER')
+  //   .filter(user => 
+  //     `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     user.phone_number?.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+  
+    if (value.length > 0) {
+      const filtered = users?.results?.filter((user) =>
+        `${user.first_name} ${user.last_name}`.toLowerCase().includes(value.toLowerCase()) ||
+        user.email.toLowerCase().includes(value.toLowerCase()) ||
+        user.phone_number?.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+    } else {
+      setFilteredUsers(users?.results);
+    }
+  };
 
   // Get role badge color
   const getRoleBadgeColor = (role) => {
@@ -98,8 +129,7 @@ const StaffUsers = () => {
       </div>
     );
   }
-
-  return (
+   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-200 mb-4 md:mb-0">Member Directory</h1>
@@ -112,15 +142,15 @@ const StaffUsers = () => {
             placeholder="Search members..."
             className="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearch}
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-base-300 rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-base-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
@@ -129,10 +159,10 @@ const StaffUsers = () => {
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+            <tbody className="bg-base-300 divide-y divide-gray-200">
+              {filteredUsers?.length > 0 ? (
+                filteredUsers?.map((user) => (
+                  <tr key={user.id} className="hover:bg-base-200">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -143,13 +173,13 @@ const StaffUsers = () => {
                           )}
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{user.first_name} {user.last_name}</div>
+                          <div className="text-sm font-medium text-gray-200">{user.first_name} {user.last_name}</div>
                           <div className="text-sm text-gray-500">{user.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.phone_number}</div>
+                      <div className="text-sm text-gray-200">{user.phone_number}</div>
                       <div className="text-sm text-gray-500">{user.address}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

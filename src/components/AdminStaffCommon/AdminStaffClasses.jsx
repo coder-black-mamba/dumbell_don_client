@@ -115,7 +115,7 @@ const AdminStaffClasses = () => {
       <div className="space-y-4">
         {filteredClasses?.length > 0 ? (
           filteredClasses?.map((cls) => (
-            <SingleClass cls={cls} />
+            <SingleClass cls={cls} key={cls.id}/>
           ))
         ) : (
           <div className="text-center py-10 text-gray-500">

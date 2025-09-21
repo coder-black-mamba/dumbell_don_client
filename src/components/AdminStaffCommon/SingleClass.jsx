@@ -26,9 +26,9 @@ const SingleClass = ({ cls }) => {
   const handleEdit = (cls) => {
     const id = cls.id;
     if (isAdmin) {
-      navigate(`/admin/classes/edit/${id}`);
+      navigate(`/staff/classes/edit/${id}`,{state:{cls}});
     } else if (isStaff) {
-      navigate(`/staff/classes/edit/${id}`);
+      navigate(`/staff/classes/edit/${id}`,{state:{cls}});
     } else {
       navigate("/unauthorized");
     }

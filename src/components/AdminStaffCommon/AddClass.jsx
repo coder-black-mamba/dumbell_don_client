@@ -141,7 +141,7 @@ const AddClass = () => {
             {/* Instructor */}
             <div>
               <label htmlFor="instructor" className="block text-sm font-medium text-gray-700 mb-1">
-                Instructor <span className="text-red-500">*</span>
+                Instructor ID <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="instructor"
@@ -154,10 +154,9 @@ const AddClass = () => {
                     </div>
                     <input
                       {...field}
-                      disabled
-                      type="text"
+                       type="text"
                       id="instructor"
-                      className={`w-full pl-10 px-4 py-2 border rounded-lg bg-gray-600`}
+                      className={`w-full pl-10 px-4 py-2 border rounded-lg `}
                     /> 
                   </div>
                 )}

@@ -43,7 +43,7 @@ const SingleClass = ({ cls }) => {
         <div className="flex flex-col md:flex-row md:justify-between md:items-start">
           <div className="flex-1">
             <div className="flex items-start justify-between">
-              <h3 className="text-xl font-bold text-gray-800">{cls.name}</h3>
+              <h3 className="text-xl font-bold text-gray-800">{cls.title}</h3>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-semibold ${
                   cls.is_active
@@ -59,11 +59,11 @@ const SingleClass = ({ cls }) => {
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="flex items-center text-gray-700">
                 <FaUserAlt className="text-blue-500 mr-2" />
-                <span>{cls.instructor}</span>
+                <span># {cls.instructor}</span>
               </div>
               <div className="flex items-center text-gray-700">
                 <FaCalendarAlt className="text-blue-500 mr-2" />
-                <span>{formatDateTime(cls.schedule)}</span>
+                <span>{formatDateTime(cls.start_datetime)}</span>
               </div>
               <div className="flex items-center text-gray-700">
                 <FaClock className="text-blue-500 mr-2" />
@@ -72,7 +72,7 @@ const SingleClass = ({ cls }) => {
               <div className="flex items-center text-gray-700">
                 <FaDumbbell className="text-blue-500 mr-2" />
                 <span>
-                  {getAvailableSpots(cls)}/{cls.max_capacity} spots available
+                  {cls.capacity} spots 
                 </span>
               </div>
             </div>

@@ -4,6 +4,7 @@ import {  FaPlus, FaSearch  } from 'react-icons/fa';
 import Loader from "../common/Loader"
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router';
+import { authApiClient } from '../../services/apiServices';
 
 // Mock data
 const mockClasses = {
@@ -55,43 +56,41 @@ const mockClasses = {
 };
 
 const AdminStaffClasses = () => {
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState();
+  const [filteredClasses,setFilteredClasses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentClass, setCurrentClass] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    instructor: '',
-    schedule: '',
-    duration_minutes: 60,
-    max_capacity: 15,
-    is_active: true,
-  });
-
+  const [searchTerm, setSearchTerm] = useState('');  
   const { isAdmin, isStaff } = useAuth();
   const navigate = useNavigate();
   
 
   // Load classes
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setClasses(mockClasses.results);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const fetchClasses= async ()=>{
+      setLoading(true);
+      try {
+        const response=await authApiClient.get('fitness-classes/');
+        console.log(response.data);
+        setClasses(response.data.data);
+        setFilteredClasses(response.data.data.results)
+      } catch (error) {
+        console.log(error)
+      }finally{
+        setLoading(false);
+      }
+    }
+    fetchClasses();
   }, []);
  
 
   // Filter classes based on search term
-  const filteredClasses = classes.filter(cls => 
-    cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cls.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cls.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const handleAddClass = (cls) => {
-    const id = cls.id;
+  // const filteredClasses = classes?.filter(cls => 
+  //   cls.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   cls.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   cls.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  const handleAddClass = () => {
     if (isAdmin) {
       navigate(`/admin/classes/add`);
     } else if (isStaff) {
@@ -109,6 +108,7 @@ const AdminStaffClasses = () => {
       </div>
     );
   }
+  console.log(filteredClasses)
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -137,8 +137,8 @@ const AdminStaffClasses = () => {
       </div>
 
       <div className="space-y-4">
-        {filteredClasses.length > 0 ? (
-          filteredClasses.map((cls) => (
+        {filteredClasses?.length > 0 ? (
+          filteredClasses?.map((cls) => (
             <SingleClass cls={cls} />
           ))
         ) : (

@@ -2,6 +2,8 @@ import React from 'react';
 import {FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit , FaTrash} from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
+import { authApiClient } from '../../services/apiServices';
+import toast, { Toaster } from 'react-hot-toast';
 
 const MemberDetails = () => {
     const { member } = useLocation().state;
@@ -24,14 +26,27 @@ const MemberDetails = () => {
         navigate(`/admin/members/edit/${member.id}`, { state: { member } });
     };
 
-    const handleDelete = () => {
+    const handleDelete =async () => {
         // Handle delete functionality
         console.log('Delete member:', member.id);
         // navigate(`/admin/members/delete/${member.id}`, { state: { member } });
+        try {
+            toast.loading("Deleting member...");
+           const response = await authApiClient.delete(`user-list/${member.id}/`); 
+           console.log(response);
+           navigate('/admin/members');
+           toast.success("Member deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete member");
+            console.log(error);
+        }finally{
+            toast.dismiss();
+        }
     };
 
     return (
         <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+            <Toaster />
             <div className="max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <button

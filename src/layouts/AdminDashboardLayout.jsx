@@ -28,9 +28,9 @@ const AdminDashboard = () => {
   const activeTab = location.pathname;
 
   const menuItems = [
-    { name: "Dashboard", icon: <FaHome />, path: "/admin" },
+    { name: "Dashboard", icon: <FaHome />, path: "/admin/dashboard" },
     { name: "Users", icon: <FaUsers />, path: "/admin/users" },
-    { name: "Memberships", icon: <FaIdCard />, path: "/admin/memberships" },
+    { name: "Plans", icon: <FaIdCard />, path: "/admin/plans" },
     { name: "Classes", icon: <FaDumbbell />, path: "/admin/classes" },
     { name: "Bookings", icon: <FaCalendarAlt />, path: "/admin/bookings" },
     {

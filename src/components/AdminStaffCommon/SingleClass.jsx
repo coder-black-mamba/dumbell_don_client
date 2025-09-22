@@ -25,8 +25,9 @@ const SingleClass = ({ cls }) => {
 
   const handleEdit = (cls) => {
     const id = cls.id;
+    console.log(isAdmin)
     if (isAdmin) {
-      navigate(`/staff/classes/edit/${id}`,{state:{cls}});
+      navigate(`/admin/classes/edit/${id}`,{state:{cls}});
     } else if (isStaff) {
       navigate(`/staff/classes/edit/${id}`,{state:{cls}});
     } else {

@@ -175,6 +175,8 @@ function AppRoutes() {
           <Route path="plans/add" element={<AddPlan/>} />
           <Route path="plans/edit/:id" element={<EditPlan/>} />
           <Route path="classes" element={<AdminStaffClasses />} />
+          <Route path="classes/add" element={<AddClass/>} />
+          <Route path="classes/edit/:id" element={<EditClass/>} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="attendance" element={<AdminAttendences />} />
           <Route path="payments" element={<AdminPayments />} />

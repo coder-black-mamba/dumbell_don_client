@@ -93,7 +93,7 @@ const AdminDashboard = () => {
                 <Link
                   to={item.path}
                   className={`flex items-center px-4 py-3 text-sm font-medium transition-colors duration-200 ${
-                    activeTab === item.path
+                    activeTab.toLowerCase().includes(item.path.toLowerCase())
                       ? "bg-brand text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white"
                   }`}

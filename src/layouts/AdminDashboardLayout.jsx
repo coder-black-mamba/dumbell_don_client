@@ -19,6 +19,7 @@ import {
   FaChartBar,
   FaCog,
 } from "react-icons/fa";
+import {useAuth} from "../hooks/useAuth";
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,6 +27,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   // const [activeTab, setActiveTab] = useState('dashboard');
   const activeTab = location.pathname;
+  const {user} = useAuth();
 
   const menuItems = [
     { name: "Dashboard", icon: <FaHome />, path: "/admin/dashboard" },
@@ -49,7 +51,6 @@ const AdminDashboard = () => {
     { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
   ];
 
-  console.log(activeTab);
 
   const handleLogout = () => {
     // Handle logout logic here
@@ -142,9 +143,9 @@ const AdminDashboard = () => {
           <div className="flex items-center">
             <div className="relative">
               <button className="flex items-center text-sm font-medium text-gray-300 hover:text-white">
-                <span className="mr-2">Admin User</span>
+                <span className="mr-2">{user?.first_name} {user?.last_name}</span>
                 <div className="h-8 w-8 rounded-full bg-brand-dark flex items-center justify-center text-white">
-                  AU
+                  {user?.first_name?.charAt(0).toUpperCase()}{user?.last_name?.charAt(0).toUpperCase()}
                 </div>
               </button>
             </div>

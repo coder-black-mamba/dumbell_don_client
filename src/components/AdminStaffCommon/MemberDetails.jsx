@@ -1,5 +1,5 @@
 import React from 'react';
-import { Famember, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit , FaTrash} from 'react-icons/fa';
+import {FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit , FaTrash} from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -21,13 +21,13 @@ const MemberDetails = () => {
     const handleEdit = () => {
         // Handle edit functionality
         console.log('Edit member:', member.id);
-        navigate(`/admin/members/edit/${member.id}`);
+        navigate(`/admin/members/edit/${member.id}`, { state: { member } });
     };
 
     const handleDelete = () => {
         // Handle delete functionality
         console.log('Delete member:', member.id);
-        navigate(`/admin/members/delete/${member.id}`);
+        // navigate(`/admin/members/delete/${member.id}`, { state: { member } });
     };
 
     return (
@@ -74,7 +74,7 @@ const MemberDetails = () => {
                                             alt={`${member.first_name} ${member.last_name}`} 
                                         />
                                     ) : (
-                                        <Famember className="h-12 w-12 text-gray-400" />
+                                        <FaUser className="h-12 w-12 text-gray-400" />
                                     )}
                                 </div>
                                 <span className="absolute -bottom-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -94,7 +94,7 @@ const MemberDetails = () => {
                             {/* Contact Information */}
                             <div className="space-y-4">
                                 <h2 className="text-lg font-semibold text-gray-200 flex items-center">
-                                    <Famember className="mr-2 text-blue-400" />
+                                    <FaUser className="mr-2 text-blue-400" />
                                     Contact Information
                                 </h2>
                                 <div className="space-y-4">

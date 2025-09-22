@@ -1,10 +1,10 @@
 import React from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit } from 'react-icons/fa';
+import { Famember, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaArrowLeft, FaEdit , FaTrash} from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
 const MemberDetails = () => {
-    const { user } = useLocation().state;
+    const { member } = useLocation().state;
     const navigate = useNavigate();
     const { isAdmin } = useAuth();
     // const isAdmin = true;
@@ -20,8 +20,14 @@ const MemberDetails = () => {
 
     const handleEdit = () => {
         // Handle edit functionality
-        console.log('Edit member:', user.id);
-        navigate(`/admin/member/edit/${user.id}`);
+        console.log('Edit member:', member.id);
+        navigate(`/admin/members/edit/${member.id}`);
+    };
+
+    const handleDelete = () => {
+        // Handle delete functionality
+        console.log('Delete member:', member.id);
+        navigate(`/admin/members/delete/${member.id}`);
     };
 
     return (
@@ -36,13 +42,22 @@ const MemberDetails = () => {
                         Back to Members
                     </button>
                     {isAdmin && (
+                        <>
+                        <button
+                        onClick={handleDelete}
+                        className="flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    >
+                        <FaTrash className="mr-2" />
+                        Delete Member
+                    </button>
                         <button
                             onClick={handleEdit}
                             className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                        >
+                            >
                             <FaEdit className="mr-2" />
                             Edit Member
                         </button>
+                        </>
                     )}
                 </div>
 
@@ -52,23 +67,23 @@ const MemberDetails = () => {
                         <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
                             <div className="relative">
                                 <div className="h-24 w-24 rounded-full bg-gray-700 flex items-center justify-center ring-4 ring-blue-500/20">
-                                    {user.profile_picture_url ? (
+                                    {member.profile_picture_url ? (
                                         <img 
                                             className="h-24 w-24 rounded-full object-cover" 
-                                            src={user.profile_picture_url} 
-                                            alt={`${user.first_name} ${user.last_name}`} 
+                                            src={member.profile_picture_url} 
+                                            alt={`${member.first_name} ${member.last_name}`} 
                                         />
                                     ) : (
-                                        <FaUser className="h-12 w-12 text-gray-400" />
+                                        <Famember className="h-12 w-12 text-gray-400" />
                                     )}
                                 </div>
                                 <span className="absolute -bottom-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    {user.role}
+                                    {member.role}
                                 </span>
                             </div>
                             <div className="text-center sm:text-left">
-                                <h1 className="text-2xl font-bold text-white">{user.first_name} {user.last_name}</h1>
-                                <p className="text-gray-300 mt-1">Member since {formatDate(user.join_date)}</p>
+                                <h1 className="text-2xl font-bold text-white">{member.first_name} {member.last_name}</h1>
+                                <p className="text-gray-300 mt-1">Member since {formatDate(member.join_date)}</p>
                             </div>
                         </div>
                     </div>
@@ -79,7 +94,7 @@ const MemberDetails = () => {
                             {/* Contact Information */}
                             <div className="space-y-4">
                                 <h2 className="text-lg font-semibold text-gray-200 flex items-center">
-                                    <FaUser className="mr-2 text-blue-400" />
+                                    <Famember className="mr-2 text-blue-400" />
                                     Contact Information
                                 </h2>
                                 <div className="space-y-4">
@@ -87,21 +102,21 @@ const MemberDetails = () => {
                                         <FaEnvelope className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
                                         <div>
                                             <p className="text-sm text-gray-400">Email</p>
-                                            <p className="text-gray-200">{user.email}</p>
+                                            <p className="text-gray-200">{member.email}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start bg-gray-750 p-3 rounded-lg">
                                         <FaPhone className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
                                         <div>
                                             <p className="text-sm text-gray-400">Phone</p>
-                                            <p className="text-gray-200">{user.phone_number || 'Not provided'}</p>
+                                            <p className="text-gray-200">{member.phone_number || 'Not provided'}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start bg-gray-750 p-3 rounded-lg">
                                         <FaMapMarkerAlt className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
                                         <div>
                                             <p className="text-sm text-gray-400">Address</p>
-                                            <p className="text-gray-200">{user.address || 'Not provided'}</p>
+                                            <p className="text-gray-200">{member.address || 'Not provided'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +140,7 @@ const MemberDetails = () => {
                                     </div>
                                     <div className="mt-4">
                                         <p className="text-sm text-gray-400">Member Since</p>
-                                        <p className="text-gray-200">{formatDate(user.join_date)}</p>
+                                        <p className="text-gray-200">{formatDate(member.join_date)}</p>
                                     </div>
                                 </div>
 

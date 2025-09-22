@@ -25,7 +25,6 @@ import ActivationEmailSuccessfull from '../pages/ActivationEmailSuccessfull'
 import EmailVerified from '../pages/EmailVerified'
 import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
 import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
-import AdminUsers from '../components/AdminDashboard/AdminUsers'
 import AdminStaffMembershipPlans from '../components/AdminStaffCommon/AdminStaffMembershipPlans'
 import AdminBookings from '../components/AdminDashboard/AdminBookings'
 import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
@@ -33,9 +32,7 @@ import AdminPayments from '../components/AdminDashboard/AdminPayments'
 import AdminInvoices from '../components/AdminDashboard/AdminInvoices'
 import AdminFeedback from '../components/AdminDashboard/AdminFeedback'
 import Report from '../components/AdminDashboard/Report'
-import StaffBookings from '../components/StaffDashboard/StaffBookings'
-import StaffUsers from '../components/StaffDashboard/StaffUsers'
-import StaffFeedback from '../components/StaffDashboard/StaffFeedback'
+import StaffBookings from '../components/StaffDashboard/StaffBookings'  
 import Unauthorized from '../components/common/Unauthorized'
 import NotFound from '../components/common/NotFound'
 import Dashboard from '../pages/Dashboard'
@@ -54,13 +51,16 @@ import PaymentFail from '../pages/PaymentFail'
 import DownloadRecipt from '../pages/DownloadRecipt'
 import ConfirmSubscription from '../pages/ConfirmSubscription'
 import DownloadInvoice from '../pages/DownloadInvoice'
-import MemberDetails from '../components/StaffDashboard/MemberDetails'
+import MemberDetails from '../components/AdminStaffCommon/MemberDetails'
 import EditClass from '../components/AdminStaffCommon/EditClass'
 import AdminStaffClasses from '../components/AdminStaffCommon/AdminStaffClasses'
 import AddClass from '../components/AdminStaffCommon/AddClass'
 import AddPlan from '../components/AdminStaffCommon/AddPlan'
 import EditPlan from '../components/AdminStaffCommon/EditPlan'
-
+import AdminStaffMembers from '../components/AdminStaffCommon/AdminStaffMembers'
+import StaffFeedback from '../components/StaffDashboard/StaffFeedback' 
+import EditMember from '../components/AdminDashboard/EditMebmer'
+import AddMember from '../components/AdminDashboard/AddMember'
 
 function AppRoutes() {
   return (
@@ -156,8 +156,8 @@ function AppRoutes() {
           <Route path="plans/edit/:id" element={<EditPlan/>} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="bookings" element={<StaffBookings />} />
-          <Route path="members" element={<StaffUsers />} />
-          <Route path="member/:id" element={<MemberDetails/>} />
+          <Route path="members" element={<AdminStaffMembers />} />
+          <Route path="members/:id" element={<MemberDetails/>} />
           <Route path="feedback" element={<StaffFeedback />} />
           <Route path="*" element={<NotFound />} />
         </Route>
@@ -170,7 +170,10 @@ function AppRoutes() {
           </AdminRoute>
         }>
           <Route index path="dashboard" element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
+          <Route path="members" element={<AdminStaffMembers />} />
+          <Route path="members/add" element={<AddMember/>} />
+          <Route path="members/:id" element={<MemberDetails/>} />
+          <Route path="members/edit/:id/" element={<EditMember/>} />
           <Route path="plans" element={<AdminStaffMembershipPlans />} />
           <Route path="plans/add" element={<AddPlan/>} />
           <Route path="plans/edit/:id" element={<EditPlan/>} />

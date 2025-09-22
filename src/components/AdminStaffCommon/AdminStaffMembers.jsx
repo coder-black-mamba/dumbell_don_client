@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaUser, FaEye } from 'react-icons/fa';
+import { FaSearch, FaUser, FaEye ,FaEdit,FaTrash} from 'react-icons/fa';
 import Loader from '../common/Loader';
-import { useNavigate } from 'react-router';
+import { useNavigate,Link } from 'react-router';
 import { authApiClient } from '../../services/apiServices';
+import { useAuth } from '../../hooks/useAuth';
 
 // Mock data
 const mockUsers = {
@@ -61,6 +62,7 @@ const StaffUsers = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const {isAdmin, user} = useAuth();
 
  
   // Load users
@@ -81,10 +83,10 @@ const StaffUsers = () => {
   }, []);
  
 
-  // View user details
+  // View user details  
   const handleViewDetails = (user) => {
-    console.log(user);
-    navigate(`/staff/member/${user.id}`, { state: { user } });
+    
+    isAdmin ? navigate(`/admin/members/${user.id}`, { state: { member:user } }) : navigate(`/staff/members/${user.id}`, { state: { member:user } });
   };
 
   // Filter only MEMBER role users and apply search
@@ -131,19 +133,29 @@ const StaffUsers = () => {
   }
    return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-200 mb-4 md:mb-0">Member Directory</h1>
-        <div className="relative w-full md:w-64">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FaSearch className="text-gray-400" />
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 mb-6">
+        <h1 className="text-2xl font-bold text-gray-200">Member Directory</h1>
+        <div className="w-full md:w-auto flex-1 md:flex-none md:ml-4">
+          <div className="relative flex items-center">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FaSearch className="h-4 w-4 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search members..."
+              className="pl-10 pr-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+            <div className="ml-2">
+              <button
+                onClick={() => navigate('/admin/members/add')}
+                className="whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+              >
+                Add New Member
+              </button>
+            </div>
           </div>
-          <input
-            type="text"
-            placeholder="Search members..."
-            className="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
         </div>
       </div>
 
@@ -193,11 +205,12 @@ const StaffUsers = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                       <button
                         onClick={() => handleViewDetails(user)}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-blue-600 btn hover:text-blue-900"
                         title="View Details"
                       >
                         <FaEye className="inline mr-1" /> View
                       </button>
+                      
                     </td>
                   </tr>
                 ))

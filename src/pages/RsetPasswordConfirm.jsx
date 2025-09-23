@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate , useParams} from 'react-router';
 import { useForm } from 'react-hook-form';
-import { FaLock, FaArrowLeft, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
+import { FaLock, FaArrowLeft, FaCheck, FaExclamationTriangle ,FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { apiClient } from '../services/apiServices';
 
@@ -266,7 +266,7 @@ const ResetPasswordConfirm = () => {
               >
                 {isLoading ? (
                   <>
-                    <span className="animate-spin mr-2 h-5 w-5 border-b-2 border-white rounded-full"></span>
+                    <FaSpinner className="animate-spin mr-2 text-white fw-bold text-lg" />
                     Resetting Password...
                   </>
                 ) : (

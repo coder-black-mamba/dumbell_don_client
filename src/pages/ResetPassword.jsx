@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaLock, FaArrowLeft } from 'react-icons/fa';
+import { FaLock, FaArrowLeft,FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router';
 import Logo from '../assets/logo_white.png';
 import { apiClient } from '../services/apiServices';
@@ -93,11 +93,11 @@ const ResetPassword = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand"
+                  className="w-full flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand"
                 >
                   {isLoading ? (
                     <>
-                    <span className="animate-spin mr-2 h-5 w-5 border-b-2 border-white rounded-full"></span>
+                    <FaSpinner className="animate-spin mr-2 text-white fw-bold text-lg" />
                     'Sending...'
                     </>
                   ) : 'Send reset link'}

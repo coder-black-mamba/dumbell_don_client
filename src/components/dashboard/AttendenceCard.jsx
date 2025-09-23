@@ -21,7 +21,7 @@ const AttendenceCard = ({ attendance ,key}) => {
   };
 
   return (
-    <div key={key} ke className="bg-base-300 rounded-xl border border-base-200 overflow-hidden hover:border-brand/30 transition-all duration-200">
+    <div key={key} className="bg-base-300 rounded-xl border border-base-200 overflow-hidden hover:border-brand/30 transition-all duration-200">
       {/* Header */}
       <div className="p-4 border-b border-base-200/50 flex justify-between items-start">
         <div>

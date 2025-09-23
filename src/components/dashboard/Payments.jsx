@@ -15,7 +15,7 @@ import { useNavigate } from "react-router";
 const Payments = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [paymentData, setPaymentData] = useState({});
+  const [paymentData, setPaymentData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {

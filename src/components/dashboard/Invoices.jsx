@@ -15,7 +15,7 @@ import ErrorMessage from "../common/ErrorMessage";
 import { useNavigate } from "react-router";
 
 const Invoices = () => {
-  const [invoiceData, setInvoiceData] = useState({});
+  const [invoiceData, setInvoiceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [error, setError] = useState(null);
@@ -106,6 +106,7 @@ const Invoices = () => {
   if (error) {
     return <ErrorMessage error={error} />;
   }
+
 
   return (
     <div className="space-y-6">
@@ -263,80 +264,6 @@ const Invoices = () => {
           </table>
         </div>
 
-        {invoiceData.count === 0 ? (
-          <div className="text-center py-12">
-            <FaFileInvoiceDollar className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No invoices
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new invoice.
-            </p>
-            <div className="mt-6">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                <FaFileInvoiceDollar className="-ml-1 mr-2 h-5 w-5" />
-                New Invoice
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-base-300 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-            <div className="flex-1 flex justify-between sm:hidden">
-              <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                Previous
-              </button>
-              <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                Next
-              </button>
-            </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">10</span> of{" "}
-                  <span className="font-medium">{invoiceData.count}</span>{" "}
-                  results
-                </p>
-              </div>
-              <div>
-                <nav
-                  className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                  aria-label="Pagination"
-                >
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <span className="sr-only">Previous</span>
-                    &larr;
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    2
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
-                    <span className="sr-only">Next</span>
-                    &rarr;
-                  </a>
-                </nav>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

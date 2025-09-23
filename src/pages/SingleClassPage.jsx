@@ -26,7 +26,7 @@ const SingleClassPage = () => {
     const fetchClassDetails = async () => {
       try {
         const response = await apiClient.get(`/fitness-classes/${id}`);
-        setClassData(response.data);
+        setClassData(response.data.data);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to load class details. Please try again later.");
@@ -84,7 +84,7 @@ const SingleClassPage = () => {
   const formatDate = (dateString) => {
     return format(parseISO(dateString), "EEEE, MMMM d, yyyy");
   };
-
+  console.log(classData)
   return (
     <div className="bg-base-200 min-h-screen">
       {/* Back button */}
@@ -140,11 +140,11 @@ const SingleClassPage = () => {
                       <FaCalendarAlt className="h-5 w-5 text-brand mt-0.5 mr-3 flex-shrink-0" />
                       <div>
                         <p className="font-medium text-gray-900">
-                          {formatDate(classData.start_datetime)}
+                          {(classData.start_datetime)}
                         </p>
                         <p className="text-gray-600">
-                          {formatTime(classData.start_datetime)} -{" "}
-                          {formatTime(classData.end_datetime)}
+                          {(classData.start_datetime)} -{" "}
+                          {(classData.end_datetime)}
                           <span className="mx-2">•</span>
                           {classData.duration_minutes} minutes
                         </p>

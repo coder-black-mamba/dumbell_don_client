@@ -84,10 +84,13 @@ const InitiateBookingPayment = () => {
     setIsSubmitting(true);
     try {
       const booking_response = await authApiClient.post('bookings/',{
-        "fitness_class":classData.id 
+        "fitness_class_id":classData.id ,
+        "member_id":user.id,
       });
+
+      console.log(booking_response)
  
-      const booking_id=booking_response.data.id;
+      const booking_id=booking_response.data.data.id;
        const invoice_response = await  authApiClient.post(`invoices/?payment_type=booking&id=${booking_id}`,{
         "notes": "nothing",
         "metadata": {},
@@ -96,7 +99,7 @@ const InitiateBookingPayment = () => {
 
 
       // initiating payment
-      const invoice_id=invoice_response.data.number;
+      const invoice_id=invoice_response.data.data.number;
       const payment_response = await authApiClient.post(`payment/initiate/`,{
         "invoice_id": invoice_id
       });

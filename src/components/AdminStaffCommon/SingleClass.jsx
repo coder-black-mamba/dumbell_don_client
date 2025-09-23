@@ -11,7 +11,6 @@ import {
   FaUserAlt,
   FaDumbbell,
 } from "react-icons/fa";
-import { formatDate, formatTime, formatDateTime } from "../../utils/datetime";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -64,7 +63,7 @@ const SingleClass = ({ cls }) => {
               </div>
               <div className="flex items-center text-gray-700">
                 <FaCalendarAlt className="text-blue-500 mr-2" />
-                <span>{formatDateTime(cls.start_datetime)}</span>
+                <span>{cls.start_datetime}</span>
               </div>
               <div className="flex items-center text-gray-700">
                 <FaClock className="text-blue-500 mr-2" />

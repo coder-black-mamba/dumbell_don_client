@@ -26,7 +26,7 @@ const ClassesDashboard = () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
-        const classesWithDates = response.data.data.map(cls => ({
+        const classesWithDates = response.data.map(cls => ({
           ...cls,
           startDate: newDate(cls.fitness_class.start_datetime),
           endDate: newDate(cls.fitness_class.end_datetime)

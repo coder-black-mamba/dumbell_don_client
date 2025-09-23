@@ -71,8 +71,8 @@ const StaffUsers = () => {
       try {
         const response = await authApiClient.get('user-list/');
         const data = response.data;
-        setUsers(data.data);
-        setFilteredUsers(data.data.results);
+        setUsers(data);
+        setFilteredUsers(data);
         setLoading(false);
       } catch (error) {
         console.error(error);

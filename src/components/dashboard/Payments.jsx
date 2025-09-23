@@ -23,7 +23,7 @@ const Payments = () => {
       setLoading(true);
       try {
         const response = await authApiClient.get("payments/");
-        setPaymentData(response.data.data);
+        setPaymentData(response.data);
       } catch (error) {
         setError(
           error.response?.data?.message || "Failed to fetch payment data"

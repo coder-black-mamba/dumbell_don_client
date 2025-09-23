@@ -27,7 +27,7 @@ const Classes = () => {
       try {
       const response = await apiClient.get('/fitness-classes');
       const data = response.data;
-      setFitnessClasses(data.data.results.slice(0, 4));
+      setFitnessClasses(data.slice(0, 4));
       setLoading(false);
       } catch (error) {
         setLoading(false)

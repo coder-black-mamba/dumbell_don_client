@@ -25,8 +25,8 @@ const AddBooking = () => {
           authApiClient.get('/user-list/'),
           authApiClient.get('/fitness-classes/')
         ]);
-        setMembers(membersRes.data.data.results);
-        setFitnessClasses(classesRes.data.data.results);
+        setMembers(membersRes.data);
+        setFitnessClasses(classesRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
         toast.error('Failed to load required data');

@@ -26,7 +26,7 @@ const SingleClassPage = () => {
     const fetchClassDetails = async () => {
       try {
         const response = await apiClient.get(`/fitness-classes/${id}`);
-        setClassData(response.data.data);
+        setClassData(response.data);
         setIsLoading(false);
       } catch (err) {
         setError("Failed to load class details. Please try again later.");

@@ -47,7 +47,7 @@ const Reviews = () => {
     try {
       const fetchReviews = async () => {
         const response = await authApiClient.get("/feedbacks/");
-        setReviews(response.data.data.results);
+        setReviews(response.data);
       }
       fetchReviews();
     } catch (error) {

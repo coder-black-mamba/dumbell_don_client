@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await authApiClient.get("/subscriptions/");
-      const subscriptionsData = response.data.data.results;
+      const subscriptionsData = response.data;
 
       const today = new Date();
       const selectedSubscription = subscriptionsData.find((subscription) => {

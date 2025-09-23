@@ -26,7 +26,7 @@ const Invoices = () => {
     const fetchInvoiceData = async () => {
       try {
         const response = await authApiClient.get("invoices/");
-        setInvoiceData(response.data.data);
+        setInvoiceData(response.data);
       } catch (error) {
         setError(
           error.response?.data?.message || "Failed to fetch invoice data"

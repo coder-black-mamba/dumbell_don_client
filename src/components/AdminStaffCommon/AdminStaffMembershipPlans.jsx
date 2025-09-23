@@ -61,8 +61,8 @@ const AdminStaffMembershipPlans = () => {
       try {
         setLoading(true)
         const response = await authApiClient.get("membership-plans/");
-        setPlans(response.data.data)
-        setFilteredPlans(response.data.data.results)
+        setPlans(response.data)
+        setFilteredPlans(response.data)
         setLoading(false)
       } catch (error) {
         setError(error)

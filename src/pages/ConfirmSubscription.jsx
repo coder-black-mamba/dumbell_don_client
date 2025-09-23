@@ -23,7 +23,7 @@ const ConfirmSubscription = () => {
       try {
         setLoading(true);
         const response = await authApiClient.get(`membership-plans/${id}/`);
-        setPlan(response.data.data);
+        setPlan(response.data);
       } catch (error) {
         setError(error.response?.data?.message || "Failed to load plan details");
       } finally {

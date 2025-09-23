@@ -35,7 +35,7 @@ const StaffBookings = () => {
     const fetchBookings = async () => {
       try {
         const response = await authApiClient.get('/bookings');
-        setBookings(response.data.data.results);
+        setBookings(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching bookings:', error);

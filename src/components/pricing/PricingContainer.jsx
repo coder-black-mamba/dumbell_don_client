@@ -15,11 +15,11 @@ const PricingContainer = () => {
   useEffect(() => {
     const fetchPricingPlans=async()=>{
        const plans_response= await apiClient.get("/membership-plans/") 
-       const monthly_plans=plans_response.data.data.results.filter((plan)=>plan.duration_days===30)
-       const yearly_plans=plans_response.data.data.results.filter((plan)=>plan.duration_days===360)
+       const monthly_plans=plans_response.data.filter((plan)=>plan.duration_days===30)
+       const yearly_plans=plans_response.data.filter((plan)=>plan.duration_days===360)
        setMonthlyPlans(monthly_plans)
        setYearlyPlans(yearly_plans)
-       setPricingPlans(plans_response.data.data.results)
+       setPricingPlans(plans_response.data)
        setLoading(false)
     }
 

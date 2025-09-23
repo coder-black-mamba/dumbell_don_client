@@ -26,7 +26,7 @@ const PaymentSuccess = () => {
     setLoading(true);
     const fetchPayment = async () => {
       const payment = await authApiClient.get(`/payments/${id}/`);
-      setPayment(payment.data.data);
+      setPayment(payment.data);
       setLoading(false);
     };
 

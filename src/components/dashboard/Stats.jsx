@@ -32,7 +32,7 @@ const Stats = () => {
     try {
       const fetchBookings = async () => {
         const response = await authApiClient.get("classes/bookings/");
-        const bookingsData = response.data.data;
+        const bookingsData = response.data;
         const today = new Date();
         const filteredBookings = bookingsData.filter((booking) => {
           const bookingDate = new Date(booking.class_data.start_datetime);

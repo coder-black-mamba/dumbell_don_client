@@ -32,7 +32,7 @@ const StaffFeedback = () => {
       try {
         const response = await authApiClient.get('feedbacks/');
         console.log(response)
-        setFeedbackList(response?.data?.data?.results);
+        setFeedbackList(response?.data);
       setLoading(false);
       } catch (error) {
         console.error('Error fetching feedback:', error);
@@ -45,7 +45,7 @@ const StaffFeedback = () => {
       try {
         const response = await authApiClient.get('fitness-classes/');
         console.log(response)
-        setFitnessClasses(response?.data?.data?.results);
+        setFitnessClasses(response?.data);
       setLoading(false);
       } catch (error) {
         console.error('Error fetching fitness classes:', error);

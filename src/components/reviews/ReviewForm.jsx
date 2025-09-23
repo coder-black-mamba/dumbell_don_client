@@ -56,7 +56,7 @@ const ReviewForm = ({ reviews, setReviews }) => {
 
       const response = await authApiClient.post("/feedbacks/", review);
       console.log(response);
-      setReviews([response.data.data, ...reviews]);
+      setReviews([response.data, ...reviews]);
       setNewReview({ rating: 0, comment: "", hover: 0 });
       // alert("Thank you for your review!");
     } catch (error) {

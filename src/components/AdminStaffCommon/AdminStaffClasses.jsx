@@ -24,8 +24,8 @@ const AdminStaffClasses = () => {
       setLoading(true);
       try {
         const response=await authApiClient.get('fitness-classes/');
-        setClasses(response.data.data);
-        setFilteredClasses(response.data.data.results)
+        setClasses(response.data);
+        setFilteredClasses(response.data)
       } catch (error) {
         console.log(error)
         setError(error)

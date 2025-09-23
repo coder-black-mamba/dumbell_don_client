@@ -23,7 +23,7 @@ const Attendance = () => {
 
     try {
       const response = await authApiClient.get("classes/attendance/");
-      setAttendance(response.data.data || []);
+      setAttendance(response.data || []);
       setError(null);
     } catch (err) {
       console.error("Error fetching attendance:", err);

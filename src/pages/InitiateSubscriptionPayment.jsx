@@ -90,7 +90,7 @@ const InitiateSubscriptionPayment = () => {
         "plan": subscriptionData.id,
       });
 
-      const subscription_id = subscription_response.data.id;
+      const subscription_id = subscription_response.data.data.id;
       console.log(subscriptionData);
       const invoice_response = await authApiClient.post(
         `invoices/?payment_type=subscription&id=${subscription_id}`,
@@ -102,7 +102,7 @@ const InitiateSubscriptionPayment = () => {
       // console.log(invoice_response)
 
       // initiating payment
-      const invoice_id = invoice_response.data.number;
+      const invoice_id = invoice_response.data.data.number;
       const payment_response = await authApiClient.post(`payment/initiate/`, {
         invoice_id: invoice_id,
       });

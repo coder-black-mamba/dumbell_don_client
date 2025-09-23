@@ -104,14 +104,14 @@ const StaffUsers = () => {
     setSearchTerm(value);
   
     if (value.length > 0) {
-      const filtered = users?.results?.filter((user) =>
+      const filtered = users?.filter((user) =>
         `${user.first_name} ${user.last_name}`.toLowerCase().includes(value.toLowerCase()) ||
         user.email.toLowerCase().includes(value.toLowerCase()) ||
         user.phone_number?.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredUsers(filtered);
     } else {
-      setFilteredUsers(users?.results);
+      setFilteredUsers(users);
     }
   };
 

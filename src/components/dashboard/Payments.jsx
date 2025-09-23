@@ -95,7 +95,7 @@ const Payments = () => {
           <h2 className="text-2xl font-bold mb-6">Payment History</h2>
 
           <div className="space-y-4">
-            {paymentData.results?.map((payment) => (
+            {paymentData?.map((payment) => (
               <div
                 key={payment.id}
                 className="border rounded-lg p-4 hover:bg-base-100 transition-colors"

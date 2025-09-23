@@ -170,7 +170,7 @@ const Invoices = () => {
               </tr>
             </thead>
             <tbody className="bg-base-300 divide-y divide-gray-200">
-              {invoiceData.results?.map((invoice) => {
+              {invoiceData?.map((invoice) => {
                 return (
                   <tr
                     key={invoice.id}

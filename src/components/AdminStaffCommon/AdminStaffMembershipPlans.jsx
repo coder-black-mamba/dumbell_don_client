@@ -89,13 +89,13 @@ const AdminStaffMembershipPlans = () => {
     setSearchTerm(value);
   
     if (value.length > 0) {
-      const filtered = plans?.results?.filter((plan) =>
+      const filtered = plans?.filter((plan) =>
         `${plan.name}`.toLowerCase().includes(value.toLowerCase()) ||
         plan.description.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredPlans(filtered);
     } else {
-      setFilteredPlans(plans?.results);
+      setFilteredPlans(plans);
     }
   };
 

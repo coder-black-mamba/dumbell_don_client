@@ -59,13 +59,13 @@ const AdminStaffClasses = () => {
     setSearchTerm(value);
   
     if (value.length > 0) {
-      const filtered = classes?.results?.filter((cls) =>
+      const filtered = classes?.filter((cls) =>
         `${cls.name} ${cls.instructor}`.toLowerCase().includes(value.toLowerCase()) ||
         cls.description.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredClasses(filtered);
     } else {
-      setFilteredClasses(classes?.results);
+      setFilteredClasses(classes);
     }
   };
 

@@ -61,6 +61,10 @@ import AdminStaffMembers from '../components/AdminStaffCommon/AdminStaffMembers'
 import StaffFeedback from '../components/StaffDashboard/StaffFeedback' 
 import EditMember from '../components/AdminDashboard/EditMebmer'
 import AddMember from '../components/AdminDashboard/AddMember'
+import AddBooking from '../components/AdminDashboard/AddBooking'
+import EditBooking from '../components/AdminDashboard/EditBooking'
+import AdminStaffBookings from '../components/AdminStaffCommon/AdminStaffBookings'
+import SingleBookingView from '../components/AdminStaffCommon/SingleBookingView'
 
 function AppRoutes() {
   return (
@@ -155,7 +159,8 @@ function AppRoutes() {
           <Route path="plans/add" element={<AddPlan/>} />
           <Route path="plans/edit/:id" element={<EditPlan/>} />
           <Route path="profile" element={<MyProfile />} />
-          <Route path="bookings" element={<StaffBookings />} />
+          <Route path="bookings" element={<AdminStaffBookings />} />
+          <Route path="bookings/:id" element={<SingleBookingView/>} />
           <Route path="members" element={<AdminStaffMembers />} />
           <Route path="members/:id" element={<MemberDetails/>} />
           <Route path="feedback" element={<StaffFeedback />} />
@@ -180,7 +185,10 @@ function AppRoutes() {
           <Route path="classes" element={<AdminStaffClasses />} />
           <Route path="classes/add" element={<AddClass/>} />
           <Route path="classes/edit/:id" element={<EditClass/>} />
-          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="bookings" element={<AdminStaffBookings />} />
+          <Route path="bookings/:id" element={<SingleBookingView/>} />
+          <Route path="bookings/add" element={<AddBooking/>} />
+          <Route path="bookings/edit/:id" element={<EditBooking/>} />
           <Route path="attendance" element={<AdminAttendences />} />
           <Route path="payments" element={<AdminPayments />} />
           <Route path="invoices" element={<AdminInvoices />} />

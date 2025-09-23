@@ -38,12 +38,12 @@ const AttendenceDetail = ({selectedAttendance:parentSelectedAttendance, setIsMod
           <div className="flex items-center space-x-4 mb-4">
             <img 
               className="h-16 w-16 rounded-full" 
-              src={selectedAttendance.booking.member.avatar} 
-              alt={selectedAttendance.booking.member.name} 
+              src={selectedAttendance.booking_data.member.avatar} 
+              alt={selectedAttendance.booking_data.member.first_name} 
             />
             <div>
-              <p className="text-lg font-medium text-gray-700">{selectedAttendance.booking.member.name}</p>
-              <p className="text-gray-600">{selectedAttendance.booking.member.email}</p>
+              <p className="text-lg font-medium text-gray-700">{selectedAttendance.booking_data.member.first_name}</p>
+              <p className="text-gray-600">{selectedAttendance.booking_data.member.email}</p>
             </div>
           </div>
           
@@ -52,25 +52,25 @@ const AttendenceDetail = ({selectedAttendance:parentSelectedAttendance, setIsMod
             <p className="text-sm text-gray-900">
               <span className="font-medium  text-gray-700 ">Class:</span>{' '}
               <span className="text-gray-600">
-                {selectedAttendance.booking.fitness_class.name}
+                {selectedAttendance.booking_data.fitness_class.title}
               </span>
             </p>
             <p className="text-sm text-gray-900">
               <span className="font-medium text-gray-700">Instructor:</span>{' '}
               <span className="text-gray-600">
-                {selectedAttendance.booking.fitness_class.instructor}
+                {selectedAttendance.booking_data.fitness_class.instructor}
               </span>
             </p>
             <p className="text-sm text-gray-900">
               <span className="font-medium text-gray-700">Scheduled Time:</span>{' '}
               <span className="text-gray-600">
-                {formatTime(selectedAttendance.booking.fitness_class.schedule)}
+                {formatTime(selectedAttendance.booking_data.fitness_class.start_datetime)}
               </span>   
             </p>
             <p className="text-sm text-gray-900">
               <span className="font-medium text-gray-700">Duration:</span>{' '}
               <span className="text-gray-600">
-                {selectedAttendance.booking.fitness_class.duration_minutes} minutes
+                {selectedAttendance.booking_data.fitness_class.duration_minutes} minutes
               </span>
             </p>
           </div>

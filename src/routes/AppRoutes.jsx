@@ -26,13 +26,11 @@ import EmailVerified from '../pages/EmailVerified'
 import AdminDashboardLayout from '../layouts/AdminDashboardLayout'
 import StaffDashboardLayout from '../layouts/StaffDashboardLayout'
 import AdminStaffMembershipPlans from '../components/AdminStaffCommon/AdminStaffMembershipPlans'
-import AdminBookings from '../components/AdminDashboard/AdminBookings'
-import AdminAttendences from '../components/AdminDashboard/AdminAttendences'
+import AdminStaffAttendences from '../components/AdminStaffCommon/AdminStaffAttendences'
 import AdminPayments from '../components/AdminDashboard/AdminPayments'
 import AdminInvoices from '../components/AdminDashboard/AdminInvoices'
 import AdminFeedback from '../components/AdminDashboard/AdminFeedback'
 import Report from '../components/AdminDashboard/Report'
-import StaffBookings from '../components/StaffDashboard/StaffBookings'  
 import Unauthorized from '../components/common/Unauthorized'
 import NotFound from '../components/common/NotFound'
 import Dashboard from '../pages/Dashboard'
@@ -65,6 +63,7 @@ import AddBooking from '../components/AdminDashboard/AddBooking'
 import EditBooking from '../components/AdminDashboard/EditBooking'
 import AdminStaffBookings from '../components/AdminStaffCommon/AdminStaffBookings'
 import SingleBookingView from '../components/AdminStaffCommon/SingleBookingView'
+import AddAttendence from '../components/AdminStaffCommon/AddAttendence'
 
 function AppRoutes() {
   return (
@@ -151,7 +150,8 @@ function AppRoutes() {
           </StaffRoute>
         }>
           <Route index path="dashboard" element={<StaffDashboard />} />
-          <Route path="attendance" element={<AdminAttendences />} />
+          <Route path="attendance" element={<AdminStaffAttendences />} />
+          <Route path="attendance/add" element={<AddAttendence />} />
           <Route path="classes" element={<AdminStaffClasses/>} />
           <Route path="classes/add" element={<AddClass/>} />
           <Route path="classes/edit/:id" element={<EditClass/>} />
@@ -189,7 +189,8 @@ function AppRoutes() {
           <Route path="bookings/:id" element={<SingleBookingView/>} />
           <Route path="bookings/add" element={<AddBooking/>} />
           <Route path="bookings/edit/:id" element={<EditBooking/>} />
-          <Route path="attendance" element={<AdminAttendences />} />
+          <Route path="attendance" element={<AdminStaffAttendences />} />
+          <Route path="attendance/add" element={<AddAttendence />} />
           <Route path="payments" element={<AdminPayments />} />
           <Route path="invoices" element={<AdminInvoices />} />
           <Route path="feedback" element={<AdminFeedback />} />

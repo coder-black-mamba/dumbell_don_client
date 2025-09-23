@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaCalendarAlt, FaUser, FaCheck, FaTimes, FaFilter, FaSync, FaClipboardCheck } from 'react-icons/fa';
+import { FaSearch, FaCalendarAlt, FaUser, FaCheck, FaTimes, FaFilter, FaSync, FaClipboardCheck , FaPlus } from 'react-icons/fa';
 import Loader from '../common/Loader';
-import AttendenceDetail from '../AdminStaffCommon/AttendenceDetail';
+import AttendenceDetail from './AttendenceDetail';
 import { formatDateTime, formatDate, formatTime } from '../../utils/datetime'
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router';
+import { authApiClient } from '../../services/apiServices';
 
 // Mock data for demonstration
 const mockAttendances = {
@@ -146,7 +149,7 @@ const mockAttendances = {
   ]
 };
 
-const AdminAttendences = () => {
+const AdminStaffAttendences = () => {
   const [attendances, setAttendances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -159,21 +162,30 @@ const AdminAttendences = () => {
   const [selectedAttendance, setSelectedAttendance] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const {isAdmin} = useAuth();
+  const navigate = useNavigate()
+
   // Load attendances
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setAttendances(mockAttendances.results);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const fetchAttendances = async () => {
+      try {
+        const response = await authApiClient.get('attendances/');
+        setAttendances(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching attendances:', error);
+        setLoading(false);
+      }
+    };
+    fetchAttendances();
   }, []);
 
   // Filter attendances based on search and filters
   const filteredAttendances = attendances.filter(attendance => {
     const matchesSearch = 
-      attendance.booking.member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      attendance.booking.member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      attendance.booking.fitness_class.name.toLowerCase().includes(searchTerm.toLowerCase());
+      attendance.booking_data.member.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      attendance.booking_data.member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      attendance.booking_data.fitness_class.title.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesAttendance = 
       attendanceFilter === 'ALL' || 
@@ -239,6 +251,13 @@ const AdminAttendences = () => {
           >
             <FaSync className="mr-2" />
             Reset
+          </button>
+          <button
+            onClick={() => isAdmin ? navigate('/admin/attendance/add') : navigate('/staff/attendance/add')}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            <FaPlus className="mr-2" />
+            Add Attendance
           </button>
         </div>
       </div>
@@ -377,17 +396,17 @@ const AdminAttendences = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <img className="h-10 w-10 rounded-full" src={attendance.booking.member.avatar} alt={attendance.booking.member.name} />
+                          <img className="h-10 w-10 rounded-full" src={attendance.booking_data.member.avatar} alt={attendance.booking_data.member.first_name} />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{attendance.booking.member.name}</div>
-                          <div className="text-sm text-gray-500">{attendance.booking.member.email}</div>
+                          <div className="text-sm font-medium text-gray-900">{attendance.booking_data.member.first_name}</div>
+                          <div className="text-sm text-gray-500">{attendance.booking_data.member.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{attendance.booking.fitness_class.name}</div>
-                      <div className="text-sm text-gray-500">{attendance.booking.fitness_class.instructor}</div>
+                      <div className="text-sm font-medium text-gray-900">{attendance.booking_data.fitness_class.title}</div>
+                      <div className="text-sm text-gray-500">{attendance.booking_data.fitness_class.instructor}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{formatDate(attendance.marked_at)}</div>
@@ -438,4 +457,4 @@ const AdminAttendences = () => {
   );
 };
 
-export default AdminAttendences;
+export default AdminStaffAttendences;

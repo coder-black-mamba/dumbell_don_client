@@ -25,8 +25,8 @@ const PaymentSuccess = () => {
   useEffect(() => {
     setLoading(true);
     const fetchPayment = async () => {
-      const payment = await authApiClient.get(`/payments/${id}/`);
-      setPayment(payment.data);
+      const response = await authApiClient.get(`/payments/${id}/`);
+      setPayment(response.data.data);
       setLoading(false);
     };
 
@@ -46,7 +46,7 @@ const PaymentSuccess = () => {
   const handleDownloadReceipt = () => {
     navigate("/download-receipt", { state: { payment } });
   };
-
+  console.log(payment)
    return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-24 flex-col ">
       {loading && <Loader />}
@@ -81,7 +81,7 @@ const PaymentSuccess = () => {
                   <span className="font-medium">Transaction ID:</span>
                   <div className="tooltip" data-tip={payment?.reference}>
                     <span className="font-mono text-sm bg-base-300 px-2 py-1 rounded">
-                      {payment?.reference.substring(0, 8)}...
+                      {payment?.reference?.substring(0, 8)}...
                     </span>
                   </div>
                 </div>

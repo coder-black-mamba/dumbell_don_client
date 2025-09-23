@@ -43,12 +43,14 @@ export const AuthProvider = ({ children }) => {
       });
 
       const authToken = response.data;
+      
       localStorage.setItem("token", JSON.stringify(authToken));
       setToken(authToken);
+      console.log("authToken",authToken);
 
       const user = await fetchUser();
       if (!user) throw new Error("Failed to fetch user data");
-
+      console.log("user",user);
       setUser(user);
       return user;
     } catch (error) {
@@ -73,6 +75,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       const response = await authApiClient.get("/subscriptions/");
       const subscriptionsData = response.data;
+
 
       const today = new Date();
       const selectedSubscription = subscriptionsData.find((subscription) => {

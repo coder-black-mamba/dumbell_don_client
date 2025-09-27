@@ -1,8 +1,8 @@
-import React , { useState , useEffect } from 'react';
+import React , { useState , useEffect ,  } from 'react';
 import SectionTitle from '../SectionTitle';
 import { FaDumbbell, FaRunning, FaFire, FaHeartbeat, FaClock, FaUserFriends , FaMapMarkerAlt} from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link ,useNavigate} from 'react-router';
 import {apiClient} from '../../services/apiServices';
 
 
@@ -20,6 +20,7 @@ const icons=[
 const Classes = () => {
   const [fitnessClasses, setFitnessClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   
     useEffect(() => {
       setLoading(true);
@@ -109,11 +110,9 @@ const Classes = () => {
                   <span className="text-lg font-bold text-gray-900">
                     ${(cls.price_cents / 100).toFixed(2)}
                   </span>
-                  <Link to={{ pathname: `/classes/${cls.id}`, state: cls }} >
-                    <button className="bg-brand hover:bg-brand/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <button onClick={() => navigate(`/classes/${cls.id}` ,{state:{classData:cls}})} className="bg-brand hover:bg-brand/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                       Book Now
                     </button>
-                  </Link>
                   </div>
                   {/* <button className="mt-4 w-full bg-brand hover:bg-brand/90 text-white py-2 px-4 rounded-lg font-medium transition-colors">
                     Join Class

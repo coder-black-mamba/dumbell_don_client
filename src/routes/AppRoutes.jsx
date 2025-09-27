@@ -41,8 +41,6 @@ import SentEmailSuccess from '../pages/SentEmailSuccess'
 import ActivateAccount from '../pages/ActivateAccount'
 import SingleClassPage from '../pages/SingleClassPage'
 import RegistrationSuccessfull from '../pages/RegistrationSuccessfull'
-import InitiateBookingPayment from '../pages/InitiateBookingPayment'
-import InitiateSubscriptionPayment from '../pages/InitiateSubscriptionPayment'
 import PaymentSuccess from '../pages/PaymentSuccess'
 import PaymentCancel from '../pages/PaymentCancel'
 import PaymentFail from '../pages/PaymentFail'
@@ -65,6 +63,14 @@ import AdminStaffBookings from '../components/AdminStaffCommon/AdminStaffBooking
 import SingleBookingView from '../components/AdminStaffCommon/SingleBookingView'
 import AddAttendence from '../components/AdminStaffCommon/AddAttendence'
 import AdminStaffFeedback from '../components/AdminStaffCommon/AdminStaffFeedback'
+import InitiatePayment from '../pages/InitiatePayment'
+
+
+const PAYMENT_TYPES = {
+  BOOKING: "booking",
+  SUBSCRIPTION: "subscription",
+};
+
 
 function AppRoutes() {
   return (
@@ -101,12 +107,12 @@ function AppRoutes() {
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/payment/initiate/booking" element={
               <AuthenticatedRoute>
-                <InitiateBookingPayment />
+                <InitiatePayment  paymentType={PAYMENT_TYPES.BOOKING} />
               </AuthenticatedRoute>
             } />
             <Route path="/payment/initiate/subscription" element={
               <AuthenticatedRoute>
-                <InitiateSubscriptionPayment />
+                <InitiatePayment paymentType={PAYMENT_TYPES.SUBSCRIPTION} />
               </AuthenticatedRoute>
             } />
             <Route path="/payment/success/:id" element={

@@ -64,7 +64,7 @@ const ClassesPage = () => {
   };
 
   const handleBookNow = (cls) => {
-    navigate(`/classes/${cls.id}`);
+    navigate(`/classes/${cls.id}` ,{state:{classData:cls}});
   };
 
   if (loading) return<div className="flex justify-center items-center h-screen"><Loader /></div>;

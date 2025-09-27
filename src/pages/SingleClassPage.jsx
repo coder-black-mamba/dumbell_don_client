@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, Link, useNavigate, useLocation } from "react-router";
 import {
   FaArrowLeft,
   FaClock,
@@ -14,27 +14,32 @@ import { format, parseISO } from "date-fns";
 
 const SingleClassPage = () => {
   const { id } = useParams();
-  const [classData, setClassData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const [classData, setClassData] = useState(location.state?.classData || null);
+  const [isLoading, setIsLoading] = useState(!location.state?.classData);
   const [error, setError] = useState(null);
   const [isEnrolling, setIsEnrolling] = useState(false);
   
   const navigate = useNavigate();
 
+  const fetchClassDetails = async () => {
+    setIsLoading(true);
+    try {
+      const response = await apiClient.get(`/fitness-classes/${id}`);
+      setClassData(response.data.data);
+    } catch (err) {
+      setError("Failed to load class details. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    const fetchClassDetails = async () => {
-      try {
-        const response = await apiClient.get(`/fitness-classes/${id}`);
-        setClassData(response.data.data);
-        setIsLoading(false);
-      } catch (err) {
-        setError("Failed to load class details. Please try again later.");
-        setIsLoading(false);
-      }
-    };
-    fetchClassDetails();
-  }, [id]);
+    if (!location.state?.classData) {
+      fetchClassDetails();
+    }
+  }, [id, location.state]);
 
   const handleEnroll = async () => {
     if (!classData) {

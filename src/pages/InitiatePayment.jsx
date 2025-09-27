@@ -471,7 +471,7 @@ const InitiatePayment = ({ paymentType }) => {
                 <div className="card-actions  w-full pt-4">
                   <button
                     type="submit"
-                    className={`btn bg-brand w-full block  ${isSubmitting ? 'opacity-70' : ''}`}
+                    className={`btn bg-brand w-full flex  ${isSubmitting ? 'opacity-70' : ''}`}
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

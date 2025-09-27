@@ -4,8 +4,9 @@ import { useNavigate, useParams, useLocation } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 import { authApiClient } from '../../services/apiServices';
 import { toast } from 'react-hot-toast';
-import { FaArrowLeft, FaSave, FaDollarSign, FaCalendarAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaDollarSign, FaCalendarAlt, FaTrash } from 'react-icons/fa';
 import Loader from '../common/Loader';
+import { Toaster } from 'react-hot-toast';
 
 const EditPlan = () => {
   const navigate = useNavigate();
@@ -45,17 +46,36 @@ const EditPlan = () => {
 
   const onSubmit = async (data) => {
     try {
+      toast.loading('Updating plan...');
       await authApiClient.put(`membership-plans/${id}/`, data);
       toast.success('Membership plan updated successfully');
       isAdmin ? navigate('/admin/plans') : navigate('/staff/plans');
     } catch (error) {
       console.error('Error updating plan:', error);
       toast.error('Failed to update membership plan');
+    }finally{
+      toast.dismiss();
     }
   };
 
   const handleBack = () => {
     isAdmin ? navigate('/admin/plans') : navigate('/staff/plans');
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+      toast.loading('Deleting plan...');
+      try {
+        await authApiClient.delete(`membership-plans/${id}/`);
+        toast.success('Membership plan deleted successfully');
+        isAdmin ? navigate('/admin/plans') : navigate('/staff/plans');
+      } catch (error) {
+        console.error('Error deleting plan:', error);
+        toast.error('Failed to delete membership plan');
+      }finally{
+        toast.dismiss();
+      }
+    }
   };
 
   if (!planData && !id) {
@@ -68,6 +88,7 @@ const EditPlan = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Toaster position="top-center" reverseOrder={false} />  
       <div className="mb-6">
         <button 
           onClick={handleBack}
@@ -212,22 +233,35 @@ const EditPlan = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="flex justify-end space-x-4 mt-8">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="btn btn-ghost"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={`btn btn-primary ${isSubmitting ? 'loading' : ''}`}
-              disabled={isSubmitting}
-            >
-              <FaSave className="mr-2" />
-              {isSubmitting ? 'Updating...' : 'Update Plan'}
-            </button>
+          <div className="flex justify-between items-center mt-8">
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="btn btn-error btn-outline"
+                disabled={isSubmitting}
+              >
+                <FaTrash className="mr-2" />
+                Delete Plan
+              </button>
+            )}
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className={`btn btn-primary ${isSubmitting ? 'loading' : ''}`}
+                disabled={isSubmitting}
+              >
+                <FaSave className="mr-2" />
+                {isSubmitting ? 'Updating...' : 'Update Plan'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

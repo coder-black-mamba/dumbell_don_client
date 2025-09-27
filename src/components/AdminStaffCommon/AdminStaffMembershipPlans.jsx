@@ -7,42 +7,7 @@ import { authApiClient } from '../../services/apiServices';
 import ErrorMessage from '../common/ErrorMessage';
 import Loader from '../common/Loader';
 
-// Mock data
-const mockPlans = {
-  count: 3,
-  results: [
-    {
-      id: 1,
-      name: 'Monthly Membership Platinum',
-      description: 'Flexible month-to-month access without commitment',
-      duration_days: 30,
-      price_cents: 3000,
-      is_active: true,
-      created_at: '2025-08-13T15:04:57.587705Z',
-      created_by: 2
-    },
-    {
-      id: 2,
-      name: '3-Month Membership',
-      description: 'Discounted rate for a 3-month commitment. Paid upfront; includes unlimited gym and classes access',
-      duration_days: 90,
-      price_cents: 8100,
-      is_active: true,
-      created_at: '2025-08-13T15:07:12.984537Z',
-      created_by: 2
-    },
-    {
-      id: 3,
-      name: '7 Day Trial',
-      description: 'Wanna Try LEts have 7 day plan',
-      duration_days: 7,
-      price_cents: 500,
-      is_active: true,
-      created_at: '2025-08-13T15:07:55.672907Z',
-      created_by: 2
-    }
-  ]
-};
+
 
 const AdminStaffMembershipPlans = () => {
   const [plans, setPlans] = useState([]);

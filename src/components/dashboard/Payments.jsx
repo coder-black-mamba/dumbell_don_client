@@ -107,9 +107,11 @@ const Payments = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-300">
-                        {payment.metadata.payment_type === "subscription"
+                        {/* {payment.metadata.payment_type === "subscription"
                           ? payment.metadata.subscription
-                          : payment.metadata.booking}
+                          : payment.metadata.booking} */}
+                          Invoice #{payment.metadata.invoice.split("-")[1]}
+
                       </h3>
                       <div className="flex items-center text-sm text-gray-500 mt-1 space-x-4">
                         <span className="flex items-center">
@@ -118,7 +120,6 @@ const Payments = () => {
                         </span>
                         <span>•</span>
                         <span>
-                          Invoice #{payment.metadata.invoice.split("-")[1]}
                         </span>
                       </div>
                     </div>

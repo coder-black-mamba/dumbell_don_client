@@ -43,7 +43,7 @@ const SingleClass = ({ cls }) => {
         <div className="flex flex-col md:flex-row md:justify-between md:items-start">
           <div className="flex-1">
             <div className="flex items-start justify-between">
-              <h3 className="text-xl font-bold text-gray-800">{cls.title}</h3>
+              <h3 className="text-xl font-bold text-gray-800">{cls.title} - ID : {cls.id}</h3>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-semibold ${
                   cls.is_active

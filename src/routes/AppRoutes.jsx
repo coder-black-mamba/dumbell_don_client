@@ -64,6 +64,7 @@ import EditBooking from '../components/AdminDashboard/EditBooking'
 import AdminStaffBookings from '../components/AdminStaffCommon/AdminStaffBookings'
 import SingleBookingView from '../components/AdminStaffCommon/SingleBookingView'
 import AddAttendence from '../components/AdminStaffCommon/AddAttendence'
+import AdminStaffFeedback from '../components/AdminStaffCommon/AdminStaffFeedback'
 
 function AppRoutes() {
   return (
@@ -163,7 +164,7 @@ function AppRoutes() {
           <Route path="bookings/:id" element={<SingleBookingView/>} />
           <Route path="members" element={<AdminStaffMembers />} />
           <Route path="members/:id" element={<MemberDetails/>} />
-          <Route path="feedback" element={<StaffFeedback />} />
+          <Route path="feedback" element={<AdminStaffFeedback />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
@@ -193,7 +194,7 @@ function AppRoutes() {
           <Route path="attendance/add" element={<AddAttendence />} />
           <Route path="payments" element={<AdminPayments />} />
           <Route path="invoices" element={<AdminInvoices />} />
-          <Route path="feedback" element={<AdminFeedback />} />
+          <Route path="feedback" element={<AdminStaffFeedback />} />
           <Route path="reports" element={<Report />} />
           <Route path="*" element={<NotFound />} />
         </Route>

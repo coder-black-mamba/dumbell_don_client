@@ -1,429 +1,507 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaFilter, FaSync, FaFileInvoiceDollar, FaEye, FaEdit, FaTrash, FaPlus, FaDownload } from 'react-icons/fa';
-
-// Mock data
-const mockInvoices = {
-  count: 2,
-  results: [
-    {
-      id: 1,
-      member: {
-        id: 3,
-        name: 'John Doe',
-        email: 'john@example.com',
-        avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-      },
-      number: 'INV-20250813151857',
-      issue_date: '2025-08-13',
-      due_date: '2025-08-20',
-      total_cents: 3000,
-      currency: 'USD',
-      status: 'PAID',
-      notes: 'Monthly membership subscription',
-      metadata: {
-        payment_type: 'subscription',
-        subscription: 'Monthly Membership Platinum',
-        subscription_id: 1
-      }
-    },
-    {
-      id: 2,
-      member: {
-        id: 3,
-        name: 'John Doe',
-        email: 'john@example.com',
-        avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-      },
-      number: 'INV-20250813152229',
-      issue_date: '2025-08-13',
-      due_date: '2025-08-20',
-      total_cents: 1500,
-      currency: 'USD',
-      status: 'PENDING',
-      notes: 'Class booking payment',
-      metadata: {
-        booking: 'Morning Vinyasa Yoga',
-        booking_id: 1,
-        payment_type: 'booking'
-      }
-    }
-  ]
-};
+import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
+import { authApiClient } from "../../services/apiServices";
+import {FaPlus ,FaSearch} from 'react-icons/fa';
+import Loader from '../common/Loader';
 
 const AdminInvoices = () => {
   const [invoices, setInvoices] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [modalType, setModalType] = useState('create'); // 'create', 'edit', or 'view'
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [filteredInvoices, setFilteredInvoices] = useState([]);
 
-  // Load invoices
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setInvoices(mockInvoices.results);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    fetchInvoices();
   }, []);
 
-  // Format currency
-  const formatCurrency = (amount, currency = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 2
-    }).format(amount / 100);
+  const fetchInvoices = async () => {
+    try {
+      setLoading(true);
+      const response = await authApiClient.get("invoices/");
+      setInvoices(response.data);
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+      toast.error('Failed to fetch invoices');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Format date
+  const openModal = (type, invoice = null) => {
+    setModalType(type);
+    setSelectedInvoice(invoice);
+    
+    if (type === 'edit' || type === 'view') {
+      const metadata = invoice.metadata || {};
+      reset({
+        member: invoice.member,
+        issue_date: invoice.issue_date,
+        due_date: invoice.due_date,
+        total_cents: invoice.total_cents / 100,
+        currency: invoice.currency,
+        status: invoice.status,
+        notes: invoice.notes || '',
+        payment_type: metadata.payment_type || '',
+        reference_id: metadata.booking_id || metadata.subscription_id || '',
+        metadata: JSON.stringify(metadata, null, 2)
+      });
+    } else {
+      reset({
+        member: '',
+        issue_date: new Date().toISOString().split('T')[0],
+        due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        total_cents: '',
+        currency: 'USD',
+        status: 'DRAFT',
+        notes: '',
+        payment_type: '',
+        reference_id: '',
+        metadata: JSON.stringify({}, null, 2)
+      });
+    }
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    reset();
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      // Create metadata object from form data
+      const metadata = data.metadata ? JSON.parse(data.metadata) : {};
+      
+      // Add payment type and reference ID to metadata
+      if (data.payment_type && data.reference_id) {
+        metadata.payment_type = data.payment_type;
+        metadata[`${data.payment_type}_id`] = data.reference_id;
+      }
+
+      const invoiceData = {
+        ...data,
+        total_cents: Math.round(parseFloat(data.total_cents) * 100),
+        metadata: metadata
+      };
+      
+      // Remove form-specific fields before sending to API
+      delete invoiceData.payment_type;
+      delete invoiceData.reference_id;
+
+      if (modalType === 'create') {
+        toast.loading("Creating Invoice...");
+        await authApiClient.post('invoices/', invoiceData);
+        toast.success('Invoice created successfully');
+      } else if (modalType === 'edit') {
+        toast.loading("Updating Invoice...");
+        await authApiClient.put(`invoices/${selectedInvoice.id}/`, invoiceData);
+        toast.success('Invoice updated successfully');
+      }
+
+      fetchInvoices();
+      closeModal();
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      toast.error(`Failed to ${modalType} invoice`);
+    } finally {
+      toast.dismiss();
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this invoice?')) {
+      try {
+        await authApiClient.delete(`invoices/${id}/`);
+        toast.success('Invoice deleted successfully');
+        fetchInvoices();
+      } catch (error) {
+        console.error('Error deleting invoice:', error);
+        toast.error('Failed to delete invoice');
+      } finally {
+        toast.dismiss();
+      }
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    return new Date(dateString).toLocaleString();
   };
 
-  // Filter invoices
-  const filteredInvoices = invoices.filter(invoice => {
-    const matchesSearch = 
-      invoice.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      invoice.member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      invoice.member.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'ALL' || invoice.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
-  });
-
-  // Handle CRUD operations
-  const handleView = (invoice) => {
-    setSelectedInvoice(invoice);
-    setIsEditMode(false);
-    setIsModalOpen(true);
+  const formatAmount = (amount) => {
+    return `$${(amount / 100).toFixed(2)}`;
   };
 
-  const handleEdit = (invoice) => {
-    setSelectedInvoice(invoice);
-    setIsEditMode(true);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = (invoice) => {
-    if (window.confirm('Are you sure you want to delete this invoice?')) {
-      setInvoices(invoices.filter(i => i.id !== invoice.id));
+  const getStatusBadge = (status) => {
+    const baseClasses = "badge font-bold";
+    switch (status) {
+      case 'PAID':
+        return <span className={`${baseClasses} badge-success`}>PAID</span>;
+      case 'PENDING':
+        return <span className={`${baseClasses} badge-warning`}>PENDING</span>;
+      case 'DRAFT':
+        return <span className={`${baseClasses} badge-info`}>DRAFT</span>;
+      case 'CANCELLED':
+        return <span className={`${baseClasses} badge-error`}>CANCELLED</span>;
+      default:
+        return <span className={`${baseClasses} badge-ghost`}>{status}</span>;
     }
   };
 
-  const handleSave = (updatedInvoice) => {
-    if (isEditMode) {
-      setInvoices(invoices.map(i => 
-        i.id === updatedInvoice.id ? { ...i, ...updatedInvoice } : i
-      ));
-    } else {
-      const newInvoice = {
-        ...updatedInvoice,
-        id: Math.max(0, ...invoices.map(i => i.id)) + 1,
-        number: `INV-${new Date().getTime()}`,
-        created_at: new Date().toISOString()
-      };
-      setInvoices([newInvoice, ...invoices]);
-    }
-    setIsModalOpen(false);
-  };
+  const invoiceStatuses = ['DRAFT', 'PENDING', 'PAID', 'CANCELLED'];
+  const currencies = ['USD', 'EUR', 'GBP', 'BDT'];
 
-  if (loading) {
+  if (loading && invoices.length === 0) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex justify-center items-center min-h-[200px]">
+        <Loader />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Invoice Management</h1>
-        <div className="flex space-x-3 w-full md:w-auto">
-          <button
-            onClick={() => {
-              setSelectedInvoice(null);
-              setIsEditMode(true);
-              setIsModalOpen(true);
-            }}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <FaPlus className="mr-2" />
-            Create Invoice
-          </button>
-        </div>
+    <div className="p-6">
+      <Toaster/>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Invoices Management</h1>
+        <button
+          className="btn btn-primary"
+          onClick={() => openModal('create')}
+        >
+          Create New Invoice
+        </button>
       </div>
 
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search by invoice #, member..."
-                className="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div>
-            <select
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="PAID">Paid</option>
-              <option value="PENDING">Pending</option>
-              <option value="OVERDUE">Overdue</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Invoices Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+      <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>Member</th>
+              <th>Issue Date</th>
+              <th>Due Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoices.map((invoice) => (
+              <tr key={invoice.id} className="hover">
+                <td>{invoice.number}</td>
+                <td>{invoice.member}</td>
+                <td>{formatDate(invoice.issue_date)}</td>
+                <td>{formatDate(invoice.due_date)}</td>
+                <td>{formatAmount(invoice.total_cents)} {invoice.currency}</td>
+                <td>{getStatusBadge(invoice.status)}</td>
+                <td>
+                  <div>
+                    {invoice.metadata?.payment_type || 'N/A'}
+                    {invoice.metadata?.subscription && (
+                      <div className="text-xs opacity-75">{invoice.metadata.subscription}</div>
+                    )}
+                    {invoice.metadata?.booking && (
+                      <div className="text-xs opacity-75">Booking</div>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div className="flex space-x-2">
+                    <button 
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => openModal('view', invoice)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button 
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => openModal('edit', invoice)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button 
+                      className="btn btn-ghost btn-sm text-error"
+                      onClick={() => handleDelete(invoice.id)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredInvoices.length > 0 ? (
-                filteredInvoices.map((invoice) => (
-                  <tr key={invoice.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{invoice.number}</div>
-                      <div className="text-xs text-gray-500">
-                        {invoice.metadata?.payment_type || 'N/A'}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img className="h-10 w-10 rounded-full" src={invoice.member.avatar} alt={invoice.member.name} />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{invoice.member.name}</div>
-                          <div className="text-sm text-gray-500">{invoice.member.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDate(invoice.issue_date)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {formatCurrency(invoice.total_cents, invoice.currency)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        invoice.status === 'PAID' ? 'bg-green-100 text-green-800' :
-                        invoice.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {invoice.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button
-                          onClick={() => handleView(invoice)}
-                          className="text-blue-600 hover:text-blue-900"
-                          title="View"
-                        >
-                          <FaEye className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleEdit(invoice)}
-                          className="text-yellow-600 hover:text-yellow-900"
-                          title="Edit"
-                        >
-                          <FaEdit className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(invoice)}
-                          className="text-red-600 hover:text-red-900"
-                          title="Delete"
-                        >
-                          <FaTrash className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
-                    No invoices found matching your criteria.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-      {/* Invoice Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">
-                {isEditMode ? (selectedInvoice ? 'Edit Invoice' : 'Create Invoice') : 'Invoice Details'}
-              </h2>
-              <button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setSelectedInvoice(null);
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                &times;
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Invoice #</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedInvoice?.number || 'Auto-generated'}
-                    disabled
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                  <select
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedInvoice?.status || 'PENDING'}
-                    disabled={!isEditMode}
-                  >
-                    <option value="PENDING">Pending</option>
-                    <option value="PAID">Paid</option>
-                    <option value="OVERDUE">Overdue</option>
-                  </select>
-                </div>
+      {/* Modal */}
+      <div className={`modal ${isModalOpen ? 'modal-open' : ''}`}>
+        <div className="modal-box w-11/12 max-w-5xl">
+          <h3 className="font-bold text-lg mb-4">
+            {modalType === 'create' && 'Create New Invoice'}
+            {modalType === 'edit' && 'Edit Invoice'}
+            {modalType === 'view' && 'Invoice Details'}
+          </h3>
+          
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Member ID</span>
+                </label>
+                <input
+                  type="number"
+                  className={`input input-bordered w-full ${errors.member ? 'input-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('member', { required: 'Member ID is required' })}
+                />
+                {errors.member && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.member.message}</span>
+                  </label>
+                )}
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Member</label>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Issue Date</span>
+                </label>
+                <input
+                  type="date"
+                  className={`input input-bordered w-full ${errors.issue_date ? 'input-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('issue_date', { required: 'Issue date is required' })}
+                />
+                {errors.issue_date && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.issue_date.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Due Date</span>
+                </label>
+                <input
+                  type="date"
+                  className={`input input-bordered w-full ${errors.due_date ? 'input-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('due_date', { required: 'Due date is required' })}
+                />
+                {errors.due_date && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.due_date.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Amount</span>
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  className={`input input-bordered w-full ${errors.total_cents ? 'input-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('total_cents', { 
+                    required: 'Amount is required',
+                    min: { value: 0.01, message: 'Amount must be greater than 0' }
+                  })}
+                />
+                {errors.total_cents && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.total_cents.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Currency</span>
+                </label>
+                <select
+                  className={`select select-bordered w-full ${errors.currency ? 'select-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('currency', { required: 'Currency is required' })}
+                >
+                  {currencies.map((currency) => (
+                    <option key={currency} value={currency}>
+                      {currency}
+                    </option>
+                  ))}
+                </select>
+                {errors.currency && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.currency.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Status</span>
+                </label>
+                <select
+                  className={`select select-bordered w-full ${errors.status ? 'select-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('status', { required: 'Status is required' })}
+                >
+                  {invoiceStatuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+                {errors.status && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.status.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Payment Type</span>
+                </label>
+                <select
+                  className={`select select-bordered w-full ${errors.payment_type ? 'select-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('payment_type', { required: 'Payment type is required' })}
+                >
+                  <option value="">Select payment type</option>
+                  <option value="booking">Booking</option>
+                  <option value="subscription">Subscription</option>
+                </select>
+                {errors.payment_type && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.payment_type.message}</span>
+                  </label>
+                )}
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Reference ID</span>
+                </label>
                 <input
                   type="text"
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={selectedInvoice?.member?.name || ''}
-                  disabled={!isEditMode}
+                  className={`input input-bordered w-full ${errors.reference_id ? 'input-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  placeholder="Booking ID or Subscription ID"
+                  {...register('reference_id', { required: 'Reference ID is required' })}
                 />
+                {errors.reference_id && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.reference_id.message}</span>
+                  </label>
+                )}
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Issue Date</label>
-                  <input
-                    type="date"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedInvoice?.issue_date || new Date().toISOString().split('T')[0]}
-                    disabled={!isEditMode}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                  <input
-                    type="date"
-                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedInvoice?.due_date || ''}
-                    disabled={!isEditMode}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500">$</span>
-                  </div>
-                  <input
-                    type="number"
-                    className="pl-8 pr-3 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedInvoice ? (selectedInvoice.total_cents / 100) : ''}
-                    disabled={!isEditMode}
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+
+              <div className="form-control md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Notes</span>
+                </label>
                 <textarea
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows="3"
-                  value={selectedInvoice?.notes || ''}
-                  disabled={!isEditMode}
+                  className={`textarea textarea-bordered h-24 ${errors.notes ? 'textarea-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('notes')}
+                  placeholder="Additional notes about this invoice"
                 ></textarea>
+                {errors.notes && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.notes.message}</span>
+                  </label>
+                )}
               </div>
-              
-              <div className="flex justify-end space-x-3 pt-4">
-                {isEditMode ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        // Handle save
-                        setIsModalOpen(false);
-                      }}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                    >
-                      Save Invoice
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                    >
-                      Close
-                    </button>
-                    <button
-                      type="button"
-                      className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 flex items-center"
-                    >
-                      <FaDownload className="mr-2" />
-                      Download
-                    </button>
-                  </>
+
+              <div className="form-control md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Metadata</span>
+                </label>
+                <textarea
+                  className={`textarea textarea-bordered h-32 font-mono text-xs ${errors.metadata ? 'textarea-error' : ''}`}
+                  disabled={modalType === 'view'}
+                  {...register('metadata', {
+                    validate: (value) => {
+                      try {
+                        if (value) JSON.parse(value);
+                        return true;
+                      } catch (e) {
+                        return 'Invalid JSON';
+                      }
+                    }
+                  })}
+                  placeholder='Enter metadata as JSON (e.g., {"payment_type": "subscription", "subscription_id": 1})'
+                ></textarea>
+                {errors.metadata && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{errors.metadata.message}</span>
+                  </label>
                 )}
               </div>
             </div>
-          </div>
+
+            {modalType === 'view' && selectedInvoice && (
+              <div className="mt-6 p-4 bg-base-200 rounded-lg">
+                <h4 className="font-bold mb-2">Invoice Details:</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="font-semibold">Created At:</span> {formatDate(selectedInvoice.created_at)}
+                  </div>
+                  <div>
+                    <span className="font-semibold">Invoice #:</span> {selectedInvoice.number}
+                  </div>
+                  <div>
+                    <span className="font-semibold">Payment Type:</span> {selectedInvoice.metadata?.payment_type || 'N/A'}
+                  </div>
+                  {selectedInvoice.metadata?.subscription && (
+                    <div>
+                      <span className="font-semibold">Subscription:</span> {selectedInvoice.metadata.subscription}
+                    </div>
+                  )}
+                  {selectedInvoice.metadata?.booking && (
+                    <div className="md:col-span-2">
+                      <span className="font-semibold">Booking:</span> {selectedInvoice.metadata.booking}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="modal-action">
+              <button
+                type="button"
+                className="btn"
+                onClick={closeModal}
+              >
+                {modalType === 'view' ? 'Close' : 'Cancel'}
+              </button>
+              {modalType !== 'view' && (
+                <button type="submit" className="btn btn-primary">
+                  {modalType === 'create' ? 'Create' : 'Save Changes'}
+                </button>
+              )}
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </div>
   );
 };

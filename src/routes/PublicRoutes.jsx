@@ -40,8 +40,7 @@ import { PAYMENT_TYPES } from "./CONSTANTS";
 
 const PublicRoutes = () => {
   return (
-    <Routes>
-      <Route element={<BaseLayout />}>
+    <>
         {/* Main */}
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -114,8 +113,8 @@ const PublicRoutes = () => {
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    </>
+
   );
 };
 

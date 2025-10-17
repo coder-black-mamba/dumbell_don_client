@@ -28,6 +28,7 @@ import Report from "../components/AdminDashboard/Report.jsx";
 import NotFound from "../components/common/NotFound";
 
 const AdminRoutes = () => (
+  <>
   <Route
     path="/admin/*"
     element={
@@ -59,6 +60,7 @@ const AdminRoutes = () => (
     <Route path="reports" element={<Report />} />
     <Route path="*" element={<NotFound />} />
   </Route>
+</>
 );
 
 export default AdminRoutes;
